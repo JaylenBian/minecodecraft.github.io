@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Minecode个人技术博客" />
+  <meta name="keywords" content="ARKit,SceneKit," />
 
 
 
@@ -79,16 +79,25 @@
 
 
 
-<meta name="description" content="iOS鶸的奋斗之路">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Minecode&#39;s Blog">
-<meta property="og:url" content="https://minecodecraft.github.io/index.html">
+<meta name="description" content="##前言苹果推出ARKit半年了，开发者对其兴趣有增无减，AR产业也借苹果谷歌等厂商的努力得到了快速发展。作为广大iOS开发者的一员，我也加入了学习AR的队伍中。得益于SceneKit优越的性能和封装，ARKit的开发也如鱼得水，如果你有SceneKit开发经验，那么短时间开发出一款很酷的AR应用不是难事。这次，我们尝试使用ARKit来制作一个传送门（或者说哆啦A梦的任意门） 项目效果：  ##前">
+<meta name="keywords" content="ARKit,SceneKit">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用iOS ARKit制作AR传送门">
+<meta property="og:url" content="https://minecodecraft.github.io/2017/11/11/利用iOS ARKit制作AR传送门/index.html">
 <meta property="og:site_name" content="Minecode&#39;s Blog">
-<meta property="og:description" content="iOS鶸的奋斗之路">
+<meta property="og:description" content="##前言苹果推出ARKit半年了，开发者对其兴趣有增无减，AR产业也借苹果谷歌等厂商的努力得到了快速发展。作为广大iOS开发者的一员，我也加入了学习AR的队伍中。得益于SceneKit优越的性能和封装，ARKit的开发也如鱼得水，如果你有SceneKit开发经验，那么短时间开发出一款很酷的AR应用不是难事。这次，我们尝试使用ARKit来制作一个传送门（或者说哆啦A梦的任意门） 项目效果：  ##前">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6362190-e53495eba32cac33.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6362190-6d89c5b097b4e61f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6362190-5ae28ed3ea992db0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6362190-e28f6e7674923b63.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6362190-7c83213fd3e8b805.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6362190-c3f45dae96065468.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-11-14T15:42:11.151Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Minecode&#39;s Blog">
-<meta name="twitter:description" content="iOS鶸的奋斗之路">
+<meta name="twitter:title" content="利用iOS ARKit制作AR传送门">
+<meta name="twitter:description" content="##前言苹果推出ARKit半年了，开发者对其兴趣有增无减，AR产业也借苹果谷歌等厂商的努力得到了快速发展。作为广大iOS开发者的一员，我也加入了学习AR的队伍中。得益于SceneKit优越的性能和封装，ARKit的开发也如鱼得水，如果你有SceneKit开发经验，那么短时间开发出一款很酷的AR应用不是难事。这次，我们尝试使用ARKit来制作一个传送门（或者说哆啦A梦的任意门） 项目效果：  ##前">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/6362190-e53495eba32cac33.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -118,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="https://minecodecraft.github.io/"/>
+  <link rel="canonical" href="https://minecodecraft.github.io/2017/11/11/利用iOS ARKit制作AR传送门/"/>
 
 
 
 
 
-  <title>Minecode's Blog</title>
+  <title>利用iOS ARKit制作AR传送门 | Minecode's Blog</title>
   
 
 
@@ -143,8 +152,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -247,137 +255,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://minecodecraft.github.io/2017/11/14/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Minecode">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Minecode's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/14/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-14T19:09:37+08:00">
-                2017-11-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
 
   
 
@@ -407,9 +287,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/11/利用iOS ARKit制作AR传送门/" itemprop="url">利用iOS ARKit制作AR传送门</a></h1>
+          <h1 class="post-title" itemprop="name headline">利用iOS ARKit制作AR传送门</h1>
         
 
         <div class="post-meta">
@@ -481,9 +359,7 @@
       
 
       
-        
-          
-            <p>##前言<br>苹果推出ARKit半年了，开发者对其兴趣有增无减，AR产业也借苹果谷歌等厂商的努力得到了快速发展。作为广大iOS开发者的一员，我也加入了学习AR的队伍中。<br>得益于SceneKit优越的性能和封装，ARKit的开发也如鱼得水，如果你有SceneKit开发经验，那么短时间开发出一款很酷的AR应用不是难事。这次，我们尝试使用ARKit来制作一个传送门（或者说哆啦A梦的任意门）</p>
+        <p>##前言<br>苹果推出ARKit半年了，开发者对其兴趣有增无减，AR产业也借苹果谷歌等厂商的努力得到了快速发展。作为广大iOS开发者的一员，我也加入了学习AR的队伍中。<br>得益于SceneKit优越的性能和封装，ARKit的开发也如鱼得水，如果你有SceneKit开发经验，那么短时间开发出一款很酷的AR应用不是难事。这次，我们尝试使用ARKit来制作一个传送门（或者说哆啦A梦的任意门）</p>
 <p>项目效果：<br><img src="http://upload-images.jianshu.io/upload_images/6362190-e53495eba32cac33.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="AR任意门"></p>
 <p><br><br></p>
 <p>##前期准备<br>制作前，我们需要准备好任意门中的3D模型，以及任意门中的天空盒贴图。<br>在这里我使用了大学的钟塔模型，使用了Cinema4D制作，SceneKit支持dae或obj格式的模型，导入后可以转换成SceneKit对应的scn格式。<br>天空盒贴图是什么？游戏中对于一些有边界地图，想要创造远距离场景的视觉效果，就可以采用将天空盒包裹当前真实场景的方法，如CS。<br><img src="http://upload-images.jianshu.io/upload_images/6362190-6d89c5b097b4e61f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="天空盒的示例图，图片来自网络"></p>
@@ -502,8 +378,6 @@
 <p>具体代码见<a href="https://github.com/Minecodecraft/ARDoor" target="_blank" rel="external">Github项目</a>：<br> <a href="https://github.com/Minecodecraft/ARDoor" target="_blank" rel="external">https://github.com/Minecodecraft/ARDoor</a></p>
 <p>###如果有问题，欢迎评论区留言</p>
 
-          
-        
       
     </div>
     
@@ -518,135 +392,42 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://minecodecraft.github.io/2017/10/11/test/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Minecode">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Minecode's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/11/test/" itemprop="url">test</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-11T21:03:46+08:00">
-                2017-10-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/ARKit/" rel="tag"># ARKit</a>
           
-            
+            <a href="/tags/SceneKit/" rel="tag"># SceneKit</a>
           
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##你好，世界</p>
-<p>##Hello, World!!</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/11/test/" rel="next" title="test">
+                <i class="fa fa-chevron-left"></i> test
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/14/hello-world/" rel="prev" title="Hello World">
+                Hello World <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
       
     </footer>
   </div>
@@ -656,10 +437,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -667,6 +449,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -909,6 +695,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
