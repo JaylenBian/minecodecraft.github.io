@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="数据结构,SceneKit," />
+  <meta name="keywords" content="SceneKit,数据结构," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="##简述 在用C来实现数据结构以及部分算法时，经常用到结构体，比如实现树以及树的子节点时，就需要该结构体包含自身类型的成员变量。而最近在研究OC的匿名函数实现时，也涉及到了类似需求。同时，两个结构体之间相互引用也经常遇到问题。故简单总结一下C语言结构体的自引用语法。 ##示例我们以二叉树的节点为例来看一下自引用：12345struct binary_tree &amp;#123;    int data">
-<meta name="keywords" content="数据结构,SceneKit">
+<meta name="description" content="简述在用C来实现数据结构以及部分算法时，经常用到结构体，比如实现树以及树的子节点时，就需要该结构体包含自身类型的成员变量。而最近在研究OC的匿名函数实现时，也涉及到了类似需求。同时，两个结构体之间相互引用也经常遇到问题。故简单总结一下C语言结构体的自引用语法。 示例我们以二叉树的节点为例来看一下自引用：12345struct binary_tree &amp;#123;    int data    ;">
+<meta name="keywords" content="SceneKit,数据结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="结构体的自引用及相互引用">
 <meta property="og:url" content="https://minecodecraft.github.io/2017/10/01/结构体的自引用及相互引用/index.html">
 <meta property="og:site_name" content="Minecode&#39;s Blog">
-<meta property="og:description" content="##简述 在用C来实现数据结构以及部分算法时，经常用到结构体，比如实现树以及树的子节点时，就需要该结构体包含自身类型的成员变量。而最近在研究OC的匿名函数实现时，也涉及到了类似需求。同时，两个结构体之间相互引用也经常遇到问题。故简单总结一下C语言结构体的自引用语法。 ##示例我们以二叉树的节点为例来看一下自引用：12345struct binary_tree &amp;#123;    int data">
+<meta property="og:description" content="简述在用C来实现数据结构以及部分算法时，经常用到结构体，比如实现树以及树的子节点时，就需要该结构体包含自身类型的成员变量。而最近在研究OC的匿名函数实现时，也涉及到了类似需求。同时，两个结构体之间相互引用也经常遇到问题。故简单总结一下C语言结构体的自引用语法。 示例我们以二叉树的节点为例来看一下自引用：12345struct binary_tree &amp;#123;    int data    ;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-04T09:11:40.312Z">
+<meta property="og:updated_time" content="2017-12-04T09:13:52.092Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="结构体的自引用及相互引用">
-<meta name="twitter:description" content="##简述 在用C来实现数据结构以及部分算法时，经常用到结构体，比如实现树以及树的子节点时，就需要该结构体包含自身类型的成员变量。而最近在研究OC的匿名函数实现时，也涉及到了类似需求。同时，两个结构体之间相互引用也经常遇到问题。故简单总结一下C语言结构体的自引用语法。 ##示例我们以二叉树的节点为例来看一下自引用：12345struct binary_tree &amp;#123;    int data">
+<meta name="twitter:description" content="简述在用C来实现数据结构以及部分算法时，经常用到结构体，比如实现树以及树的子节点时，就需要该结构体包含自身类型的成员变量。而最近在研究OC的匿名函数实现时，也涉及到了类似需求。同时，两个结构体之间相互引用也经常遇到问题。故简单总结一下C语言结构体的自引用语法。 示例我们以二叉树的节点为例来看一下自引用：12345struct binary_tree &amp;#123;    int data    ;">
 
 
 
@@ -352,20 +352,16 @@
       
 
       
-        <p>##简述</p>
-<p>在用C来实现数据结构以及部分算法时，经常用到结构体，比如实现树以及树的子节点时，就需要该结构体包含自身类型的成员变量。而最近在研究OC的匿名函数实现时，也涉及到了类似需求。同时，两个结构体之间相互引用也经常遇到问题。故简单总结一下C语言结构体的自引用语法。</p>
-<p>##示例<br>我们以二叉树的节点为例来看一下自引用：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> data    ;   <span class="comment">// Data area</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">right</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+        <h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>在用C来实现数据结构以及部分算法时，经常用到结构体，比如实现树以及树的子节点时，就需要该结构体包含自身类型的成员变量。而最近在研究OC的匿名函数实现时，也涉及到了类似需求。同时，两个结构体之间相互引用也经常遇到问题。故简单总结一下C语言结构体的自引用语法。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>我们以二叉树的节点为例来看一下自引用：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> data    ;   <span class="comment">// Data area</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">right</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
 <p>在树中，我们需要保存其左右子树，所以需要引用自身。</p>
-<p>##结构体自引用</p>
-<p>###不使用typedef<br>如果不适用typedef，那么此时我们需要使用struct [名称]来调用。<br>但如果按下面的调用方式<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> <span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> <span class="title">right</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h2 id="结构体自引用"><a href="#结构体自引用" class="headerlink" title="结构体自引用"></a>结构体自引用</h2><h3 id="不使用typedef"><a href="#不使用typedef" class="headerlink" title="不使用typedef"></a>不使用typedef</h3><p>如果不适用typedef，那么此时我们需要使用struct [名称]来调用。<br>但如果按下面的调用方式<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> <span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> <span class="title">right</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
 <p>则会导致在分配内存的时候循环分配，此时编译器会计算left和right的成员变量并为之分配内存，从而导致嵌套死循环。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">right</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
 <p>所以后者是正确的，left和right在分配时是以结构体指针的形式来分配内存的。而意义上我们就是为了将其指向另一个binary_tree，所以这样是复合逻辑的。</p>
-<p>###使用typedef<br>使用typedef可以为结构体设置别名，但是要注意的是，typdef的语法为<code>typedef [原类型] [别名];</code><br>所以在结构体声明之前，别名是未定义的。所以我们在内部需要使用其原类型来定义成员变量。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">right</span>;</span></span><br><span class="line">&#125;BinTREE;</span><br></pre></td></tr></table></figure></p>
-<p>##结构体相互引用</p>
-<p>###同文件内</p>
-<p>####使用不完整类型<br>通过不完整类型语法来实现相互引用<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s_a</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">s_b</span> *<span class="title">B_Ptr</span>;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s_b</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    A *A_Ptr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>####使用前向声明<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">s_a</span> <span class="title">A</span>;</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">s_b</span> <span class="title">B</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s_a</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    B *B_Ptr;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s_b</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    A *A_Ptr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>###不同文件内<br>对于不同文件，主要有两点需要注意的。</p>
+<h3 id="使用typedef"><a href="#使用typedef" class="headerlink" title="使用typedef"></a>使用typedef</h3><p>使用typedef可以为结构体设置别名，但是要注意的是，typdef的语法为<code>typedef [原类型] [别名];</code><br>所以在结构体声明之前，别名是未定义的。所以我们在内部需要使用其原类型来定义成员变量。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">right</span>;</span></span><br><span class="line">&#125;BinTREE;</span><br></pre></td></tr></table></figure></p>
+<h2 id="结构体相互引用"><a href="#结构体相互引用" class="headerlink" title="结构体相互引用"></a>结构体相互引用</h2><h3 id="同文件内"><a href="#同文件内" class="headerlink" title="同文件内"></a>同文件内</h3><h4 id="使用不完整类型"><a href="#使用不完整类型" class="headerlink" title="使用不完整类型"></a>使用不完整类型</h4><p>通过不完整类型语法来实现相互引用<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s_a</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">s_b</span> *<span class="title">B_Ptr</span>;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s_b</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    A *A_Ptr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h4 id="使用前向声明"><a href="#使用前向声明" class="headerlink" title="使用前向声明"></a>使用前向声明</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">s_a</span> <span class="title">A</span>;</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">s_b</span> <span class="title">B</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s_a</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    B *B_Ptr;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s_b</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    A *A_Ptr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="不同文件内"><a href="#不同文件内" class="headerlink" title="不同文件内"></a>不同文件内</h3><p>对于不同文件，主要有两点需要注意的。</p>
 <ul>
 <li>头文件重复包含问题</li>
 <li>结构体的声明问题</li>
@@ -389,9 +385,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/数据结构/" rel="tag"># 数据结构</a>
-          
             <a href="/tags/SceneKit/" rel="tag"># SceneKit</a>
+          
+            <a href="/tags/数据结构/" rel="tag"># 数据结构</a>
           
         </div>
       
@@ -469,8 +465,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -558,6 +563,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简述"><span class="nav-number">1.</span> <span class="nav-text">简述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例"><span class="nav-number">2.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结构体自引用"><span class="nav-number">3.</span> <span class="nav-text">结构体自引用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不使用typedef"><span class="nav-number">3.1.</span> <span class="nav-text">不使用typedef</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用typedef"><span class="nav-number">3.2.</span> <span class="nav-text">使用typedef</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结构体相互引用"><span class="nav-number">4.</span> <span class="nav-text">结构体相互引用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#同文件内"><span class="nav-number">4.1.</span> <span class="nav-text">同文件内</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用不完整类型"><span class="nav-number">4.1.1.</span> <span class="nav-text">使用不完整类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用前向声明"><span class="nav-number">4.1.2.</span> <span class="nav-text">使用前向声明</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不同文件内"><span class="nav-number">4.2.</span> <span class="nav-text">不同文件内</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
