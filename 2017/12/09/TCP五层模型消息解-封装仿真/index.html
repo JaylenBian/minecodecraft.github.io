@@ -79,22 +79,22 @@
 
 
 
-<meta name="description" content="消息封/解装仿真###功能要求按照TCP五层模型仿真消息在两台主机之间的通信过程。  在发送端模拟数据从高层到低层的封装过程，在接收端模拟数据从低层到高层的解封装过程。 按照每层的功能对数据填加报头，并显示每一层得到的封/解装格式。 传输层和网络层的封装格式参考TCP/IP的相应各层协议格式。 网络层的IP报文需要模拟报文分段和重组的过程。 数据链路层帧格式参考局域网的MAC帧格式。 物理层显示为">
+<meta name="description" content="消息封/解装仿真功能要求按照TCP五层模型仿真消息在两台主机之间的通信过程。  在发送端模拟数据从高层到低层的封装过程，在接收端模拟数据从低层到高层的解封装过程。 按照每层的功能对数据填加报头，并显示每一层得到的封/解装格式。 传输层和网络层的封装格式参考TCP/IP的相应各层协议格式。 网络层的IP报文需要模拟报文分段和重组的过程。 数据链路层帧格式参考局域网的MAC帧格式。 物理层显示为0或1">
 <meta name="keywords" content="TCP&#x2F;IP,计算机网络">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TCP五层模型消息解&#x2F;封装仿真">
 <meta property="og:url" content="https://minecodecraft.github.io/2017/12/09/TCP五层模型消息解-封装仿真/index.html">
 <meta property="og:site_name" content="Minecode&#39;s Blog">
-<meta property="og:description" content="消息封/解装仿真###功能要求按照TCP五层模型仿真消息在两台主机之间的通信过程。  在发送端模拟数据从高层到低层的封装过程，在接收端模拟数据从低层到高层的解封装过程。 按照每层的功能对数据填加报头，并显示每一层得到的封/解装格式。 传输层和网络层的封装格式参考TCP/IP的相应各层协议格式。 网络层的IP报文需要模拟报文分段和重组的过程。 数据链路层帧格式参考局域网的MAC帧格式。 物理层显示为">
+<meta property="og:description" content="消息封/解装仿真功能要求按照TCP五层模型仿真消息在两台主机之间的通信过程。  在发送端模拟数据从高层到低层的封装过程，在接收端模拟数据从低层到高层的解封装过程。 按照每层的功能对数据填加报头，并显示每一层得到的封/解装格式。 传输层和网络层的封装格式参考TCP/IP的相应各层协议格式。 网络层的IP报文需要模拟报文分段和重组的过程。 数据链路层帧格式参考局域网的MAC帧格式。 物理层显示为0或1">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/TCP_%E4%BA%94%E5%B1%82%E6%A8%A1%E5%9E%8B.png">
 <meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/TCP_%E9%9D%A2%E5%90%91%E8%BF%9E%E6%8E%A5%E7%9A%84Socket.png">
 <meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/image/network%E9%9D%A2%E5%90%91%E6%97%A0%E8%BF%9E%E6%8E%A5%E7%9A%84Socket.png">
 <meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/TCP_Showcase.gif">
-<meta property="og:updated_time" content="2017-12-09T05:28:25.474Z">
+<meta property="og:updated_time" content="2017-12-09T09:33:22.883Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCP五层模型消息解&#x2F;封装仿真">
-<meta name="twitter:description" content="消息封/解装仿真###功能要求按照TCP五层模型仿真消息在两台主机之间的通信过程。  在发送端模拟数据从高层到低层的封装过程，在接收端模拟数据从低层到高层的解封装过程。 按照每层的功能对数据填加报头，并显示每一层得到的封/解装格式。 传输层和网络层的封装格式参考TCP/IP的相应各层协议格式。 网络层的IP报文需要模拟报文分段和重组的过程。 数据链路层帧格式参考局域网的MAC帧格式。 物理层显示为">
+<meta name="twitter:description" content="消息封/解装仿真功能要求按照TCP五层模型仿真消息在两台主机之间的通信过程。  在发送端模拟数据从高层到低层的封装过程，在接收端模拟数据从低层到高层的解封装过程。 按照每层的功能对数据填加报头，并显示每一层得到的封/解装格式。 传输层和网络层的封装格式参考TCP/IP的相应各层协议格式。 网络层的IP报文需要模拟报文分段和重组的过程。 数据链路层帧格式参考局域网的MAC帧格式。 物理层显示为0或1">
 <meta name="twitter:image" content="http://p0h33xrro.bkt.clouddn.com/TCP_%E4%BA%94%E5%B1%82%E6%A8%A1%E5%9E%8B.png">
 
 
@@ -357,7 +357,7 @@
       
 
       
-        <h2 id="消息封-解装仿真"><a href="#消息封-解装仿真" class="headerlink" title="消息封/解装仿真"></a>消息封/解装仿真</h2><p>###功能要求<br>按照TCP五层模型仿真消息在两台主机之间的通信过程。</p>
+        <h2 id="消息封-解装仿真"><a href="#消息封-解装仿真" class="headerlink" title="消息封/解装仿真"></a>消息封/解装仿真</h2><h3 id="功能要求"><a href="#功能要求" class="headerlink" title="功能要求"></a>功能要求</h3><p>按照TCP五层模型仿真消息在两台主机之间的通信过程。</p>
 <ol>
 <li>在发送端模拟数据从高层到低层的封装过程，在接收端模拟数据从低层到高层的解封装过程。</li>
 <li>按照每层的功能对数据填加报头，并显示每一层得到的封/解装格式。</li>
@@ -375,8 +375,8 @@
 <li>一个特殊的协议，比如TCP或者UDP</li>
 </ul>
 <p><strong>其中，可以实现面向连接和无连接的Socket</strong></p>
-<p>###面向连接的Socket<br><img src="http://p0h33xrro.bkt.clouddn.com/TCP_%E9%9D%A2%E5%90%91%E8%BF%9E%E6%8E%A5%E7%9A%84Socket.png" alt="面向连接的Socket"></p>
-<p>###面向无连接的Socket<br><img src="http://p0h33xrro.bkt.clouddn.com/image/network%E9%9D%A2%E5%90%91%E6%97%A0%E8%BF%9E%E6%8E%A5%E7%9A%84Socket.png" alt="面向无连接的Socket"></p>
+<h3 id="面向连接的Socket"><a href="#面向连接的Socket" class="headerlink" title="面向连接的Socket"></a>面向连接的Socket</h3><p><img src="http://p0h33xrro.bkt.clouddn.com/TCP_%E9%9D%A2%E5%90%91%E8%BF%9E%E6%8E%A5%E7%9A%84Socket.png" alt="面向连接的Socket"></p>
+<h3 id="面向无连接的Socket"><a href="#面向无连接的Socket" class="headerlink" title="面向无连接的Socket"></a>面向无连接的Socket</h3><p><img src="http://p0h33xrro.bkt.clouddn.com/image/network%E9%9D%A2%E5%90%91%E6%97%A0%E8%BF%9E%E6%8E%A5%E7%9A%84Socket.png" alt="面向无连接的Socket"></p>
 <h2 id="模拟TCP"><a href="#模拟TCP" class="headerlink" title="模拟TCP"></a>模拟TCP</h2><table>
 <thead>
 <tr>
@@ -609,7 +609,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#消息封-解装仿真"><span class="nav-number">1.</span> <span class="nav-text">消息封/解装仿真</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Socket编程简介"><span class="nav-number">2.</span> <span class="nav-text">Socket编程简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Socket包含的内容"><span class="nav-number">2.1.</span> <span class="nav-text">Socket包含的内容</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模拟TCP"><span class="nav-number">3.</span> <span class="nav-text">模拟TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最终效果"><span class="nav-number">3.1.</span> <span class="nav-text">最终效果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行逻辑"><span class="nav-number">3.2.</span> <span class="nav-text">运行逻辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务端-Server"><span class="nav-number">3.3.</span> <span class="nav-text">服务端(Server)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端-Client"><span class="nav-number">3.4.</span> <span class="nav-text">客户端(Client)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#报头编码"><span class="nav-number">3.5.</span> <span class="nav-text">报头编码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他细节"><span class="nav-number">4.</span> <span class="nav-text">其他细节</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#消息封-解装仿真"><span class="nav-number">1.</span> <span class="nav-text">消息封/解装仿真</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#功能要求"><span class="nav-number">1.1.</span> <span class="nav-text">功能要求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Socket编程简介"><span class="nav-number">2.</span> <span class="nav-text">Socket编程简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Socket包含的内容"><span class="nav-number">2.1.</span> <span class="nav-text">Socket包含的内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#面向连接的Socket"><span class="nav-number">2.2.</span> <span class="nav-text">面向连接的Socket</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#面向无连接的Socket"><span class="nav-number">2.3.</span> <span class="nav-text">面向无连接的Socket</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模拟TCP"><span class="nav-number">3.</span> <span class="nav-text">模拟TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最终效果"><span class="nav-number">3.1.</span> <span class="nav-text">最终效果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行逻辑"><span class="nav-number">3.2.</span> <span class="nav-text">运行逻辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务端-Server"><span class="nav-number">3.3.</span> <span class="nav-text">服务端(Server)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端-Client"><span class="nav-number">3.4.</span> <span class="nav-text">客户端(Client)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#报头编码"><span class="nav-number">3.5.</span> <span class="nav-text">报头编码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他细节"><span class="nav-number">4.</span> <span class="nav-text">其他细节</span></a></li></ol></div>
             
 
           </div>
