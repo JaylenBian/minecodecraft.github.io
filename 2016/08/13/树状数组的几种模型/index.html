@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="数据结构,ACM," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="树状数组基本定义：树状数组是利用二分的思想使得查询和修改的复杂度都为log(n)的数据结构，主要用于查询数组前缀和、区间和并且经常更改数据。 数据结构思想：如上图，2的k次方的位置存放1一直到$2^k$这些数的和，然后再不断二分。具体实现可以用二进制解释，也就是例如XXX100中储存的是XXX000~XXX100这一个区间的所有数 基本操作：而要实现这一点，就要求一个二进制数的最低位1，这个可以用">
+<meta name="keywords" content="数据结构,ACM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="树状数组的几种模型">
+<meta property="og:url" content="https://minecodecraft.github.io/2016/08/13/树状数组的几种模型/index.html">
+<meta property="og:site_name" content="Minecode&#39;s Blog">
+<meta property="og:description" content="树状数组基本定义：树状数组是利用二分的思想使得查询和修改的复杂度都为log(n)的数据结构，主要用于查询数组前缀和、区间和并且经常更改数据。 数据结构思想：如上图，2的k次方的位置存放1一直到$2^k$这些数的和，然后再不断二分。具体实现可以用二进制解释，也就是例如XXX100中储存的是XXX000~XXX100这一个区间的所有数 基本操作：而要实现这一点，就要求一个二进制数的最低位1，这个可以用">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/Algo_%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F">
+<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/Algo_%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84%E6%94%B9%E6%AE%B5%E6%B1%82%E7%82%B9">
+<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/Algo_%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84%E6%94%B9%E6%AE%B5%E6%B1%82%E6%AE%B5">
+<meta property="og:updated_time" content="2017-12-17T13:48:36.401Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="树状数组的几种模型">
+<meta name="twitter:description" content="树状数组基本定义：树状数组是利用二分的思想使得查询和修改的复杂度都为log(n)的数据结构，主要用于查询数组前缀和、区间和并且经常更改数据。 数据结构思想：如上图，2的k次方的位置存放1一直到$2^k$这些数的和，然后再不断二分。具体实现可以用二进制解释，也就是例如XXX100中储存的是XXX000~XXX100这一个区间的所有数 基本操作：而要实现这一点，就要求一个二进制数的最低位1，这个可以用">
+<meta name="twitter:image" content="http://p0h33xrro.bkt.clouddn.com/Algo_%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://minecodecraft.github.io/2016/08/13/树状数组的几种模型/"/>
+
+
+
+
+
+  <title>树状数组的几种模型 | Minecode's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Minecode's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://minecodecraft.github.io/2016/08/13/树状数组的几种模型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Minecode">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Minecode's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">树状数组的几种模型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-13T11:54:00+08:00">
+                2016-08-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="树状数组"><a href="#树状数组" class="headerlink" title="树状数组"></a><strong>树状数组</strong></h2><p>基本定义：树状数组是利用二分的思想使得查询和修改的复杂度都为log(n)的数据结构，主要用于查询数组前缀和、区间和并且经常更改数据。<br><img src="http://p0h33xrro.bkt.clouddn.com/Algo_%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F" alt="树状数组的存储方式"></p>
+<p>数据结构思想：如上图，2的k次方的位置存放1一直到$2^k$这些数的和，然后再不断二分。具体实现可以用二进制解释，也就是例如XXX100中储存的是XXX000~XXX100这一个区间的所有数</p>
+<p>基本操作：而要实现这一点，就要求一个二进制数的最低位1，这个可以用lowbit操作实现：<br>一个二进制数x对其进行x&amp;(-x)的操作，就可以保留其最低位的1，而讲其他全部位全清零<br>所以一个数加上自己的lowbit，就到了上一级包含自己的区间，例如110(6)加上10变成了1000(8)，因为1000对应的0~1000<br>同样，减去自己的lowbit就相当于去尾。</p>
+<hr>
+<p><strong>模型1：改点求点求段</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设M为最大数的上限，treeray存树状数组</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> k,<span class="keyword">int</span> num)</span><span class="comment">//像某个位置添加的操作</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">while</span>(k&lt;=M)<span class="comment">//防止上界溢出</span></span><br><span class="line">&#123;</span><br><span class="line">treeray[k]+=num;</span><br><span class="line">k+=k&amp;(-k);<span class="comment">//不断加上lowbit来向上更新包含自己的区间</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">read</span><span class="params">(<span class="keyword">int</span> k)</span><span class="comment">//读取以某个位置为终点的前缀和</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span>(k)<span class="comment">//一定要注意树状数组不能储存0这个位置</span></span><br><span class="line">&#123;</span><br><span class="line">sum+=treeray[k];</span><br><span class="line">k-=k&amp;(-k);<span class="comment">//不断减lowbit来加上前面区间的和</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p><strong>模型2：改段求点</strong><br>当需要改段求点时，利用树状数组方便求前缀和的特性，我们采用记录变化量的技巧，就可以使得一个数的前缀和变成他之前所有的变化量，便可得到这个数本身。<br>在树状数组中，每个数初始化为0，然后每个位置记录它与左边的差值，如图所示：<br><img src="http://p0h33xrro.bkt.clouddn.com/Algo_%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84%E6%94%B9%E6%AE%B5%E6%B1%82%E7%82%B9" alt=""></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//add与read函数同上</span></span><br><span class="line"><span class="comment">//当在a与b间全部加上c时</span></span><br><span class="line">add(a,c);</span><br><span class="line">add(b+<span class="number">1</span>,c);</span><br><span class="line"><span class="comment">//当要得到k的值时</span></span><br><span class="line">read(k);</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>模型3：改段求段</strong><br>当需要改段求段时，与前一种类型的区别是，需要求某一点“真正的”前缀和。考虑前一种方法，只知道该点本身与前面所有变化量的总和，却不知道这些变化是从哪里开始的，无法方便地求出前缀和。我们先假设这个点之前所有数都与这个点相等，这样必然会多出前面的一些变化值<em>变化长度这么多，那么我们再用一个树状数组，其中在每一个变化点记录变化值</em>变化长度，那么最终算某个点的和，只需要再减去这个树状数组的在该点的值，如图所示：<br><img src="http://p0h33xrro.bkt.clouddn.com/Algo_%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84%E6%94%B9%E6%AE%B5%E6%B1%82%E6%AE%B5" alt=""><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> A[],B[]; <span class="comment">//两个树状数组</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">tadd</span><span class="params">(<span class="keyword">int</span> a[],<span class="keyword">int</span> x,<span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">while</span>(x&lt;=N)</span><br><span class="line">&#123;</span><br><span class="line">a[x]+=c;</span><br><span class="line">x+=lowbit(x);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">tread</span><span class="params">(<span class="keyword">int</span> a[],<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span>(x&gt;<span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">sum+=a[x];</span><br><span class="line">x-=lowbit(x);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">update</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b,<span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">tadd(A,a,c);</span><br><span class="line">tadd(A,b+<span class="number">1</span>,-c);</span><br><span class="line">tadd(B,a,c*(a<span class="number">-1</span>)); <span class="comment">//叠加前缀变化量</span></span><br><span class="line">tadd(B,b+<span class="number">1</span>,-c*b);</span><br><span class="line"><span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">querry</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> sum1=tread(A,a<span class="number">-1</span>)*(a<span class="number">-1</span>)-tread(B,a<span class="number">-1</span>);</span><br><span class="line"><span class="keyword">int</span> sum2=tread(A,b)*b-tread(B,b);</span><br><span class="line"><span class="keyword">return</span> sum2-sum1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p><strong>模型4：多维树状数组（以二维为例）</strong><br>多维树状数组只需把多维的每一维度分别当作一维树状数组即可，那么N维的某一点的前缀和，其实就是，各个维度的前缀和分别映射到其他维度的前缀和<br>所以这里给出二维树状数组的代码实现，具体可以见下面的例题POJ1195：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">tadd</span><span class="params">(<span class="keyword">int</span> i,<span class="keyword">int</span> j,<span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> x=i;x&lt;=N;x+=lowbit(x))</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> y=j;y&lt;=N;y+=lowbit(y))<span class="comment">//一定要注意这里不能再直接用传入的形参j了，因为每次循环都要使之成为刚传入的值</span></span><br><span class="line">base[x][y]+=c;</span><br><span class="line"><span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">tread</span><span class="params">(<span class="keyword">int</span> i,<span class="keyword">int</span> j)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> x=i;x&gt;<span class="number">0</span>;x-=lowbit(x))</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> y=j;y&gt;<span class="number">0</span>;y-=lowbit(y))</span><br><span class="line">sum+=base[x][y];</span><br><span class="line"><span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p><strong>注意提示</strong><br>1.树状数组中一定不能有0元，如果题目中有要注意处理。通常是整体数据加1，这样后同时也要注意变化后的数据上限<br>2.树状数组可以用来求逆序数，实现方法使让数字成为树状数组的元素，比某个数小的数有多少就是这个数在数组中的前缀和</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据结构/" rel="tag"># 数据结构</a>
+          
+            <a href="/tags/ACM/" rel="tag"># ACM</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/01/结构体的自引用及相互引用/" rel="prev" title="结构体的自引用及相互引用">
+                结构体的自引用及相互引用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Minecode</p>
+              <p class="site-description motion-element" itemprop="description">iOS鶸的奋斗之路</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Minecodecraft" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:minecoder@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
+                    
+                      <i class="fa fa-fw fa-globe"></i>简书</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://blog.csdn.net/b735098742" target="_blank" title="CSDN博客">
+                    
+                      <i class="fa fa-fw fa-globe"></i>CSDN博客</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#树状数组"><span class="nav-number">1.</span> <span class="nav-text">树状数组</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Minecode</span>
+
+  
+</div>
+
+
+<!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>-->
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2148924"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
