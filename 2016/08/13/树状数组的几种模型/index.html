@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="数据结构,ACM," />
+  <meta name="keywords" content="数据结构,ACM,算法," />
 
 
 
@@ -79,21 +79,21 @@
 
 
 
-<meta name="description" content="树状数组基本定义：树状数组是利用二分的思想使得查询和修改的复杂度都为log(n)的数据结构，主要用于查询数组前缀和、区间和并且经常更改数据。 数据结构思想：如上图，2的k次方的位置存放1一直到$2^k$这些数的和，然后再不断二分。具体实现可以用二进制解释，也就是例如XXX100中储存的是XXX000~XXX100这一个区间的所有数 基本操作：而要实现这一点，就要求一个二进制数的最低位1，这个可以用">
-<meta name="keywords" content="数据结构,ACM">
+<meta name="description" content="树状数组基本定义：树状数组是利用二分的思想使得查询和修改的复杂度都为log(n)的数据结构，主要用于查询数组前缀和、区间和并且经常更改数据。 数据结构思想：如上图，2的k次方的位置存放1一直到 2^k 这些数的和，然后再不断二分。具体实现可以用二进制解释，也就是例如XXX100中储存的是XXX000~XXX100这一个区间的所有数 基本操作：而要实现这一点，就要求一个二进制数的最低位1，这个可以用">
+<meta name="keywords" content="数据结构,ACM,算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="树状数组的几种模型">
 <meta property="og:url" content="https://minecodecraft.github.io/2016/08/13/树状数组的几种模型/index.html">
 <meta property="og:site_name" content="Minecode&#39;s Blog">
-<meta property="og:description" content="树状数组基本定义：树状数组是利用二分的思想使得查询和修改的复杂度都为log(n)的数据结构，主要用于查询数组前缀和、区间和并且经常更改数据。 数据结构思想：如上图，2的k次方的位置存放1一直到$2^k$这些数的和，然后再不断二分。具体实现可以用二进制解释，也就是例如XXX100中储存的是XXX000~XXX100这一个区间的所有数 基本操作：而要实现这一点，就要求一个二进制数的最低位1，这个可以用">
+<meta property="og:description" content="树状数组基本定义：树状数组是利用二分的思想使得查询和修改的复杂度都为log(n)的数据结构，主要用于查询数组前缀和、区间和并且经常更改数据。 数据结构思想：如上图，2的k次方的位置存放1一直到 2^k 这些数的和，然后再不断二分。具体实现可以用二进制解释，也就是例如XXX100中储存的是XXX000~XXX100这一个区间的所有数 基本操作：而要实现这一点，就要求一个二进制数的最低位1，这个可以用">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/Algo_%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F">
 <meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/Algo_%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84%E6%94%B9%E6%AE%B5%E6%B1%82%E7%82%B9">
 <meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/Algo_%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84%E6%94%B9%E6%AE%B5%E6%B1%82%E6%AE%B5">
-<meta property="og:updated_time" content="2017-12-17T13:48:36.401Z">
+<meta property="og:updated_time" content="2017-12-17T13:56:42.881Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="树状数组的几种模型">
-<meta name="twitter:description" content="树状数组基本定义：树状数组是利用二分的思想使得查询和修改的复杂度都为log(n)的数据结构，主要用于查询数组前缀和、区间和并且经常更改数据。 数据结构思想：如上图，2的k次方的位置存放1一直到$2^k$这些数的和，然后再不断二分。具体实现可以用二进制解释，也就是例如XXX100中储存的是XXX000~XXX100这一个区间的所有数 基本操作：而要实现这一点，就要求一个二进制数的最低位1，这个可以用">
+<meta name="twitter:description" content="树状数组基本定义：树状数组是利用二分的思想使得查询和修改的复杂度都为log(n)的数据结构，主要用于查询数组前缀和、区间和并且经常更改数据。 数据结构思想：如上图，2的k次方的位置存放1一直到 2^k 这些数的和，然后再不断二分。具体实现可以用二进制解释，也就是例如XXX100中储存的是XXX000~XXX100这一个区间的所有数 基本操作：而要实现这一点，就要求一个二进制数的最低位1，这个可以用">
 <meta name="twitter:image" content="http://p0h33xrro.bkt.clouddn.com/Algo_%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F">
 
 
@@ -357,7 +357,7 @@
 
       
         <h2 id="树状数组"><a href="#树状数组" class="headerlink" title="树状数组"></a><strong>树状数组</strong></h2><p>基本定义：树状数组是利用二分的思想使得查询和修改的复杂度都为log(n)的数据结构，主要用于查询数组前缀和、区间和并且经常更改数据。<br><img src="http://p0h33xrro.bkt.clouddn.com/Algo_%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F" alt="树状数组的存储方式"></p>
-<p>数据结构思想：如上图，2的k次方的位置存放1一直到$2^k$这些数的和，然后再不断二分。具体实现可以用二进制解释，也就是例如XXX100中储存的是XXX000~XXX100这一个区间的所有数</p>
+<p>数据结构思想：如上图，2的k次方的位置存放1一直到 2^k 这些数的和，然后再不断二分。具体实现可以用二进制解释，也就是例如XXX100中储存的是XXX000~XXX100这一个区间的所有数</p>
 <p>基本操作：而要实现这一点，就要求一个二进制数的最低位1，这个可以用lowbit操作实现：<br>一个二进制数x对其进行x&amp;(-x)的操作，就可以保留其最低位的1，而讲其他全部位全清零<br>所以一个数加上自己的lowbit，就到了上一级包含自己的区间，例如110(6)加上10变成了1000(8)，因为1000对应的0~1000<br>同样，减去自己的lowbit就相当于去尾。</p>
 <hr>
 <p><strong>模型1：改点求点求段</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设M为最大数的上限，treeray存树状数组</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> k,<span class="keyword">int</span> num)</span><span class="comment">//像某个位置添加的操作</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">while</span>(k&lt;=M)<span class="comment">//防止上界溢出</span></span><br><span class="line">&#123;</span><br><span class="line">treeray[k]+=num;</span><br><span class="line">k+=k&amp;(-k);<span class="comment">//不断加上lowbit来向上更新包含自己的区间</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">read</span><span class="params">(<span class="keyword">int</span> k)</span><span class="comment">//读取以某个位置为终点的前缀和</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span>(k)<span class="comment">//一定要注意树状数组不能储存0这个位置</span></span><br><span class="line">&#123;</span><br><span class="line">sum+=treeray[k];</span><br><span class="line">k-=k&amp;(-k);<span class="comment">//不断减lowbit来加上前面区间的和</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -390,6 +390,8 @@
             <a href="/tags/数据结构/" rel="tag"># 数据结构</a>
           
             <a href="/tags/ACM/" rel="tag"># ACM</a>
+          
+            <a href="/tags/算法/" rel="tag"># 算法</a>
           
         </div>
       
@@ -514,7 +516,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
