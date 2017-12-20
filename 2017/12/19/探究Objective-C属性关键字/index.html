@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Minecode&#39;s Blog">
 <meta property="og:description" content="在使用Objective-C时，频繁用到属性关键字。我们应该理解每种属性的意义，并了解一些偏底层的实现，故在此对OC的属性关键字做个浅析。 基础概念：ivar、getter、setter在C语言中，我们通常是直接操作成员变量。而在Objective-C中，使用了“属性”这一概念来封装对象中的数据，OC对象会把需要的数据保存为各种实例变量，同时通过“存取方法”(Access Method)来进行访问">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-20T09:57:06.212Z">
+<meta property="og:updated_time" content="2017-12-20T09:59:17.279Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="探究Objective-C属性关键字">
 <meta name="twitter:description" content="在使用Objective-C时，频繁用到属性关键字。我们应该理解每种属性的意义，并了解一些偏底层的实现，故在此对OC的属性关键字做个浅析。 基础概念：ivar、getter、setter在C语言中，我们通常是直接操作成员变量。而在Objective-C中，使用了“属性”这一概念来封装对象中的数据，OC对象会把需要的数据保存为各种实例变量，同时通过“存取方法”(Access Method)来进行访问">
@@ -367,8 +367,66 @@
 <h3 id="Runtime下的定义"><a href="#Runtime下的定义" class="headerlink" title="Runtime下的定义"></a>Runtime下的定义</h3><p>我们首先反编译为cpp代码，可以发现property在OC运行时中是<code>objc_property_t</code>类型的，定义如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">objc_property</span> *<span class="title">objc_property_t</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">property_t</span> &#123;</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *name;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *attributes;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
 <p>property结构体有name和attributes两个成员变量，而attributes则是property的属性定义，我们看一下它的定义：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// Defines a property attribute</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *name;           <span class="comment">/**&lt; The name of the attribute */</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *value;          <span class="comment">/**&lt; The value of the attribute (usually empty) */</span></span><br><span class="line">&#125; <span class="keyword">objc_property_attribute_t</span>;</span><br></pre></td></tr></table></figure></p>
 <p>我们可以通过以下方法获取对应变量：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取所有属性列表</span></span><br><span class="line">class_copyPropertyList</span><br><span class="line"><span class="comment">// 获取属性名</span></span><br><span class="line">property_getName</span><br><span class="line"><span class="comment">// 获取属性描述字符串</span></span><br><span class="line">property_getAttributes</span><br><span class="line"><span class="comment">// 获取所有属性列表</span></span><br><span class="line">property_copyAttributeList</span><br></pre></td></tr></table></figure></p>
-<p>可以看到，每一个attribute对应一种属性修饰符，property所定义的属性就包含其中。对应关系如下<br>|  属性修饰符类型  |   name     |   value   |<br>|       —        |    –      |     –    |<br>|   属性类型       |     T      |    属性类型名  |<br>|   内存管理       |   C(copy)  &amp;(strong/retain)  W(weak)  R(readonly)      |    空    |<br>|   自定义getter/setter       |     G(getter)  S(setter)      |    方法名    |<br>|   原子/非原子类型       |     N(nonatomic)  空(atomic)      |    空    |<br>|   ivar名称       |     V      |    变量名称    |</p>
-<p>比如我们分别定义一个对象类型、标量、以及id类型的属性来看一下<br>|  属性定义  |   attributes描述     |<br>|       —        |    –      |<br>|@property char charDefault;|Tc,V_charDefault|<br>|@property (nonatomic, copy) NSString *myString;|T@”NSString”,C,N,V_myString|<br>|@property(nonatomic, readonly, retain) id idVar;|T@,R,&amp;,V_idVar|</p>
+<p>可以看到，每一个attribute对应一种属性修饰符，property所定义的属性就包含其中。对应关系如下</p>
+<table>
+<thead>
+<tr>
+<th>属性修饰符类型</th>
+<th>name</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>属性类型</td>
+<td>T</td>
+<td>属性类型名</td>
+</tr>
+<tr>
+<td>内存管理</td>
+<td>C(copy)  &amp;(strong/retain)  W(weak)  R(readonly)</td>
+<td>空</td>
+</tr>
+<tr>
+<td>自定义getter/setter</td>
+<td>G(getter)  S(setter)</td>
+<td>方法名</td>
+</tr>
+<tr>
+<td>原子/非原子类型</td>
+<td>N(nonatomic)  空(atomic)</td>
+<td>空</td>
+</tr>
+<tr>
+<td>ivar名称</td>
+<td>V</td>
+<td>变量名称</td>
+</tr>
+</tbody>
+</table>
+<p>比如我们分别定义一个对象类型、标量、以及id类型的属性来看一下</p>
+<table>
+<thead>
+<tr>
+<th>属性定义</th>
+<th>attributes描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>@property char charDefault;</td>
+<td>Tc,V_charDefault</td>
+</tr>
+<tr>
+<td>@property (nonatomic, copy) NSString *myString;</td>
+<td>T@”NSString”,C,N,V_myString</td>
+</tr>
+<tr>
+<td>@property(nonatomic, readonly, retain) id idVar;</td>
+<td>T@,R,&amp;,V_idVar</td>
+</tr>
+</tbody>
+</table>
 <blockquote>
 <p>注意：注意描述符中的<code>V_ivar名称</code>，此描述符是基于64bit系统的，因为会自动合成ivar，如果是32bit系统则不会有下划线，前文已做解释。</p>
 </blockquote>
