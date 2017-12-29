@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Github,CocoaPods,OpenSource," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言CocoaPods是一款很棒的依赖管理工具，在开发中也经常用它来导入开源第三方库。最近也想把自己的一些库开源并加入CocoaPods中，特总结一下自己制作CocoaPods库的过程。 前提在制作之前，你需要：  掌握CocoaPods的基本使用 掌握Git的简单使用 准备好自己要开源的成品  开始制作下面我们开始制作自己的开源库，以个人的MCScratchImageView为例。 推送至Git">
+<meta name="keywords" content="Github,CocoaPods,OpenSource">
+<meta property="og:type" content="article">
+<meta property="og:title" content="创建自己的CocoaPods库并提交指南">
+<meta property="og:url" content="https://minecodecraft.github.io/2017/12/30/创建自己的CocoaPods库并提交指南/index.html">
+<meta property="og:site_name" content="Minecode&#39;s Blog">
+<meta property="og:description" content="前言CocoaPods是一款很棒的依赖管理工具，在开发中也经常用它来导入开源第三方库。最近也想把自己的一些库开源并加入CocoaPods中，特总结一下自己制作CocoaPods库的过程。 前提在制作之前，你需要：  掌握CocoaPods的基本使用 掌握Git的简单使用 准备好自己要开源的成品  开始制作下面我们开始制作自己的开源库，以个人的MCScratchImageView为例。 推送至Git">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/CocoaPods_SHA.png">
+<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/CocoaPods_GithubTag.png">
+<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/CocoaPods_git%E6%BA%90.png">
+<meta property="og:updated_time" content="2017-12-29T16:08:06.451Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="创建自己的CocoaPods库并提交指南">
+<meta name="twitter:description" content="前言CocoaPods是一款很棒的依赖管理工具，在开发中也经常用它来导入开源第三方库。最近也想把自己的一些库开源并加入CocoaPods中，特总结一下自己制作CocoaPods库的过程。 前提在制作之前，你需要：  掌握CocoaPods的基本使用 掌握Git的简单使用 准备好自己要开源的成品  开始制作下面我们开始制作自己的开源库，以个人的MCScratchImageView为例。 推送至Git">
+<meta name="twitter:image" content="http://p0h33xrro.bkt.clouddn.com/CocoaPods_SHA.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://minecodecraft.github.io/2017/12/30/创建自己的CocoaPods库并提交指南/"/>
+
+
+
+
+
+  <title>创建自己的CocoaPods库并提交指南 | Minecode's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Minecode's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://minecodecraft.github.io/2017/12/30/创建自己的CocoaPods库并提交指南/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Minecode">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Minecode's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">创建自己的CocoaPods库并提交指南</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-30T00:06:00+08:00">
+                2017-12-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/开源框架/" itemprop="url" rel="index">
+                    <span itemprop="name">开源框架</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>CocoaPods是一款很棒的依赖管理工具，在开发中也经常用它来导入开源第三方库。最近也想把自己的一些库开源并加入CocoaPods中，特总结一下自己制作CocoaPods库的过程。</p>
+<h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><p>在制作之前，你需要：</p>
+<ul>
+<li>掌握CocoaPods的基本使用</li>
+<li>掌握Git的简单使用</li>
+<li>准备好自己要开源的成品</li>
+</ul>
+<h2 id="开始制作"><a href="#开始制作" class="headerlink" title="开始制作"></a>开始制作</h2><p>下面我们开始制作自己的开源库，以个人的<a href="https://github.com/Minecodecraft/MCScratchImageView" target="_blank" rel="external">MCScratchImageView</a>为例。</p>
+<h3 id="推送至Git仓库-Github"><a href="#推送至Git仓库-Github" class="headerlink" title="推送至Git仓库(Github)"></a>推送至Git仓库(Github)</h3><p>首先需要将你的开源框架上传至远程仓库，比如Github，使用方式不再赘述。记录下你要使用的commit版本对应的SHA值。如下图：</p>
+<p><img src="http://p0h33xrro.bkt.clouddn.com/CocoaPods_SHA.png" alt="SHA Code"></p>
+<h3 id="为所选版本打tag"><a href="#为所选版本打tag" class="headerlink" title="为所选版本打tag"></a>为所选版本打tag</h3><h4 id="在Github自带tag功能"><a href="#在Github自带tag功能" class="headerlink" title="在Github自带tag功能"></a>在Github自带tag功能</h4><p>在Github上为项目打tag可在release页面，选择创建新tag并按下图所示填写即可。删除tag也同理。<br>由于CocoaPods的版本信息仅支持数字的格式(如1.0.0)，所以版本号请勿带有其他特殊符号和字母。<br><img src="http://p0h33xrro.bkt.clouddn.com/CocoaPods_GithubTag.png" alt="Tag on Github"></p>
+<h4 id="使用命令行"><a href="#使用命令行" class="headerlink" title="使用命令行"></a>使用命令行</h4><p>使用命令行进行版本管理较为方便，简单步骤为: 创建本地tag -&gt; 将tag推至远程仓库。</p>
+<p>参考如下代码：<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/<span class="regexp">/ 创建本地tag</span></span><br><span class="line"><span class="regexp">git tag -a 1.0.0 0c3b62d -m "Release Edition v1.0.0"</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 同步到远程仓库</span></span><br><span class="line"><span class="regexp">git push origin 1.0.0</span></span><br></pre></td></tr></table></figure></p>
+<p>具体Tag的使用方式，可以参考<a href="http://minecode.link/2016/10/21/%E4%BD%BF%E7%94%A8Git%E6%B7%BB%E5%8A%A0Tag%E7%9A%84%E6%96%B9%E6%B3%95/" target="_blank" rel="external">使用Git添加tag的方法</a></p>
+<h3 id="制作Podspec描述文件"><a href="#制作Podspec描述文件" class="headerlink" title="制作Podspec描述文件"></a>制作Podspec描述文件</h3><h4 id="生成Podspec"><a href="#生成Podspec" class="headerlink" title="生成Podspec"></a>生成Podspec</h4><p>首先在项目主目录输入一下命令<br><code>pod spec create &lt;你的项目名&gt;</code></p>
+<p>该命令会在目录中生成一个.podspec格式的文件，包含了该框架的详细信息，我们创建CocoaPods库的所有配置都围绕它来完成。</p>
+<h4 id="配置Podspec文件"><a href="#配置Podspec文件" class="headerlink" title="配置Podspec文件"></a>配置Podspec文件</h4><p>使用编辑工具(如SublimeText)打开该podspec文件，文档中已经有详细描述，在此简单说明一下各属性作用：</p>
+<p><strong>s.name</strong>: 框架名称</p>
+<p><strong>s.version</strong>: 框架最新版本号。这个版本号对应了你Git仓库中某个提交的tag，如果仓库中对应的tag不存在则会提交失败。</p>
+<p><strong>s.summary</strong>: 框架的概述。<br><strong>s.description</strong>: 框架的详细介绍。<br><strong>s.homepage</strong>: 框架对应页面，随便写<br><strong>s.license</strong>: 框架的开源协议<br><strong>s.author</strong>: 框架作者及邮箱，设置方式见注释</p>
+<p><strong>s.platform</strong>: 这个要按注释写清支持的系统和版本，同时也要保证实际情况，比如Swift3.0最低支持到iOS 8.0，你就不能写最低支持iOS 7.0</p>
+<p><strong>s.source</strong>: 对应的git源，在Github-&gt;Clone or download-&gt;Clone with HTTPS中<br><img src="http://p0h33xrro.bkt.clouddn.com/CocoaPods_git%E6%BA%90.png" alt="Git source"></p>
+<p><strong>s.source_files</strong>: 库的源代码文件。这个是重点，应该包含全部你的库所需的文件。<br>如<code>&quot;s.source_files  = MCScratchImageView/*.swift&quot;</code>为MCScratchImageView文件夹内的全部swift代码文件。注意默认为.h和.m文件，需要设置为swift的格式。可以设置多个文件参数。</p>
+<p><strong>s.framework</strong>: 项目所用到的原生框架，如UIKit Framework</p>
+<p><strong>s.dependency</strong>: 项目需要的其他CocoaPods库，如<code>s.dependency &quot;JSONKit&quot;, &quot;~&gt; 1.4&quot;</code></p>
+<h4 id="验证Podspec文件"><a href="#验证Podspec文件" class="headerlink" title="验证Podspec文件"></a>验证Podspec文件</h4><p>配置完Podspec文件之后，我们可以预先验证一下文件是否可用。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod spec lint &lt;文件名称&gt;.podspec</span><br></pre></td></tr></table></figure>
+<p>若提示<code>&lt;文件名&gt; passed validation.</code>，则验证通过。</p>
+<h2 id="发布到CocoaPods-Trunk方式"><a href="#发布到CocoaPods-Trunk方式" class="headerlink" title="发布到CocoaPods(Trunk方式)"></a>发布到CocoaPods(Trunk方式)</h2><p>完成了所有的制作之后，我们现在将库发布到CocoaPods。使用了其自带的Trunk工具进行提交。</p>
+<h3 id="注册Trunk"><a href="#注册Trunk" class="headerlink" title="注册Trunk"></a>注册Trunk</h3><p>首先需要将本机注册到trunk<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod trunk register &lt;E-mail&gt; <span class="string">'&lt;用户名&gt;'</span> --description=<span class="string">'&lt;设备别名&gt;'</span></span><br></pre></td></tr></table></figure></p>
+<p>提交注册后，所填写的邮箱将会收到一个验证邮件，确认验证即可。</p>
+<p>同时也可以为项目添加其他维护者:<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod trunk add-owner &lt;库名&gt; &lt;其他维护者邮箱&gt;</span><br></pre></td></tr></table></figure></p>
+<p>可以使用<code>pod trunk me</code>来查看当前账户信息。</p>
+<h3 id="使用Trunk提交"><a href="#使用Trunk提交" class="headerlink" title="使用Trunk提交"></a>使用Trunk提交</h3><p>通过配置好的Podspec，我们可以将库提交到CocoaPods上。使用以下命令:<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod trunk push &lt;文件名&gt;.podspec</span><br></pre></td></tr></table></figure></p>
+<p>提交过程会检查你的代码能否正确编译、以及Podspec是否正确配置。若成功将会显示祝贺信息。</p>
+<h3 id="查看提交库信息"><a href="#查看提交库信息" class="headerlink" title="查看提交库信息"></a>查看提交库信息</h3><p>我们可以在提交成功后查看是库是否已经在CocoaPods上，命令如下:<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pod search &lt;库名&gt;</span><br><span class="line">/<span class="regexp">/ 如果查找不到，可以尝试</span></span><br><span class="line"><span class="regexp">pod search &lt;库名&gt; --simple</span></span><br></pre></td></tr></table></figure></p>
+<p>如果找不到，可以尝试<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod setup</span><br><span class="line">rm ~<span class="regexp">/Library/</span>Caches/CocoaPods/search_index.json</span><br></pre></td></tr></table></figure></p>
+<p>如果能查看到库信息，则说明上传成功。我们可以看到库的介绍以及所有版本等信息。</p>
+<h3 id="删除库的指定版本"><a href="#删除库的指定版本" class="headerlink" title="删除库的指定版本"></a>删除库的指定版本</h3><p>当上传的库版本号已存在时会发生冲突，不能覆盖。所以我们只能先删除指定版本再重新提交。<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod trunk delete &lt;库名&gt; &lt;版本号&gt;</span><br></pre></td></tr></table></figure></p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>至此，我们已经成功把自己的库提交至CocoaPods，用户可以通过Podfile来使用。<br>下面附一份本人CocoaPods库的Podspec文件以供参考,  <a href="https://github.com/Minecodecraft/MCScratchImageView" target="_blank" rel="external">MCScratchImageView</a></p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Pod::Spec.new <span class="keyword">do</span> <span class="params">|s|</span></span><br><span class="line">s.name         = <span class="string">"MCScratchImageView"</span></span><br><span class="line">s.version      = <span class="string">"1.0.0"</span></span><br><span class="line">s.summary      = <span class="string">"Custom ImageView like scratch card"</span></span><br><span class="line">s.description  = <span class="string">&lt;&lt;-DESC</span></span><br><span class="line"><span class="string">A custom ImageView that is used to cover the surface of other view like a scratch card, user can swipe the mulch to see the view below.</span></span><br><span class="line"><span class="string">DESC</span></span><br><span class="line">s.homepage     = <span class="string">"https://github.com/Minecodecraft/MCScratchImageView"</span></span><br><span class="line">s.license      = <span class="string">"MIT"</span></span><br><span class="line">s.author       = &#123; <span class="string">"Minecode"</span> =&gt; <span class="string">"Minecoder@163.com"</span> &#125;</span><br><span class="line">s.platform     = <span class="symbol">:ios</span>, <span class="string">"8.0"</span></span><br><span class="line">s.source       = &#123; <span class="symbol">:git</span> =&gt; <span class="string">"https://github.com/Minecodecraft/MCScratchImageView.git"</span>, <span class="symbol">:tag</span> =&gt; <span class="string">"<span class="subst">#&#123;s.version&#125;</span>"</span> &#125;</span><br><span class="line">s.source_files  = <span class="string">"MCScratchImageView/MCScratchImageView.swift"</span></span><br><span class="line">s.framework  = <span class="string">"UIKit"</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>如有问题，可以发送邮件至 <a href="mailto:minecoder@163.com" target="_blank" rel="external">minecoder@163.com</a><br>欢迎共同探讨iOS开发问题</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Github/" rel="tag"># Github</a>
+          
+            <a href="/tags/CocoaPods/" rel="tag"># CocoaPods</a>
+          
+            <a href="/tags/OpenSource/" rel="tag"># OpenSource</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/21/Objective-C开发中Clang的使用/" rel="next" title="Objective-C开发中Clang的使用">
+                <i class="fa fa-chevron-left"></i> Objective-C开发中Clang的使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Minecode</p>
+              <p class="site-description motion-element" itemprop="description">在校iOS开发者，前ACM鶸，致力于成为移动端正/逆向全栈。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Minecodecraft" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:minecoder@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
+                    
+                      <i class="fa fa-fw fa-globe"></i>简书</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://blog.csdn.net/b735098742" target="_blank" title="CSDN博客">
+                    
+                      <i class="fa fa-fw fa-globe"></i>CSDN博客</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前提"><span class="nav-number">2.</span> <span class="nav-text">前提</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始制作"><span class="nav-number">3.</span> <span class="nav-text">开始制作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#推送至Git仓库-Github"><span class="nav-number">3.1.</span> <span class="nav-text">推送至Git仓库(Github)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为所选版本打tag"><span class="nav-number">3.2.</span> <span class="nav-text">为所选版本打tag</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#在Github自带tag功能"><span class="nav-number">3.2.1.</span> <span class="nav-text">在Github自带tag功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用命令行"><span class="nav-number">3.2.2.</span> <span class="nav-text">使用命令行</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#制作Podspec描述文件"><span class="nav-number">3.3.</span> <span class="nav-text">制作Podspec描述文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#生成Podspec"><span class="nav-number">3.3.1.</span> <span class="nav-text">生成Podspec</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置Podspec文件"><span class="nav-number">3.3.2.</span> <span class="nav-text">配置Podspec文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#验证Podspec文件"><span class="nav-number">3.3.3.</span> <span class="nav-text">验证Podspec文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布到CocoaPods-Trunk方式"><span class="nav-number">4.</span> <span class="nav-text">发布到CocoaPods(Trunk方式)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#注册Trunk"><span class="nav-number">4.1.</span> <span class="nav-text">注册Trunk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Trunk提交"><span class="nav-number">4.2.</span> <span class="nav-text">使用Trunk提交</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看提交库信息"><span class="nav-number">4.3.</span> <span class="nav-text">查看提交库信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除库的指定版本"><span class="nav-number">4.4.</span> <span class="nav-text">删除库的指定版本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例"><span class="nav-number">5.</span> <span class="nav-text">示例</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Minecode</span>
+
+  
+</div>
+
+
+<!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>-->
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2148924"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
