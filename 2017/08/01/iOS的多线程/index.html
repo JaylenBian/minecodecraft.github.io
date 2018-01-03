@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="GCD,多线程,iOS技术,性能优化," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在iOS开发中我们经常涉及到多线程的问题，多线程广泛用于耗时操作、并发、单例等方面。故总结一下多线程的相关知识及用法(pthread NSThread GCD NSOperation)。 基本概念进程: 操作系统运行中的任务通常对应一个进程，当进程进入内存后，及变成一个进程。在iOS中每个启动的APP即为一个进程。进程之间独立且受保护。线程: 进程内部每个顺序执行流就是一个线程，一个进程可以有多个">
+<meta name="keywords" content="GCD,多线程,iOS技术,性能优化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS的多线程">
+<meta property="og:url" content="https://minecodecraft.github.io/2017/08/01/iOS的多线程/index.html">
+<meta property="og:site_name" content="Minecode&#39;s Blog">
+<meta property="og:description" content="在iOS开发中我们经常涉及到多线程的问题，多线程广泛用于耗时操作、并发、单例等方面。故总结一下多线程的相关知识及用法(pthread NSThread GCD NSOperation)。 基本概念进程: 操作系统运行中的任务通常对应一个进程，当进程进入内存后，及变成一个进程。在iOS中每个启动的APP即为一个进程。进程之间独立且受保护。线程: 进程内部每个顺序执行流就是一个线程，一个进程可以有多个">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/Thread_ThreadStatus.png">
+<meta property="og:updated_time" content="2018-01-03T14:41:19.395Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS的多线程">
+<meta name="twitter:description" content="在iOS开发中我们经常涉及到多线程的问题，多线程广泛用于耗时操作、并发、单例等方面。故总结一下多线程的相关知识及用法(pthread NSThread GCD NSOperation)。 基本概念进程: 操作系统运行中的任务通常对应一个进程，当进程进入内存后，及变成一个进程。在iOS中每个启动的APP即为一个进程。进程之间独立且受保护。线程: 进程内部每个顺序执行流就是一个线程，一个进程可以有多个">
+<meta name="twitter:image" content="http://p0h33xrro.bkt.clouddn.com/Thread_ThreadStatus.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://minecodecraft.github.io/2017/08/01/iOS的多线程/"/>
+
+
+
+
+
+  <title>iOS的多线程 | Minecode's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Minecode's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://minecodecraft.github.io/2017/08/01/iOS的多线程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Minecode">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Minecode's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS的多线程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-01T22:40:00+08:00">
+                2017-08-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS技术/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在iOS开发中我们经常涉及到多线程的问题，多线程广泛用于耗时操作、并发、单例等方面。故总结一下多线程的相关知识及用法(pthread NSThread GCD NSOperation)。</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p><strong>进程</strong>: 操作系统运行中的任务通常对应一个进程，当进程进入内存后，及变成一个进程。在iOS中每个启动的APP即为一个进程。进程之间独立且受保护。<br><strong>线程</strong>: 进程内部每个顺序执行流就是一个线程，一个进程可以有多个线程。<br><strong>任务</strong>: 一种抽象的概念，表示需要执行的工作。</p>
+<p><strong>多线程原理</strong>:单个处理器同一时间只能处理一个线程，通过快速在多个线程之间轮换执行，使得宏观上具有多个线程同时执行的效果。多线程具体内容见操作系统原理。</p>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p>多线程的优点不言而喻，比如可以提高程序执行效率、提高资源利用率、并在执行完任务后自动销毁。<br>但多线程的使用依然要适度，多线程存在一些缺点。</p>
+<p>首先，开启多线程需要一定的内存开销: 根据官方文档说明，<strong>主要线程占用空间1MB(其实实际只占用了512k)，次要线程每开启一个占用512kb(我们所创建的线程即是次要线程)。每次线程创建耗时90ms。所以，过度使用多线程反而会使性能降低。</strong><br>其次，我们知道CPU是通过线程的轮换而实现多线程的，那么每次切换线程都会在上下文切换时产生性能开销。<br>最后，线程间通信也是一个需要考虑的问题，即生产者–消费者问题，增加了数据共享的难度。</p>
+<h2 id="iOS系统多线程原则及方案"><a href="#iOS系统多线程原则及方案" class="headerlink" title="iOS系统多线程原则及方案"></a>iOS系统多线程原则及方案</h2><h3 id="iOS多线程原则"><a href="#iOS多线程原则" class="headerlink" title="iOS多线程原则"></a>iOS多线程原则</h3><p>首先，我们先解释一个概念: <strong>UI线程/主线程</strong><br>在开发中常提到”UI线程”或”主线程”，iOS系统在程序运行之后会默认开启一个线程来作为主线程，其一般用于刷新UI界面，处理UI事件。我们在没有指定任务在其他线程执行时，也是直接在主线程执行的。<br><strong>所有UI更新操作都应该在主线程进行。</strong>因为iOS的UI控件默认都是线程不安全的，这是出于性能的考虑。如果在其他线程更新，有一定几率出现问题。<br><strong>耗时操作不应放在主线程执行。</strong>正是因为UI更新都是在主线程完成的，那么如果我们将耗时操作放在主线程，将会阻塞主线程，导致页面卡住，降低用户体验。</p>
+<h3 id="iOS的多线程技术方案"><a href="#iOS的多线程技术方案" class="headerlink" title="iOS的多线程技术方案"></a>iOS的多线程技术方案</h3><p>iOS系统存在着4中多线程技术方案: <strong>pthread、NSThread、GCD、NSOperation</strong>。(Swift中名称略有不同)</p>
+<table>
+<thead>
+<tr>
+<th>多线程方案</th>
+<th>语言</th>
+<th>ARC下的内存管理</th>
+<th>使用频率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pthread</td>
+<td>C</td>
+<td>程序员手动管理</td>
+<td>★☆☆☆☆</td>
+</tr>
+<tr>
+<td>NSThread</td>
+<td>OC/Swift(Thread)</td>
+<td>程序员手动管理</td>
+<td>★★☆☆☆</td>
+</tr>
+<tr>
+<td>GCD</td>
+<td>C/OC/Swift</td>
+<td>ARC自动管理(多数情况)</td>
+<td>★★★★★</td>
+</tr>
+<tr>
+<td>NSOperation</td>
+<td>OC/Swift</td>
+<td>ARC自动管理</td>
+<td>★★★★☆</td>
+</tr>
+</tbody>
+</table>
+<p>Tips: 主要以OC讲解，在Swift 3.0+中名称与用法略有不同。(如NSThread -&gt; Thread, dispatch_XXX -&gt; DispatchQueue)</p>
+<h2 id="多线程的使用"><a href="#多线程的使用" class="headerlink" title="多线程的使用"></a>多线程的使用</h2><h3 id="pthread-POSIX-threads"><a href="#pthread-POSIX-threads" class="headerlink" title="pthread (POSIX threads)"></a>pthread (POSIX threads)</h3><p>这个是最老盘的多线程方案了，在类Unix操作系统（Unix、Linux、Mac OS X等）中，都使用pthread作为操作系统的线程。iOS开发中基本不会用到(如果你频繁使用pthread，那么受我一拜…)。</p>
+<p>使用pthread需要导入头文件: <code>#import &lt;pthread.h&gt;</code> 或 <code>#import &lt;pthread/pthread.h&gt;</code></p>
+<p>使用方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">- (void)pthreadTest &#123;</span><br><span class="line">    /*</span><br><span class="line">     创建线程使用pthread_create函数</span><br><span class="line">     函数原型: pthread_create(pthread_t  _Nullable *restrict _Nonnull, const pthread_attr_t *restrict _Nullable, void * _Nullable (* _Nonnull)(void * _Nullable), void *restrict _Nullable)</span><br><span class="line">     参数：</span><br><span class="line">     1) 线程标识符指针，pthread_t</span><br><span class="line">     2) 线程属性(注意空地址为NULL,空对象是nil)</span><br><span class="line">     3) 要执行的函数指针</span><br><span class="line">     4) 执行函数的参数</span><br><span class="line"></span><br><span class="line">     返回值：</span><br><span class="line">     - 创建成功，返回0</span><br><span class="line">     - 创建失败，返回出错代码</span><br><span class="line">    */</span><br><span class="line">    pthread_t id = NULL;</span><br><span class="line">    NSString *paraStr = @&quot;Hello World&quot;;</span><br><span class="line"></span><br><span class="line">    int res = pthread_create(&amp;id, NULL, taskFunction, (__bridge void *)(paraStr));</span><br><span class="line"></span><br><span class="line">    if (res == 0) &#123;</span><br><span class="line">        NSLog(@&quot;线程创建完成&quot;);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        NSLog(@&quot;线程创建失败 错误:%d&quot;, res);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    pthread_detach(id);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void *taskFunction(void *params) &#123;</span><br><span class="line"></span><br><span class="line">    NSString *str = (__bridge NSString *)(params);</span><br><span class="line">    NSLog(@&quot;Thread:%@ -&gt; Message:%@&quot;, [NSThread currentThread], str);</span><br><span class="line"></span><br><span class="line">    return NULL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="补充-bridge"><a href="#补充-bridge" class="headerlink" title="补充: __bridge"></a>补充: <code>__bridge</code></h4><p>在OC与C进行混编时，会遇到OC对象与C变量之间的转换问题。在OC中<code>id</code>为万能指针，而C中<code>void *</code>为万能指针。在id类型或对象类型变量赋值给<code>void *</code>类型或反向赋值时，需要进行特定转换。</p>
+<p>为什么要进行转换呢？这主要是因为面向对象涉及到的内存管理问题，OC中对象由MRC、ARC来进行管理，而其不能管理C变量，那么在转换时会造成内存管理的冲突。<code>__bridge</code>即告知编译器，该变量内存由程序员自行进行管理。</p>
+<p>同时桥接转换还有另外两种类型: <code>__bridge_retained</code>和<code>__bridge_transfer</code>，前者为是被赋值的变量持有该对象，后者为被赋值的变量持有该对象并使赋值的对象释放其持有。由于涉及到引用计数知识，在此不赘述。如果只是为了单纯赋值，那么使用<code>__bridge即可</code>。</p>
+<h3 id="NSThread"><a href="#NSThread" class="headerlink" title="NSThread"></a>NSThread</h3><p>由于pthread过于底层，复杂性不利于开发。故苹果封装成了NSThread，这是一款较轻量的多线程实现方案，使用面向对象语法，其生命周期需要程序员自行管理。在MacOS和iOS都可使用。(Swift中为Thread)。NSThread类代表线程，创建新线程也就是创建NSThread对象。</p>
+<h4 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h4><p>NSThread创建分动态方法和静态方法两种:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/// 创建并启动新线程</span><br><span class="line">+ (void)detachNewThreadSelector:(SEL)selector toTarget:(id)target withObject:(id)argument;  </span><br><span class="line">/// 仅创建新线程，返回NSThread对象，并未启动线程</span><br><span class="line">- (id)initWithTarget:(id)target selector:(SEL)selector object:(id)argument; </span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line">  - SEL 所要执行的方法</span><br><span class="line">  - target selector消息的接收对象</span><br><span class="line">  - argument 方法唯一参数，或nil</span><br><span class="line"> */</span><br></pre></td></tr></table></figure></p>
+<p>可以发现，前者与后者并没有太大区别，只是前者不会返回NSThread对象，创建线程后立即启动，而后者只是创建一个NSThread对象并返回，需要手动调用start方法启动线程。</p>
+<p>同时还有一类隐式创建线程的方法:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)performSelectorInBackground:(SEL)aSelector withObject:(id)arg;</span><br></pre></td></tr></table></figure></p>
+<p>performXxx 这一类方法，在创建线程时也是使用的NSThread。</p>
+<h4 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h4><p>首先我们来看一下线程执行的状态:</p>
+<p><img src="http://p0h33xrro.bkt.clouddn.com/Thread_ThreadStatus.png" alt="线程的状态"></p>
+<p>前面提到，多线程的原理是CPU轮换调度多个线程。所以某线程在某一时刻不一定正在被执行。简单解释一下线程的几个状态:<br><strong>就绪</strong>: 线程准备就绪可以被执行时，会放入可调度线程池，供CPU调用。<br><strong>阻塞</strong>: 当线程的正常执行被组止，比如调用了sleep方法或线程在等待同步锁，那么线程会进入阻塞状态。注意，此”阻塞”与常说的”耗时操作阻塞UI线程”并非同一概念，后者只是占用UI线程资源导致UI操作无法正常执行。<br><strong>死亡</strong>: 当线程任务执行完毕后会自动销毁。同时当遇到异常时，或我们自行使用exit方法终止线程，线程都会死亡，不再可用。</p>
+<p><strong>NSThread提供的API</strong></p>
+<ul>
+<li>优先级: 线程为我们提供了线程优先级属性以干预其执行，对应<code>threadPriority</code>属性，范围是0.0~1.0，权值越高优先级越高。但注意，该权值仅为线程在调度时的优先权重，并非绝对优先。</li>
+<li>线程是否执行完毕: 对应executing, finished两个属性，前者在线程正在执行时为YES，后者在执行完毕时为YES。</li>
+<li>线程取消标记: NSThread提供了cancel实例方法，对应的有cancelled属性，但是注意该方法并非真正终止该线程，而是将cancelled标记为YES，而后由程序员手动判断cancelled属性并作出决策。如果需要强制结束，应使用exit方法。</li>
+</ul>
+<h4 id="线程睡眠"><a href="#线程睡眠" class="headerlink" title="线程睡眠"></a>线程睡眠</h4><p>如果需要让当前线程睡眠一段时间，可以调用sleepXXX 方法阻塞线程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 阻塞一段时间</span><br><span class="line">+ (void)sleepForTimeInterval:(NSTimeInterval)ti;</span><br><span class="line">// 阻塞到指定时间</span><br><span class="line">+ (void)sleepUntilDate:(NSDate *)date;</span><br></pre></td></tr></table></figure>
+<p>被阻塞的线程是暂时不可执行的，所以不会进入可调度线程池。在其阻塞结束后，会进入可调度线程池并在CPU时间片到来时开始执行。</p>
+<h4 id="终止线程"><a href="#终止线程" class="headerlink" title="终止线程"></a>终止线程</h4><p>前面提到，线程的终止有三种情况:</p>
+<ul>
+<li>线程执行体执行完成，线程正常结束。</li>
+<li>线程执行过程出现错误，异常退出。</li>
+<li>手动调用exit方法终止了线程。</li>
+</ul>
+<p>提一个小问题: 当主线程结束时，其他线程会受影响吗？ 答案是不会，当线程被启动，其本质上与主线程是相同地位的，并不会受到其影响。</p>
+<h4 id="线程安全问题"><a href="#线程安全问题" class="headerlink" title="线程安全问题"></a>线程安全问题</h4><p>线程安全问题一直是多线程需要特别注意的，解决线程同步问题一般采用加锁的方式。<br>iOS提供了很多种锁的方案，本质上为同步锁、互斥锁两种。</p>
+<p><strong>互斥锁</strong>: 发现其他线程正在执行锁定代码后，线程会进入休眠(阻塞)，待加锁的线程执行完毕打开锁时，会唤醒该休眠线程。<br><strong>自旋锁</strong>: 发现其他线程正在执行锁定代码后，线程会采用死循环方式轮询，直到锁被打开。<br>简单来说，自旋锁由于采用了死循环轮询，会比互斥锁有更高的效率，但同时也造成更大的性能消耗。</p>
+<p>OC对象的<code>atomic</code>属性修饰符就是使用了自旋锁，自旋锁同一时间可以有一个写者或多个读者，但是不能同时既有读者又有写者。</p>
+<p>iOS常用的加锁方案有: @synchronized, NSLock, NSCondition。加锁方式和区别将在其他文章介绍。</p>
+<p><strong>几乎所有UIKit提供的类都是线程不安全的，所有包含’Mutable’的类都是线程不安全的。</strong></p>
+<h4 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h4><p>当一组进程中的每个进程都在等待一个事件，而这一事件只能由这一组进程的另一进程引起，那么这组进程就处于死锁状态。死锁问题是操作系统的经典问题，详见操作系统原理。</p>
+<p><strong>死锁发生的必要条件</strong>:</p>
+<ol>
+<li>互斥: 至少有一个资源必须处于非共享模式，如果另一线程申请该资源，那么申请线程必须等待该资源被释放为止。如互斥锁这一情况。</li>
+<li>占有并等待:  该线程等待某资源，而该资源为其他线程所有。</li>
+<li>非抢占: 资源不能被抢占，只能在线程完成任务后自动释放。</li>
+<li>循环等待: 一组等待线程T1~Tn,其中Ti的资源被Ti+1所占有，造成循环等待。</li>
+</ol>
+<h3 id="GCD-Grand-Central-Dispatch"><a href="#GCD-Grand-Central-Dispatch" class="headerlink" title="GCD (Grand Central Dispatch)"></a>GCD (Grand Central Dispatch)</h3><p>NSThread是一款较为轻量的多线程实现，程序员需要自行控制同步和并发，较为复杂。iOS在4.0之后提供了GCD来实现多线程。其弱化了单个线程的概念，强调队列和任务两大核心概念。</p>
+<p><strong>队列</strong>: GCD为用户封装出了串行队列和并发队列两种队列。队列负责管理开发者提交的任务，采用FIFO(先进先出)的方式。串行队列提交的后一个任务只能等到前一个任务执行结束后才能开始执行；并发队列的任务按FIFO机制并发启动并执行多个任务。<br><strong>任务</strong>: 开发者提交给队列的工作单元。</p>
+<h4 id="GCD的实现机制"><a href="#GCD的实现机制" class="headerlink" title="GCD的实现机制"></a>GCD的实现机制</h4><p>GCD底层维护了一个可重用线程池，当线程结束后，系统并不第一时间销毁该线程，而是将其放入线程池中待用，若一段时间后仍未使用，则销毁。</p>
+<p>串行队列底层的线程池只需要一个线程，因此只提供一个线程用来执行任务。<br>而并发队列需要多个线程来实现并发，所以线程池中维护了多个线程。</p>
+<h4 id="GCD使用步骤"><a href="#GCD使用步骤" class="headerlink" title="GCD使用步骤"></a>GCD使用步骤</h4><p>我们可以使用系统自带的队列，获取方法如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 根据指令的优先级、额外旗标获取全局并发队列。</span><br><span class="line">// 优先级id为DISPATCH_QUEUE_PRIORITY_XXX</span><br><span class="line">dispatch_queue_t dispatch_get_global_queue(long identifier, unsigned long flags);</span><br><span class="line">// 获取主线程所关联的队列(串行队列)</span><br><span class="line">dispatch_queue_t dispatch_get_main_queue(void);</span><br></pre></td></tr></table></figure>
+<p>同时，我们也可以自行创建队列，但是ARC并不能管理自行创建的队列，所以需要我们自行管理内存:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line"> - 根据指定字符串标签创建队列</span><br><span class="line"> - label 为字符串标签</span><br><span class="line"> - attr 控制队列是串行队列还是并发队列，前者为DISPATCH_QUEUE_SERIAL，后者为DISPATCH_QUEUE_CONCURRENT。</span><br><span class="line"> */</span><br><span class="line">dispatch_queue_t dispatch_queue_create(const char *label, dispatch_queue_attr_t attr);</span><br><span class="line"></span><br><span class="line">// 需要自行释放内存</span><br><span class="line">dispatch_release()</span><br></pre></td></tr></table></figure></p>
+<h4 id="同步-异步提交任务"><a href="#同步-异步提交任务" class="headerlink" title="同步/异步提交任务"></a>同步/异步提交任务</h4><p>GCD对于任务的提交，提供了同步/异步两种方式，同时支持Block和函数指针两种形式的任务。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/// 异步</span><br><span class="line">// Block</span><br><span class="line">void dispatch_async(dispatch_queue_t queue, dispatch_block_t block);</span><br><span class="line">// 函数</span><br><span class="line">void dispatch_async_f(dispatch_queue_t queue, void *context, dispatch_function_t work);</span><br><span class="line"></span><br><span class="line">/// 同步</span><br><span class="line">// Block</span><br><span class="line">void dispatch_sync(dispatch_queue_t queue, dispatch_block_t block);</span><br><span class="line">// 函数</span><br><span class="line">void dispatch_sync_f(dispatch_queue_t queue, void *context, dispatch_function_t work);</span><br><span class="line"></span><br><span class="line">/// 延时任务</span><br><span class="line">// Block</span><br><span class="line">void dispatch_after(dispatch_time_t when, dispatch_queue_t queue, dispatch_block_t block);</span><br><span class="line">// 函数</span><br><span class="line">void dispatch_after_f(dispatch_time_t when, dispatch_queue_t queue, void *context, dispatch_function_t work);</span><br></pre></td></tr></table></figure>
+<p>同时，还提供了多次执行任务和单次执行任务，后者可以用于单例模式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/// 多次执行</span><br><span class="line">// Block</span><br><span class="line">void dispatch_apply(size_t iterations, dispatch_queue_t queue, void (^block)(size_t));</span><br><span class="line">// 函数</span><br><span class="line">void dispatch_apply_f(size_t iterations, dispatch_queue_t queue, void *context, void (*work)(void *, size_t));</span><br><span class="line"></span><br><span class="line">/// 单次执行</span><br><span class="line">/* 需要提供一个dispatch_once_t的指针最为标记 */</span><br><span class="line">// Block</span><br><span class="line">void dispatch_once(dispatch_once_t *predicate, dispatch_block_t block);</span><br><span class="line">// 函数</span><br><span class="line">void dispatch_once_f(dispatch_once_t *predicate, void *context, dispatch_function_t function);</span><br></pre></td></tr></table></figure></p>
+<h4 id="其他常见API"><a href="#其他常见API" class="headerlink" title="其他常见API"></a>其他常见API</h4><p><strong>队列优先级</strong><br>设置队列优先级与目标队列一致，实现对队列优先级的控制以及多个串行队列的有序执行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line"> - 参数1: 需要被设置优先级的队列。</span><br><span class="line"> - 参数2: 设置优先级时的目标队列。</span><br><span class="line"> */</span><br><span class="line">void dispatch_set_target_queue(dispatch_object_t object, dispatch_queue_t queue);</span><br><span class="line"></span><br><span class="line">// 情况1: 目标队列为不同优先级的队列，被设置的队列将拥有和目标队列相同的优先级</span><br><span class="line">dispatch_queue_t serialDispatchQueue =</span><br><span class="line">	dispatch_queue_create(&quot;serialDispatchQueue&quot;, NULL);</span><br><span class="line">dispatch_queue_t backgroundDispatchQueue =</span><br><span class="line">	dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);</span><br><span class="line">dispatch_set_target_queue(serialDispatchQueue, backgroundDispatchQueue);</span><br><span class="line"></span><br><span class="line">// 情况2: 目标队列为串行队列，而多个串行队列设置其为目标队列后将互相串行，同一时间只有其中一个队列执行串行任务。</span><br></pre></td></tr></table></figure></p>
+<p><strong>调度组(Dispatch Group)</strong><br>针对希望在追加到Dispatch Queue队列中的任务全部完成后执行某一特定任务的情况，提供了Dispatch Group这一特性。<br>创建线程组后，可以向其中追加任务，当所有任务全部完成时，会执行通知任务，通知任务的具体内容由程序员设置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// 创建Dispatch Group</span><br><span class="line">dispatch_group_t group = dispatch_group_create();</span><br><span class="line">// 获取一个并发队列</span><br><span class="line">dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRORITY_DEFAULT, 0);</span><br><span class="line"></span><br><span class="line">// 追加两个任务</span><br><span class="line">dispatch_group_async(group, queue, ^&#123;NSLog(@&quot;No.1&quot;); &#125;);</span><br><span class="line">dispatch_group_async(group, queue, ^&#123;NSLog(@&quot;No.2&quot;); &#125;);</span><br><span class="line"></span><br><span class="line">//设置完成时的任务</span><br><span class="line">dispatch_group_notify(group, dispatch_get_main_queue(), ^&#123;NSLog(@&quot;All task done&quot;)&#125;);</span><br><span class="line"></span><br><span class="line">// Dispatch Group需要手动释放内存</span><br><span class="line">dispatch_release(group)</span><br></pre></td></tr></table></figure>
+<p><strong>Dispatch Barrier</strong><br>为了解决线程安全问题，我们可以将读取处理放入并发队列中，将写入处理放入串行队列中，同时还要保证在没有读取操作时写入。我们可以通过队列优先级和调度组结合实现，但是这样过于复杂。GCD提供了<code>dispatch_barrier_async</code>函数来实现这一点。</p>
+<p><code>dispatch_barrier_async</code>函数会等待追加到并发队列中的任务全部完成后才将自己的处理追加到并发队列中，但此时并发队列仅运行该任务，待该任务执行完后，并发队列恢复正常继续并发执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// 创建并发队列</span><br><span class="line">dispatch_queue_t queue = dispatch_queue_create(&quot;barrierTest&quot;, DISPATCH_QUEUE_CONCURRENT);</span><br><span class="line"></span><br><span class="line">// 读取操作</span><br><span class="line">dispatch_async(queue, readingBlock1);</span><br><span class="line">dispatch_async(queue, readingBlock2);</span><br><span class="line">dispatch_async(queue, readingBlock3);</span><br><span class="line">// 写入操作</span><br><span class="line">dispatch_barrier_async(queue, writingBlock1);</span><br><span class="line">// 读取操作</span><br><span class="line">dispatch_async(queue, readingBlock4);</span><br><span class="line">dispatch_async(queue, readingBlock5);</span><br></pre></td></tr></table></figure>
+<p><strong>线程的挂起/恢复</strong></p>
+<p>可以将线程暂时挂起，后面再进行恢复执行。但仅限于还未执行的任务，已执行的和正在执行的任务不受影响。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 挂起线程</span><br><span class="line">dispatch_suspend(queue);</span><br><span class="line"></span><br><span class="line">// 恢复线程</span><br><span class="line">dispatch_resume(queue);</span><br></pre></td></tr></table></figure></p>
+<p><strong>Dispatch Semaphore(信号量)控制</strong><br>为了精确控制并行处理，GCD提供了信号量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 生成Dispatch Semaphore并指定信号量</span><br><span class="line">dispatch_semaphore_t semaphore = dispatch_semaphore_create(1);</span><br><span class="line"></span><br><span class="line">// 等待信号量大于等于1</span><br><span class="line">dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);</span><br></pre></td></tr></table></figure></p>
+<h3 id="NSOperation"><a href="#NSOperation" class="headerlink" title="NSOperation"></a>NSOperation</h3><p>除了使用GCD之外，iOS还提供了NSOperation/NSOperationQueue这一多线程实现方式。</p>
+<h4 id="实现机制"><a href="#实现机制" class="headerlink" title="实现机制"></a>实现机制</h4><p>NSOperation代表一个多线程任务。<br>NSOperationQueue代表一个FIFO的队列，其底部维护一个线程池，会按照先入先出的顺序执行提交给队列的NSOperation任务。</p>
+<h4 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h4><p>使用NSOperationQueue较为简单，其负责管理、执行所有NSOperation，开发者能够将注意力更多的放在任务上而非队列的使用上。其主要提供了以下API:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// 添加到队列中</span><br><span class="line">- (void)addOperation:(NSOperation *)op;</span><br><span class="line">// 添加并阻塞当前线程至所有任务完成</span><br><span class="line">- (void)addOperations:(NSArray&lt;NSOperation *&gt; *)ops waitUntilFinished:(BOOL)wait;</span><br><span class="line"></span><br><span class="line">// 取消所有操作</span><br><span class="line">- (void)cancelAllOperations;</span><br><span class="line"></span><br><span class="line">// 设置NSOperationQueue队列最大支持的并发线程数量</span><br><span class="line">@property NSInteger maxConcurrentOperationCount;</span><br><span class="line">// 设置和返回是是否暂停调度当前正在排队的任务，需要使用KVC设置</span><br><span class="line">@property(getter=isSuspended) BOOL suspended;</span><br></pre></td></tr></table></figure></p>
+<h4 id="NSOperation使用"><a href="#NSOperation使用" class="headerlink" title="NSOperation使用"></a>NSOperation使用</h4><p>NSOperation一般不直接使用，而是创建其子类来使用。继承NSOperation需要重写其main方法，该方法的方法体用于NSOperationQueue来执行任务。</p>
+<p>而默认为我们提供了NSInvocationOperation和NSBlockOperation两种子类，分别对应了SEL和Block两种任务提交方式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// NSInvocationOperation</span><br><span class="line">- (instancetype)initWithTarget:(id)target selector:(SEL)sel object:(id)arg;</span><br><span class="line"></span><br><span class="line">// NSBlockOperation</span><br><span class="line">+ (instancetype)blockOperationWithBlock:(void (^)(void))block;</span><br></pre></td></tr></table></figure></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文主要总结iOS开发中的多线程概念、技术方案以及简单实用，具体的使用方式不再赘述。<br>开发中常用到GCD和NSOperation，而前者在功能丰富性和复杂性上也许有着更好的均衡。</p>
+<p>同时本文还涉及到了线程安全、线程中锁的技术方案、线程的使用规则等问题，有兴趣的可以进一步研究。</p>
+<h2 id="相关资料"><a href="#相关资料" class="headerlink" title="相关资料"></a>相关资料</h2><ol>
+<li><p>iOS多线程编程指南: <a href="https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/Multithreading/" target="_blank" rel="external">Threading Programming Guide</a></p>
+</li>
+<li><p>iOS并行编程指南: <a href="https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide" target="_blank" rel="external">Concurrency Programming Guide</a></p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/GCD/" rel="tag"># GCD</a>
+          
+            <a href="/tags/多线程/" rel="tag"># 多线程</a>
+          
+            <a href="/tags/iOS技术/" rel="tag"># iOS技术</a>
+          
+            <a href="/tags/性能优化/" rel="tag"># 性能优化</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/24/Objective-C协议遵守NSObject协议的原因/" rel="next" title="Objective-C协议遵守NSObject协议的原因">
+                <i class="fa fa-chevron-left"></i> Objective-C协议遵守NSObject协议的原因
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/01/结构体的自引用及相互引用/" rel="prev" title="结构体的自引用及相互引用">
+                结构体的自引用及相互引用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Minecode</p>
+              <p class="site-description motion-element" itemprop="description">在校iOS开发者，前ACM鶸，致力于成为移动端正/逆向全栈。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Minecodecraft" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:minecoder@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
+                    
+                      <i class="fa fa-fw fa-globe"></i>简书</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://blog.csdn.net/b735098742" target="_blank" title="CSDN博客">
+                    
+                      <i class="fa fa-fw fa-globe"></i>CSDN博客</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优缺点"><span class="nav-number">2.</span> <span class="nav-text">优缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iOS系统多线程原则及方案"><span class="nav-number">3.</span> <span class="nav-text">iOS系统多线程原则及方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS多线程原则"><span class="nav-number">3.1.</span> <span class="nav-text">iOS多线程原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS的多线程技术方案"><span class="nav-number">3.2.</span> <span class="nav-text">iOS的多线程技术方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多线程的使用"><span class="nav-number">4.</span> <span class="nav-text">多线程的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pthread-POSIX-threads"><span class="nav-number">4.1.</span> <span class="nav-text">pthread (POSIX threads)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#补充-bridge"><span class="nav-number">4.1.1.</span> <span class="nav-text">补充: __bridge</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NSThread"><span class="nav-number">4.2.</span> <span class="nav-text">NSThread</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建线程"><span class="nav-number">4.2.1.</span> <span class="nav-text">创建线程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程的状态"><span class="nav-number">4.2.2.</span> <span class="nav-text">线程的状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程睡眠"><span class="nav-number">4.2.3.</span> <span class="nav-text">线程睡眠</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#终止线程"><span class="nav-number">4.2.4.</span> <span class="nav-text">终止线程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程安全问题"><span class="nav-number">4.2.5.</span> <span class="nav-text">线程安全问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#死锁"><span class="nav-number">4.2.6.</span> <span class="nav-text">死锁</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GCD-Grand-Central-Dispatch"><span class="nav-number">4.3.</span> <span class="nav-text">GCD (Grand Central Dispatch)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GCD的实现机制"><span class="nav-number">4.3.1.</span> <span class="nav-text">GCD的实现机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GCD使用步骤"><span class="nav-number">4.3.2.</span> <span class="nav-text">GCD使用步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#同步-异步提交任务"><span class="nav-number">4.3.3.</span> <span class="nav-text">同步/异步提交任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他常见API"><span class="nav-number">4.3.4.</span> <span class="nav-text">其他常见API</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NSOperation"><span class="nav-number">4.4.</span> <span class="nav-text">NSOperation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实现机制"><span class="nav-number">4.4.1.</span> <span class="nav-text">实现机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用步骤"><span class="nav-number">4.4.2.</span> <span class="nav-text">使用步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NSOperation使用"><span class="nav-number">4.4.3.</span> <span class="nav-text">NSOperation使用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关资料"><span class="nav-number">6.</span> <span class="nav-text">相关资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Minecode</span>
+
+  
+</div>
+
+
+<!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>-->
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2148924"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
