@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/Thread_BuyTickets.png">
 <meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/Thread_signalDeadlockSample.png">
 <meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/Thread_chopstick.png">
-<meta property="og:updated_time" content="2018-01-06T03:26:19.456Z">
+<meta property="og:updated_time" content="2018-01-10T15:32:09.877Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="操作系统的进程&#x2F;线程同步问题">
 <meta name="twitter:description" content="很多操作系统都提供了进程和线程的并发操作，他们可能在异步执行时访问共享数据，而并发访问共享数据可能带来数据不一致的同步问题，在此总结一下操作系统的进程/线程同步问题，以线程的并发为例。 问题简介 上图是多线程的状态(以iOS系统为例)。操作系统是通过CPU的时间片轮转来实现多线程的，每个线程有着对应的时间片，当其时间片到来时CPU会切换到该线程上下文并执行，待时间片结束后切换至下一线程，保存原线程">
@@ -405,7 +405,7 @@
 
       
         <p>很多操作系统都提供了进程和线程的并发操作，他们可能在异步执行时访问共享数据，而并发访问共享数据可能带来数据不一致的同步问题，在此总结一下操作系统的进程/线程同步问题，以线程的并发为例。</p>
-<h2 id="问题简介"><a href="#问题简介" class="headerlink" title="问题简介"></a>问题简介</h2><p><img src="http://p0h33xrro.bkt.clouddn.com/Thread_ThreadStatus.png" alt="多线程实现原理(以iOS为例)"></p>
+<h2 id="问题简介"><a href="#问题简介" class="headerlink" title="问题简介"></a>问题简介</h2><p><img src="http://p0h33xrro.bkt.clouddn.com/Thread_ThreadStatus.png" alt="iOS多线程实现原理"></p>
 <p>上图是多线程的状态(以iOS系统为例)。操作系统是通过CPU的时间片轮转来实现多线程的，每个线程有着对应的时间片，当其时间片到来时CPU会切换到该线程上下文并执行，待时间片结束后切换至下一线程，保存原线程的上下文并加载下一线程的上下文，依次循环。</p>
 <p>但是，CPU何时切换并不是由用户决定，当时间片到达后会立即进行线程的切换，那么当多个线程并发进行读写操作时，就可能出现线程同步问题。</p>
 <p>我们先重现一下这个问题，以下函数模拟了买票的操作，持续买票直到卖完，整型sum表示当前的票数，函数如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">- (void)buyFunction &#123;</span><br><span class="line">    // 有余票则继续购买</span><br><span class="line">    while (sum &gt; 0) &#123;</span><br><span class="line">        // 购买前打印当前票数</span><br><span class="line">        NSLog(@&quot;线程%@准备买票 剩余:%d张票&quot;, [NSThread currentThread].name, sum);</span><br><span class="line">        // 模拟购买操作,票数-1</span><br><span class="line">        sum--;</span><br><span class="line">    &#125;</span><br><span class="line">    // 票卖完则打印当前票数</span><br><span class="line">    NSLog(@&quot;线程%@: 票已卖完 剩余:%d张票&quot;, [NSThread currentThread].name, sum);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
