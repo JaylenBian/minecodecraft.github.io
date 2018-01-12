@@ -84,7 +84,7 @@
 
 
 
-  <meta name="keywords" content="数据结构," />
+  <meta name="keywords" content="Runtime,底层,性能优化,Objecitve-C," />
 
 
 
@@ -95,18 +95,21 @@
 
 
 
-<meta name="description" content="简述在用C来实现数据结构以及部分算法时，经常用到结构体，比如实现树以及树的子节点时，就需要该结构体包含自身类型的成员变量。而最近在研究OC的匿名函数实现时，也涉及到了类似需求。同时，两个结构体之间相互引用也经常遇到问题。故简单总结一下C语言结构体的自引用语法。 示例我们以二叉树的节点为例来看一下自引用：12345struct binary_tree &amp;#123;    int data    ;">
-<meta name="keywords" content="数据结构">
+<meta name="description" content="Tagged Pointer是存在于字符串、NSNumber、NSDate等重复性高且较小的对象中的一种优化方式，用于解决重复性较高的类型在64位操作系统内存的内部碎片问题。 背景在创建讨论Tagged Pointer之前，我们先认识一下它执行以下代码: 1234567891011121314__weak NSNumber *weakNumber;__weak NSString *weakStri">
+<meta name="keywords" content="Runtime,底层,性能优化,Objecitve-C">
 <meta property="og:type" content="article">
-<meta property="og:title" content="结构体的自引用及相互引用">
-<meta property="og:url" content="https://minecodecraft.github.io/2017/10/01/结构体的自引用及相互引用/index.html">
+<meta property="og:title" content="iOS&#x2F;OS X的Tagged Pointer">
+<meta property="og:url" content="https://minecodecraft.github.io/2017/12/15/iOS:OS X的Tagged Pointer/index.html">
 <meta property="og:site_name" content="Minecode&#39;s Blog">
-<meta property="og:description" content="简述在用C来实现数据结构以及部分算法时，经常用到结构体，比如实现树以及树的子节点时，就需要该结构体包含自身类型的成员变量。而最近在研究OC的匿名函数实现时，也涉及到了类似需求。同时，两个结构体之间相互引用也经常遇到问题。故简单总结一下C语言结构体的自引用语法。 示例我们以二叉树的节点为例来看一下自引用：12345struct binary_tree &amp;#123;    int data    ;">
+<meta property="og:description" content="Tagged Pointer是存在于字符串、NSNumber、NSDate等重复性高且较小的对象中的一种优化方式，用于解决重复性较高的类型在64位操作系统内存的内部碎片问题。 背景在创建讨论Tagged Pointer之前，我们先认识一下它执行以下代码: 1234567891011121314__weak NSNumber *weakNumber;__weak NSString *weakStri">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-19T17:18:37.945Z">
+<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/TaggedPointer_memoryPiece.png">
+<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/TaggedPointer_memoryGraph.png">
+<meta property="og:updated_time" content="2018-01-12T13:28:16.262Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="结构体的自引用及相互引用">
-<meta name="twitter:description" content="简述在用C来实现数据结构以及部分算法时，经常用到结构体，比如实现树以及树的子节点时，就需要该结构体包含自身类型的成员变量。而最近在研究OC的匿名函数实现时，也涉及到了类似需求。同时，两个结构体之间相互引用也经常遇到问题。故简单总结一下C语言结构体的自引用语法。 示例我们以二叉树的节点为例来看一下自引用：12345struct binary_tree &amp;#123;    int data    ;">
+<meta name="twitter:title" content="iOS&#x2F;OS X的Tagged Pointer">
+<meta name="twitter:description" content="Tagged Pointer是存在于字符串、NSNumber、NSDate等重复性高且较小的对象中的一种优化方式，用于解决重复性较高的类型在64位操作系统内存的内部碎片问题。 背景在创建讨论Tagged Pointer之前，我们先认识一下它执行以下代码: 1234567891011121314__weak NSNumber *weakNumber;__weak NSString *weakStri">
+<meta name="twitter:image" content="http://p0h33xrro.bkt.clouddn.com/TaggedPointer_memoryPiece.png">
 
 
 
@@ -136,13 +139,13 @@
 
 
 
-  <link rel="canonical" href="https://minecodecraft.github.io/2017/10/01/结构体的自引用及相互引用/"/>
+  <link rel="canonical" href="https://minecodecraft.github.io/2017/12/15/iOS:OS X的Tagged Pointer/"/>
 
 
 
 
 
-  <title>结构体的自引用及相互引用 | Minecode's Blog</title>
+  <title>iOS/OS X的Tagged Pointer | Minecode's Blog</title>
   
 
 
@@ -279,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://minecodecraft.github.io/2017/10/01/结构体的自引用及相互引用/">
+    <link itemprop="mainEntityOfPage" href="https://minecodecraft.github.io/2017/12/15/iOS:OS X的Tagged Pointer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Minecode">
@@ -296,7 +299,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">结构体的自引用及相互引用</h1>
+          <h1 class="post-title" itemprop="name headline">iOS/OS X的Tagged Pointer</h1>
         
 
         <div class="post-meta">
@@ -308,8 +311,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-01T17:11:00+08:00">
-                2017-10-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-15T21:27:00+08:00">
+                2017-12-15
               </time>
             
 
@@ -331,8 +334,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据结构/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构</span>
+                  <a href="/categories/iOS技术/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS技术</span>
                   </a>
                 </span>
 
@@ -362,7 +365,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  622
+                  1,205
                 </span>
               
 
@@ -378,7 +381,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2
+                  5
                 </span>
               
             </div>
@@ -399,22 +402,34 @@
       
 
       
-        <h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>在用C来实现数据结构以及部分算法时，经常用到结构体，比如实现树以及树的子节点时，就需要该结构体包含自身类型的成员变量。而最近在研究OC的匿名函数实现时，也涉及到了类似需求。同时，两个结构体之间相互引用也经常遇到问题。故简单总结一下C语言结构体的自引用语法。</p>
-<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>我们以二叉树的节点为例来看一下自引用：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> data    ;   <span class="comment">// Data area</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">right</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>在树中，我们需要保存其左右子树，所以需要引用自身。</p>
-<h2 id="结构体自引用"><a href="#结构体自引用" class="headerlink" title="结构体自引用"></a>结构体自引用</h2><h3 id="不使用typedef"><a href="#不使用typedef" class="headerlink" title="不使用typedef"></a>不使用typedef</h3><p>如果不适用typedef，那么此时我们需要使用struct [名称]来调用。<br>但如果按下面的调用方式<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> <span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> <span class="title">right</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>则会导致在分配内存的时候循环分配，此时编译器会计算left和right的成员变量并为之分配内存，从而导致嵌套死循环。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">right</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>所以后者是正确的，left和right在分配时是以结构体指针的形式来分配内存的。而意义上我们就是为了将其指向另一个binary_tree，所以这样是复合逻辑的。</p>
-<h3 id="使用typedef"><a href="#使用typedef" class="headerlink" title="使用typedef"></a>使用typedef</h3><p>使用typedef可以为结构体设置别名，但是要注意的是，typdef的语法为<code>typedef [原类型] [别名];</code><br>所以在结构体声明之前，别名是未定义的。所以我们在内部需要使用其原类型来定义成员变量。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">right</span>;</span></span><br><span class="line">&#125;BinTREE;</span><br></pre></td></tr></table></figure></p>
-<h2 id="结构体相互引用"><a href="#结构体相互引用" class="headerlink" title="结构体相互引用"></a>结构体相互引用</h2><h3 id="同文件内"><a href="#同文件内" class="headerlink" title="同文件内"></a>同文件内</h3><h4 id="使用不完整类型"><a href="#使用不完整类型" class="headerlink" title="使用不完整类型"></a>使用不完整类型</h4><p>通过不完整类型语法来实现相互引用<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s_a</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">s_b</span> *<span class="title">B_Ptr</span>;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s_b</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    A *A_Ptr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<h4 id="使用前向声明"><a href="#使用前向声明" class="headerlink" title="使用前向声明"></a>使用前向声明</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">s_a</span> <span class="title">A</span>;</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">s_b</span> <span class="title">B</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s_a</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    B *B_Ptr;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s_b</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    A *A_Ptr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="不同文件内"><a href="#不同文件内" class="headerlink" title="不同文件内"></a>不同文件内</h3><p>对于不同文件，主要有两点需要注意的。</p>
-<ul>
-<li>头文件重复包含问题</li>
-<li>结构体的声明问题</li>
-</ul>
-<p>而前者通过宏定义解决<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __FILENAME_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __FILENAME_H</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 代码</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure></p>
-<p>后者通过上述的“前向声明”或“不完整类型即可解决”。</p>
+        <p>Tagged Pointer是存在于字符串、NSNumber、NSDate等重复性高且较小的对象中的一种优化方式，用于解决重复性较高的类型在64位操作系统内存的内部碎片问题。</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在创建讨论Tagged Pointer之前，我们先认识一下它执行以下代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">__weak NSNumber *weakNumber;</span><br><span class="line">__weak NSString *weakString;</span><br><span class="line">__weak NSDate *weakDate;</span><br><span class="line">int num = 123;</span><br><span class="line"></span><br><span class="line">@autoreleasepool &#123;</span><br><span class="line">    weakNumber = [NSNumber numberWithInt:num];</span><br><span class="line">    weakString = [NSString stringWithFormat:@&quot;string%d&quot;, num];</span><br><span class="line">    weakDate   = [NSDate dateWithTimeIntervalSince1970:0];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;WeakNumber is %@&quot;, weakNumber);</span><br><span class="line">NSLog(@&quot;WeakString is %@&quot;, weakString);</span><br><span class="line">NSLog(@&quot;WeakDate is %@&quot;, weakDate);</span><br></pre></td></tr></table></figure>
+<p>运行结果为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WeakNumber is 123</span><br><span class="line">WeakString is string123</span><br><span class="line">WeakDate is Thu Jan  1 08:00:00 1970</span><br></pre></td></tr></table></figure>
+<p>这样的结果与想象中可能不同，我们设置weakNumber/weakString/weakDate变量为弱引用，而在NSNumber/NSString/NSDate创建的代码部分设置了自动释放，那么当运行到输出部分的代码时，数字和字符串变量理应已经释放掉了，那么结果自然应该输出nil，然而事实是他们并没有。为什么会这样？下面我们来介绍苹果在推出64位系统后为了节省内存和提高效率而引入的Tagged Pointer。</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>在iPhone 5s推出后，处理器步入了64位架构时代，而我们知道，64位系统中变量所占字节也会随之变大，如32位系统中的int为4字节，而64位系统下是8字节。虽然值域也随之变大，但是很多情况下，增加的值域对于数字、日期、短字符串来说并不需要。造成的内部碎片问题如下图，大多数情况下64位系统增加了32位的内存浪费:</p>
+<p><img src="http://p0h33xrro.bkt.clouddn.com/TaggedPointer_memoryPiece.png" alt="字符串在64位系统中的内部碎片问题"></p>
+<p>那么能否优化这一内存浪费问题呢？可以注意到，虽然我们每个数字对象都占用8字节，但大家实际能用到的数字可能仅仅几位，大数计算的情况很少。那么，以较低的内存消耗预先保存一些常见数字，而对于不常见的再动态创建8字节的变量的方案，就会更加节省内存，以及创建对象的性能消耗。</p>
+<h2 id="Tagged-Pointer"><a href="#Tagged-Pointer" class="headerlink" title="Tagged Pointer"></a>Tagged Pointer</h2><p>知道了存在的问题，我们现在则介绍一下Tagged Pointer。它就是将大部分常用的字符串、数字对象、日期预先保存，而其不再按照64位系统的8字节大小，当我们创建的对象内容命中了Tagged Pointer预先存储的内容时，我们的对象指针会变成Tagged Pointer，指向指定的内存。我们可以看如下的例子:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">int num = 123;</span><br><span class="line">NSString *str1 = [NSString stringWithUTF8String:&quot;String123&quot;];</span><br><span class="line">NSString *str2 = [NSString stringWithFormat:@&quot;String%d&quot;, num];</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;%p&quot;, str1);</span><br><span class="line">NSLog(@&quot;%p&quot;, str2);</span><br></pre></td></tr></table></figure>
+<p>打印的地址相同，证明两者指向了同一地址。</p>
+<p>那么如何实现将这些对象不按照8字节存储的呢？<br>Tagged Pointer将一个对象按32位保存(4字节)，而后对其绑定一个同样是4字节的Tag，从而可以方便定位它。这样一个Tag+对象总共为8字节，与32位系统中对象指针+对象内容大小相当。至于为什么对象要按4字节保存而不是由数据大小而定，则是为了避免产生外部碎片。内存图如下所示:</p>
+<p><img src="http://p0h33xrro.bkt.clouddn.com/TaggedPointer_memoryGraph.png" alt="使用Tagged Pointer后内存对比"></p>
+<h2 id="isa和引用计数"><a href="#isa和引用计数" class="headerlink" title="isa和引用计数"></a>isa和引用计数</h2><p>现在再谈一些与Tagged Pointer有关的问题。看了其内存图后，我们知道它不是真正意义上的OC对象，那么其isa指针也就无法正常使用了。我们可以通过object_getClass()方法来获取真实对象，该对象打印结果为<code>NSTaggedPointerString</code>、<code>__NSTaggedDate</code>、<code>__NSCFNumber</code>。</p>
+<p>同时，Tagged Pointer的引用计数是无穷大的，可以尝试如下代码打印:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// ARC模式下可以使用CFGetRetainCount函数获取引用计数</span><br><span class="line">NSLog(@&quot;Retain count: %ld&quot;, CFGetRetainCount((__bridge CFTypeRef)(str1)));</span><br></pre></td></tr></table></figure>
+<p>结果是无穷大。所以对于类似如下的题目:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">NSString *str1 = [NSString stringWithUTF8String:&quot;String123&quot;];</span><br><span class="line">[str1 retain];</span><br><span class="line">NSString *str2 = str1;</span><br><span class="line">[str2 release];</span><br><span class="line">[str1 retain];</span><br><span class="line">/* ......... */</span><br><span class="line">NSLog(@&quot;Retain count: %lu&quot;, [str1 retainCount]);</span><br></pre></td></tr></table></figure>
+<p>无论题目中如何引用和释放，最终，其引用计数都会因为它是Tagged Pointer而是无穷大。</p>
+<h2 id="常量与Tagged-Pointer区别"><a href="#常量与Tagged-Pointer区别" class="headerlink" title="常量与Tagged Pointer区别"></a>常量与Tagged Pointer区别</h2><p>当我们如下方式定义常量str3时：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int num = 123;</span><br><span class="line">NSString *str1 = [NSString stringWithUTF8String:&quot;String123&quot;];</span><br><span class="line">NSString *str1 = [NSString stringWithUTF8String:&quot;String%d&quot;, num];</span><br><span class="line">NSString *str2 = @&quot;String123&quot;;</span><br></pre></td></tr></table></figure>
+<p>我们会发现str3和其余两个的地址并不一样，这是为什么呢？</p>
+<p>我们要知道，<strong>常量不是Tagged Pointer</strong>，因为它是在运行时之前就导入的，存在于数据段内。而其余两个对象是在运行时生成的，所以才可以通过Tagged Pointer这一机制进行优化。</p>
+<h2 id="相关资料"><a href="#相关资料" class="headerlink" title="相关资料"></a>相关资料</h2><ol>
+<li><a href="https://mikeash.com/pyblog/friday-qa-2015-07-31-tagged-pointer-strings.html" target="_blank" rel="external">mikeash.com - Friday Q&amp;A 2015-07-31: Tagged Pointer Strings</a></li>
+<li><a href="https://www.mikeash.com/pyblog/friday-qa-2012-07-27-lets-build-tagged-pointers.html" target="_blank" rel="external">mikeash.com - Friday Q&amp;A 2012-07-27: Let’s Build Tagged Pointers</a></li>
+</ol>
 
       
     </div>
@@ -432,7 +447,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/数据结构/" rel="tag"><i class="fa fa-tag"></i> 数据结构</a>
+            <a href="/tags/Runtime/" rel="tag"><i class="fa fa-tag"></i> Runtime</a>
+          
+            <a href="/tags/底层/" rel="tag"><i class="fa fa-tag"></i> 底层</a>
+          
+            <a href="/tags/性能优化/" rel="tag"><i class="fa fa-tag"></i> 性能优化</a>
+          
+            <a href="/tags/Objecitve-C/" rel="tag"><i class="fa fa-tag"></i> Objecitve-C</a>
           
         </div>
       
@@ -445,8 +466,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/08/01/iOS的多线程/" rel="next" title="iOS的多线程">
-                <i class="fa fa-chevron-left"></i> iOS的多线程
+              <a href="/2017/12/09/TCP五层模型消息解-封装仿真/" rel="next" title="TCP五层模型消息解/封装仿真">
+                <i class="fa fa-chevron-left"></i> TCP五层模型消息解/封装仿真
               </a>
             
           </div>
@@ -455,8 +476,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/11/11/利用iOS ARKit制作AR传送门/" rel="prev" title="利用iOS ARKit制作AR传送门">
-                利用iOS ARKit制作AR传送门 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/12/19/探究Objective-C属性关键字/" rel="prev" title="探究Objective-C属性关键字">
+                探究Objective-C属性关键字 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -624,7 +645,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简述"><span class="nav-number">1.</span> <span class="nav-text">简述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例"><span class="nav-number">2.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结构体自引用"><span class="nav-number">3.</span> <span class="nav-text">结构体自引用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不使用typedef"><span class="nav-number">3.1.</span> <span class="nav-text">不使用typedef</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用typedef"><span class="nav-number">3.2.</span> <span class="nav-text">使用typedef</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结构体相互引用"><span class="nav-number">4.</span> <span class="nav-text">结构体相互引用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#同文件内"><span class="nav-number">4.1.</span> <span class="nav-text">同文件内</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用不完整类型"><span class="nav-number">4.1.1.</span> <span class="nav-text">使用不完整类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用前向声明"><span class="nav-number">4.1.2.</span> <span class="nav-text">使用前向声明</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不同文件内"><span class="nav-number">4.2.</span> <span class="nav-text">不同文件内</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">2.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tagged-Pointer"><span class="nav-number">3.</span> <span class="nav-text">Tagged Pointer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#isa和引用计数"><span class="nav-number">4.</span> <span class="nav-text">isa和引用计数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常量与Tagged-Pointer区别"><span class="nav-number">5.</span> <span class="nav-text">常量与Tagged Pointer区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关资料"><span class="nav-number">6.</span> <span class="nav-text">相关资料</span></a></li></ol></div>
             
 
           </div>
