@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Cocoa," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="章节目录 iOS蓝牙框架介绍 CoreBluetooth.framework导入 CoreBluetooth的基础使用 蓝牙连接所涉及到的类 小米手环Demo  iOS蓝牙框架介绍####CoreBluetooth介绍 在iOS开发中，实现蓝牙通信的方法有两种。分别是GameKit.framework以及CoreBluetooth.framework，前者在iOS5后基本被淘汰。 在苹果文档中，写">
+<meta name="keywords" content="Cocoa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS蓝牙框架CoreBluetooth及小米手环Demo">
+<meta property="og:url" content="https://minecodecraft.github.io/2016/08/15/iOS蓝牙框架CoreBluetooth及小米手环Demo/index.html">
+<meta property="og:site_name" content="Minecode&#39;s Blog">
+<meta property="og:description" content="章节目录 iOS蓝牙框架介绍 CoreBluetooth.framework导入 CoreBluetooth的基础使用 蓝牙连接所涉及到的类 小米手环Demo  iOS蓝牙框架介绍####CoreBluetooth介绍 在iOS开发中，实现蓝牙通信的方法有两种。分别是GameKit.framework以及CoreBluetooth.framework，前者在iOS5后基本被淘汰。 在苹果文档中，写">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6362190-df35d8fa706b3aca?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/CoreBluetooth_CBRelationship.png">
+<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/CoreBluetooth_mibandDemo.jpeg">
+<meta property="og:updated_time" content="2018-01-13T02:58:13.771Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS蓝牙框架CoreBluetooth及小米手环Demo">
+<meta name="twitter:description" content="章节目录 iOS蓝牙框架介绍 CoreBluetooth.framework导入 CoreBluetooth的基础使用 蓝牙连接所涉及到的类 小米手环Demo  iOS蓝牙框架介绍####CoreBluetooth介绍 在iOS开发中，实现蓝牙通信的方法有两种。分别是GameKit.framework以及CoreBluetooth.framework，前者在iOS5后基本被淘汰。 在苹果文档中，写">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/6362190-df35d8fa706b3aca?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://minecodecraft.github.io/2016/08/15/iOS蓝牙框架CoreBluetooth及小米手环Demo/"/>
+
+
+
+
+
+  <title>iOS蓝牙框架CoreBluetooth及小米手环Demo | Minecode's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Minecode's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://minecodecraft.github.io/2016/08/15/iOS蓝牙框架CoreBluetooth及小米手环Demo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Minecode">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Minecode's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS蓝牙框架CoreBluetooth及小米手环Demo</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-15T10:34:00+08:00">
+                2016-08-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS技术/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,415
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  11
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="章节目录"><a href="#章节目录" class="headerlink" title="章节目录"></a>章节目录</h2><ul>
+<li>iOS蓝牙框架介绍</li>
+<li>CoreBluetooth.framework导入</li>
+<li>CoreBluetooth的基础使用</li>
+<li>蓝牙连接所涉及到的类</li>
+<li>小米手环Demo</li>
+</ul>
+<h2 id="iOS蓝牙框架介绍"><a href="#iOS蓝牙框架介绍" class="headerlink" title="iOS蓝牙框架介绍"></a>iOS蓝牙框架介绍</h2><p>####<strong>CoreBluetooth介绍</strong></p>
+<p>在iOS开发中，实现蓝牙通信的方法有两种。分别是GameKit.framework以及CoreBluetooth.framework，前者在iOS5后基本被淘汰。</p>
+<p>在苹果文档中，写了<code>Communicate with Bluetooth 4.0 low-energy devices</code>，也就是说仅支持蓝牙4.0低功耗协议(BLE)。</p>
+<p>对于iOS10以上的设备，苹果注明以下信息:</p>
+<blockquote>
+<p>An iOS app linked on or after iOS 10.0 must include in its Info.plist file the usage description keys for the types of data it needs to access or it will crash. To access Bluetooth peripheral data specifically, it must include NSBluetoothPeripheralUsageDescription.</p>
+</blockquote>
+<p>也就是说需要声明并注册蓝牙权限的使用。</p>
+<p><strong>CoreBluetooth协议</strong><br>首先提及蓝牙使用，在此引入两个概念：中心设备和外围设备。</p>
+<ul>
+<li>中心设备(客服端)：作为中央管理器的设备，也就是本实例中的iOS设备。</li>
+<li>外围设备(服务器)：也就是外部设备，扮演者产生数据的角色。许多传感器、蓝牙服务设备均是外围设备。本实例中小米手环就是外围设备。</li>
+</ul>
+<p>同时数据传输还涉及到以下几个值：</p>
+<ul>
+<li><strong>UUID</strong>：相当与使用这个模块对映的应用的标识。</li>
+<li><strong>RSSI</strong>：信号强度，利用此信息可进行蓝牙测距，后面将进行讲解。</li>
+</ul>
+<p>CoreBluetooth中涉及以下对象类：</p>
+<ul>
+<li><strong>CBCentralManager</strong>：中心设备类</li>
+<li><strong>CBPeripheral</strong>：外围设备类</li>
+<li><strong>CBCharacteristic</strong>：设备特征类</li>
+</ul>
+<p>接下来就看一下如何导入蓝牙框架。<br><br><br></p>
+<h2 id="CoreBluetooth-framework导入"><a href="#CoreBluetooth-framework导入" class="headerlink" title="CoreBluetooth.framework导入"></a>CoreBluetooth.framework导入</h2><ol>
+<li><strong>首先新建Xcode项目</strong></li>
+<li>在General-&gt;TARGETS-&gt;Linked Framworks and Libraries中点击添加并选择CoreBluetooth.framework导入。<br><img src="http://upload-images.jianshu.io/upload_images/6362190-df35d8fa706b3aca?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="导入CoreBluetooth.framework"> </li>
+<li>在代码中导入CoreBluetooth.framework<br>Swift：import CoreBluetooth<br>Objective-C：#import  <corebluetooth corebluetooth.h=""></corebluetooth></li>
+<li>声明协议：使用CoreBluetooth需要支持CBCentralManagerDelegate, CBPeripheralDelegate协议，即前面所说的中心设备和外围设备，并实现相应方法</li>
+</ol>
+<p><br><br></p>
+<p>##CoreBluetooth的基础使用</p>
+<p>导入框架并声明协议后，即可开始实现必要方法。<br>下面通过展示整个流程所需要的方法</p>
+<ul>
+<li><p><strong>初始化</strong></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> manager = <span class="type">CBCentralManager</span>.<span class="keyword">init</span>(delegate: <span class="keyword">self</span> <span class="keyword">as</span>? <span class="type">CBCentralManagerDelegate</span>, queue: <span class="literal">nil</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>扫描设备</strong></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span> manager.state &#123;</span><br><span class="line">        <span class="keyword">case</span> .poweredOn:</span><br><span class="line">            <span class="type">NSLog</span>(<span class="string">"正在扫描"</span>)</span><br><span class="line">            manager.scanForPeripherals(withServices: <span class="literal">nil</span>, options: <span class="literal">nil</span>)</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>注：这里为什么一定要用switch语法？</strong><br><strong>因为CBCentralManager的State属性在之前是CBCentralManagerState，但是现在变成了CBManagerState，而需要iOS10以上才支持后者(23333)。这一波强制升级我是拒绝的，找了很多方法之后，发现这样写可以被Xcode接受而不去检查</strong></p>
+<ul>
+<li><p><strong>处理当前中心设备蓝牙状态</strong></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">centralManagerDidUpdateState</span><span class="params">(<span class="number">_</span> central: CBCentralManager)</span></span> &#123;</span><br><span class="line">        <span class="keyword">switch</span> central.state &#123;</span><br><span class="line">	        <span class="keyword">case</span> .poweredOn:</span><br><span class="line">	            <span class="type">NSLog</span>(<span class="string">"蓝牙已开启"</span>)</span><br><span class="line">	        <span class="keyword">default</span>:</span><br><span class="line">	            <span class="type">NSLog</span>(<span class="string">"蓝牙未开启"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>扫描到外围设备的处理</strong></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">centralManager</span><span class="params">(<span class="number">_</span> central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber)</span></span> &#123;</span><br><span class="line">	</span><br><span class="line">        <span class="comment">//peripheral.name为设备名称</span></span><br><span class="line">        <span class="comment">//可以调用CBCentralManager的stopScan停止扫描</span></span><br><span class="line">        central.stopScan()</span><br><span class="line">        <span class="comment">//可以调用CBCentralManager的connect连接设备</span></span><br><span class="line">        central.connect(peripheral, options: <span class="literal">nil</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>成功连接到外围设备的处理</strong></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">unc centralManager(<span class="number">_</span> central: <span class="type">CBCentralManager</span>, didConnect peripheral: <span class="type">CBPeripheral</span>) &#123;</span><br><span class="line">        <span class="type">NSLog</span>(<span class="string">"成功连接"</span>)</span><br><span class="line">        <span class="comment">//设置代理</span></span><br><span class="line">        peripheral.delegate = <span class="keyword">self</span></span><br><span class="line">        <span class="comment">//连接成功后接下来该扫描服务</span></span><br><span class="line">        peripheral.discoverServices(<span class="literal">nil</span>)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>连接失败的处理</strong></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">centralManager</span><span class="params">(<span class="number">_</span> central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?)</span></span> &#123;</span><br><span class="line">        <span class="type">NSLog</span>(<span class="string">"连接设备失败"</span>)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>扫描已连接外围设备服务</strong></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">peripheral</span><span class="params">(<span class="number">_</span> peripheral: CBPeripheral, didDiscoverServices error: Error?)</span></span> &#123;</span><br><span class="line">        <span class="keyword">if</span> ((error) != <span class="literal">nil</span>) &#123;</span><br><span class="line">            <span class="type">NSLog</span>(<span class="string">"查找服务失败"</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> service <span class="keyword">in</span> peripheral.services! &#123;</span><br><span class="line">	            <span class="comment">//扫描到服务后对服务逐个扫描特征值</span></span><br><span class="line">                peripheral.discoverCharacteristics(<span class="literal">nil</span>, <span class="keyword">for</span>: service)</span><br><span class="line">           &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>扫描到特征值后的操作</strong></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">peripheral</span><span class="params">(<span class="number">_</span> peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?)</span></span> &#123;</span><br><span class="line">        <span class="keyword">if</span> ((error) != <span class="literal">nil</span>) &#123;</span><br><span class="line">            <span class="type">NSLog</span>(<span class="string">"扫描特征值失败"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> characteristic <span class="keyword">in</span> service.characteristics! &#123;</span><br><span class="line">                <span class="comment">//设置特征值只要有更新就获取</span></span><br><span class="line">                peripheral.setNotifyValue(<span class="literal">true</span>, <span class="keyword">for</span>: characteristic)</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> (characteristic.uuid.uuidString == <span class="string">"你想匹配的字符串"</span>) &#123;</span><br><span class="line">                    peripheral.readValue(<span class="keyword">for</span>: characteristic)</span><br><span class="line">                    <span class="comment">//或</span></span><br><span class="line">                    characSaver = characteristic</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>解释一下原理：方法对每个服务进行扫描，获取特征值。辨别是否是你想要的功能的特征值就要用到UUID，用UUID去匹配。匹配到后你可以选择保存他的特征值从而在后面自行操作，或者用readValue读取它的值，并由系统自动调用下面介绍的方法</strong></p>
+<ul>
+<li><strong>获取具体值之后的操作</strong><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">peripheral</span><span class="params">(<span class="number">_</span> peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?)</span></span> &#123;</span><br><span class="line">        <span class="keyword">if</span> ((error) != <span class="literal">nil</span>) &#123;</span><br><span class="line">            statusLabel.text = <span class="string">"从设备获取值失败"</span></span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span>(characteristic.uuid.uuidString == <span class="string">"特定值"</span>) &#123;</span><br><span class="line">                <span class="keyword">var</span> infoBytes = [<span class="type">UInt8</span>](characteristic.value!)</span><br><span class="line">                <span class="keyword">var</span> infoVal:<span class="type">Int</span> = <span class="type">Int</span>.<span class="keyword">init</span>(infoBytes[<span class="number">0</span>])</span><br><span class="line">                <span class="type">NSLog</span>(<span class="string">"获取的值为：%d\n"</span>, infoVal)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="蓝牙连接所涉及到的类"><a href="#蓝牙连接所涉及到的类" class="headerlink" title="蓝牙连接所涉及到的类"></a>蓝牙连接所涉及到的类</h2><p><strong>CBCentralManager</strong><br>此类为中心设备类，用于控制作为中心设备时的行为</p>
+<ul>
+<li><code>state</code>：获取当前中心设备状态</li>
+<li><code>isScanning</code>：当前中心设备是否在扫描外围设备</li>
+<li><code>stopScan()</code>：停止扫描外围设备</li>
+<li><code>scanForPeripherals(...)</code>：扫描外围设备(请确保蓝牙开启)</li>
+<li><code>connect(...)</code>：连接外围设备(需要先扫描到外围设备)</li>
+<li><code>cancelPeripheralConnection(...)</code>：断开外围设备</li>
+</ul>
+<p><strong>CBPeripheral</strong><br>此类为外围设备类，用于对外围设备进行管理</p>
+<ul>
+<li><code>name</code>：获取外围设备的名称</li>
+<li><code>rssi</code>：获取当前外围设备的信号强度</li>
+<li><code>state</code>：获取外围设备的状态(disconnected/connecting/connected)</li>
+<li>★<code>services</code>：获取外围设备所提供的服务(需要先扫描到服务)</li>
+<li><code>discoverServices(...)</code>：扫描设备所提供的服务</li>
+<li><code>discoverCharacteristics(...)</code>：扫描特征值(需要先获取服务)</li>
+<li><code>readValue(...)</code>：读取特征值所对应的值(需要先获取到特征值，同时要注意此方法不反回值，要用协议的<code>didUpdateValueFor characteristic</code>方法处理)</li>
+</ul>
+<p><img src="http://p0h33xrro.bkt.clouddn.com/CoreBluetooth_CBRelationship.png" alt="中心设备与外围设备关系"></p>
+<p><strong>CBCharacteristic</strong><br>外围设备服务的特征值</p>
+<ul>
+<li>★<code>Value</code>：获取特征值对应的值</li>
+</ul>
+<h2 id="小米手环Demo开发"><a href="#小米手环Demo开发" class="headerlink" title="小米手环Demo开发"></a>小米手环Demo开发</h2><p>现在尝试通过CoreBluetooth的内容，来实现小米手环的连接、振动与停止振动功能。特征值基于小米手环1，有兴趣可以收集其他设备特征值。</p>
+<h3 id="界面搭建"><a href="#界面搭建" class="headerlink" title="界面搭建"></a>界面搭建</h3><p>方便起见，该项目直接采用storyboard搭建，不再赘述<a href="https://github.com/Minecodecraft/MiBandDemo" target="_blank" rel="external">项目Demo</a></p>
+<p><img src="http://p0h33xrro.bkt.clouddn.com/CoreBluetooth_mibandDemo.jpeg" alt="故事板"></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> scanButton: <span class="type">UIButton</span>!</span><br><span class="line"><span class="meta">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> stopButton: <span class="type">UIButton</span>!</span><br><span class="line"><span class="meta">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> vibrateButton: <span class="type">UIButton</span>!</span><br><span class="line"><span class="meta">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> stopVibrateButton: <span class="type">UIButton</span>!</span><br><span class="line"><span class="meta">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> loadingInd: <span class="type">UIActivityIndicatorView</span>!</span><br><span class="line"><span class="meta">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> statusLabel: <span class="type">UILabel</span>!</span><br><span class="line"><span class="meta">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> resultField: <span class="type">UITextView</span>!</span><br><span class="line"><span class="meta">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> vibrateLevel: <span class="type">UISegmentedControl</span>!</span><br></pre></td></tr></table></figure>
+<h3 id="设置蓝牙操作过程所需对象"><a href="#设置蓝牙操作过程所需对象" class="headerlink" title="设置蓝牙操作过程所需对象"></a>设置蓝牙操作过程所需对象</h3><p>按上述讲解，定义所需的对象，包括中心设备外围设备等。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> theManager: <span class="type">CBCentralManager</span>!</span><br><span class="line"><span class="keyword">var</span> thePerpher: <span class="type">CBPeripheral</span>!</span><br><span class="line"><span class="keyword">var</span> theVibrator: <span class="type">CBCharacteristic</span>!</span><br></pre></td></tr></table></figure>
+<h3 id="实现CBCentralManagerDelegate协议"><a href="#实现CBCentralManagerDelegate协议" class="headerlink" title="实现CBCentralManagerDelegate协议"></a>实现CBCentralManagerDelegate协议</h3><p>按上文所述实现CBCentralManagerDelegate协议</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">viewDidLoad</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">super</span>.viewDidLoad()</span><br><span class="line">    <span class="comment">// Do any additional setup after loading the view, typically from a nib.</span></span><br><span class="line">    theManager = <span class="type">CBCentralManager</span>.<span class="keyword">init</span>(delegate: <span class="keyword">self</span> <span class="keyword">as</span>? <span class="type">CBCentralManagerDelegate</span>, queue: <span class="literal">nil</span>)</span><br><span class="line">    <span class="keyword">self</span>.scanButton.isEnabled = <span class="literal">false</span></span><br><span class="line">    statusLabel.text = <span class="string">""</span></span><br><span class="line">    loadingInd.isHidden = <span class="literal">true</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 扫描并连接</span></span><br><span class="line"><span class="meta">@IBAction</span> <span class="function"><span class="keyword">func</span> <span class="title">startConnectAction</span><span class="params">(<span class="number">_</span> sender: UIButton)</span></span> &#123;</span><br><span class="line">    <span class="keyword">switch</span> theManager.state &#123;</span><br><span class="line">    <span class="keyword">case</span> .poweredOn:</span><br><span class="line">        statusLabel.text = <span class="string">"正在扫描…"</span></span><br><span class="line">        theManager.scanForPeripherals(withServices: <span class="literal">nil</span>, options: <span class="literal">nil</span>)</span><br><span class="line">        <span class="keyword">self</span>.loadingInd.startAnimating()</span><br><span class="line">        <span class="keyword">self</span>.scanButton.isEnabled = <span class="literal">false</span></span><br><span class="line">        <span class="keyword">self</span>.isDisconnected = <span class="literal">false</span></span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@IBAction</span> <span class="function"><span class="keyword">func</span> <span class="title">disconnectAction</span><span class="params">(<span class="number">_</span> sender: UIButton)</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> ((thePerpher) != <span class="literal">nil</span>) &#123;</span><br><span class="line">        theManager.cancelPeripheralConnection(thePerpher)</span><br><span class="line">        thePerpher = <span class="literal">nil</span></span><br><span class="line">        theVibrator = <span class="literal">nil</span></span><br><span class="line">        statusLabel.text = <span class="string">"设备已断开"</span></span><br><span class="line">        scanButton.isEnabled = <span class="literal">true</span></span><br><span class="line">        isDisconnected = <span class="literal">true</span></span><br><span class="line">        isVibrating = <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@IBAction</span> <span class="function"><span class="keyword">func</span> <span class="title">vibrateAction</span><span class="params">(<span class="number">_</span> sender: Any)</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> ((thePerpher != <span class="literal">nil</span>) &amp;&amp; (theVibrator != <span class="literal">nil</span>)) &#123;</span><br><span class="line">        <span class="keyword">let</span> data: [<span class="type">UInt8</span>] = [<span class="type">UInt8</span>.<span class="keyword">init</span>(vibrateLevel.selectedSegmentIndex+<span class="number">1</span>)];</span><br><span class="line">        <span class="keyword">let</span> theData: <span class="type">Data</span> = <span class="type">Data</span>.<span class="keyword">init</span>(bytes: data)</span><br><span class="line">        thePerpher.writeValue(theData, <span class="keyword">for</span>: theVibrator, type: <span class="type">CBCharacteristicWriteType</span>.withoutResponse)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@IBAction</span> <span class="function"><span class="keyword">func</span> <span class="title">stopVibrateAction</span><span class="params">(<span class="number">_</span> sender: UIButton)</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> ((thePerpher != <span class="literal">nil</span>) &amp;&amp; (theVibrator != <span class="literal">nil</span>)) &#123;</span><br><span class="line">        <span class="keyword">let</span> data: [<span class="type">UInt8</span>] = [<span class="type">UInt8</span>.<span class="keyword">init</span>(<span class="number">0</span>)];</span><br><span class="line">        <span class="keyword">let</span> theData: <span class="type">Data</span> = <span class="type">Data</span>.<span class="keyword">init</span>(bytes: data)</span><br><span class="line">        thePerpher.writeValue(theData, <span class="keyword">for</span>: theVibrator, type: <span class="type">CBCharacteristicWriteType</span>.withoutResponse)</span><br><span class="line">        isVibrating = <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 处理当前蓝牙主设备状态</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">centralManagerDidUpdateState</span><span class="params">(<span class="number">_</span> central: CBCentralManager)</span></span> &#123;</span><br><span class="line">    <span class="keyword">switch</span> central.state &#123;</span><br><span class="line">    <span class="keyword">case</span> .poweredOn:</span><br><span class="line">        statusLabel.text = <span class="string">"蓝牙已开启"</span></span><br><span class="line">        <span class="keyword">self</span>.scanButton.isEnabled = <span class="literal">true</span></span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        statusLabel.text = <span class="string">"蓝牙未开启！"</span></span><br><span class="line">        <span class="keyword">self</span>.loadingInd.stopAnimating()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 扫描到设备</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">centralManager</span><span class="params">(<span class="number">_</span> central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber)</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (peripheral.name?.hasSuffix(<span class="string">"MI"</span>))! &#123;</span><br><span class="line">        thePerpher = peripheral</span><br><span class="line">        central.stopScan()</span><br><span class="line">        central.connect(peripheral, options: <span class="literal">nil</span>)</span><br><span class="line">        statusLabel.text = <span class="string">"搜索成功，开始连接"</span></span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 特征值匹配请用 peripheral.identifier.uuidString</span></span><br><span class="line">    resultField.text = <span class="type">String</span>.<span class="keyword">init</span>(format: <span class="string">"发现手环\n名称：%@\nUUID：%@\n"</span>, peripheral.name!, peripheral.identifier.uuidString)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 成功连接到设备</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">centralManager</span><span class="params">(<span class="number">_</span> central: CBCentralManager, didConnect peripheral: CBPeripheral)</span></span> &#123;</span><br><span class="line">    statusLabel.text = <span class="string">"连接成功，正在扫描信息..."</span></span><br><span class="line">    peripheral.delegate = <span class="keyword">self</span></span><br><span class="line">    peripheral.discoverServices(<span class="literal">nil</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 连接到设备失败</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">centralManager</span><span class="params">(<span class="number">_</span> central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?)</span></span> &#123;</span><br><span class="line">    loadingInd.stopAnimating()</span><br><span class="line">    statusLabel.text = <span class="string">"连接设备失败"</span></span><br><span class="line">    scanButton.isEnabled = <span class="literal">true</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 扫描服务</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">peripheral</span><span class="params">(<span class="number">_</span> peripheral: CBPeripheral, didDiscoverServices error: Error?)</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> ((error) != <span class="literal">nil</span>) &#123;</span><br><span class="line">        statusLabel.text = <span class="string">"查找服务失败"</span></span><br><span class="line">        loadingInd.stopAnimating()</span><br><span class="line">        scanButton.isEnabled = <span class="literal">true</span></span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> service <span class="keyword">in</span> peripheral.services! &#123;</span><br><span class="line">            peripheral.discoverCharacteristics(<span class="literal">nil</span>, <span class="keyword">for</span>: service)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 扫描到特征值</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">peripheral</span><span class="params">(<span class="number">_</span> peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?)</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> ((error) != <span class="literal">nil</span>) &#123;</span><br><span class="line">        statusLabel.text = <span class="string">"查找服务失败"</span></span><br><span class="line">        loadingInd.stopAnimating()</span><br><span class="line">        scanButton.isEnabled = <span class="literal">true</span></span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> characteristic <span class="keyword">in</span> service.characteristics! &#123;</span><br><span class="line">            peripheral.setNotifyValue(<span class="literal">true</span>, <span class="keyword">for</span>: characteristic)</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> (characteristic.uuid.uuidString == <span class="type">BATTERY</span>) &#123;</span><br><span class="line">                peripheral.readValue(<span class="keyword">for</span>: characteristic)</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (characteristic.uuid.uuidString == <span class="type">DEVICE</span>) &#123;</span><br><span class="line">                peripheral.readValue(<span class="keyword">for</span>: characteristic)</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (characteristic.uuid.uuidString == <span class="type">VIBRATE</span>) &#123;</span><br><span class="line">                theVibrator = characteristic</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 扫描到具体设备</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">peripheral</span><span class="params">(<span class="number">_</span> peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?)</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> ((error) != <span class="literal">nil</span>) &#123;</span><br><span class="line">        statusLabel.text = <span class="string">"从设备获取值失败"</span></span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(characteristic.uuid.uuidString == <span class="type">BATTERY</span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> batteryBytes = [<span class="type">UInt8</span>](characteristic.value!)</span><br><span class="line">            <span class="keyword">var</span> batteryVal:<span class="type">Int</span> = <span class="type">Int</span>.<span class="keyword">init</span>(batteryBytes[<span class="number">0</span>])</span><br><span class="line">            <span class="keyword">self</span>.resultField.text = <span class="type">String</span>.<span class="keyword">init</span>(format: <span class="string">"%@电量：%d%%\n"</span>, resultField.text, batteryVal)</span><br><span class="line">        &#125;</span><br><span class="line">        loadingInd.stopAnimating()</span><br><span class="line">        scanButton.isEnabled = <span class="literal">true</span></span><br><span class="line">        statusLabel.text = <span class="string">"信息扫描完成！"</span></span><br><span class="line">        <span class="keyword">if</span> (isVibrating) &#123;</span><br><span class="line">            vibrateAction(<span class="type">Any</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 与设备断开连接</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">centralManager</span><span class="params">(<span class="number">_</span> central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?)</span></span> &#123;</span><br><span class="line">    statusLabel.text = <span class="string">"设备已断开"</span></span><br><span class="line">    scanButton.isEnabled = <span class="literal">true</span></span><br><span class="line">    <span class="keyword">if</span>(!isDisconnected) &#123;</span><br><span class="line">        theManager.scanForPeripherals(withServices: <span class="literal">nil</span>, options: <span class="literal">nil</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>补充：<br>小米手环振动的UUID是2A06，0代表不振，1为短振，2为长振。</p>
+<p>GitHub：<a href="https://github.com/Minecodecraft" target="_blank" rel="external">https://github.com/Minecodecraft</a><br>Demo链接：<a href="https://github.com/Minecodecraft/MiBandDemo" target="_blank" rel="external">https://github.com/Minecodecraft/MiBandDemo</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Cocoa/" rel="tag"><i class="fa fa-tag"></i> Cocoa</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/13/树状数组的几种模型/" rel="next" title="树状数组的几种模型">
+                <i class="fa fa-chevron-left"></i> 树状数组的几种模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/01/CALayer的寄宿图/" rel="prev" title="CALayer的寄宿图">
+                CALayer的寄宿图 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzA3Ni85NjM4"></div>
+    </div>
+
+  
+
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Minecode</p>
+              <p class="site-description motion-element" itemprop="description">在校iOS开发者，前ACM鶸，精通各种HelloWord写法，向着移动端全栈进发。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Minecodecraft" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:minecoder@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
+                    
+                      <i class="fa fa-fw fa-globe"></i>简书</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://blog.csdn.net/b735098742" target="_blank" title="CSDN博客">
+                    
+                      <i class="fa fa-fw fa-globe"></i>CSDN博客</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#章节目录"><span class="nav-number">1.</span> <span class="nav-text">章节目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iOS蓝牙框架介绍"><span class="nav-number">2.</span> <span class="nav-text">iOS蓝牙框架介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CoreBluetooth-framework导入"><span class="nav-number">3.</span> <span class="nav-text">CoreBluetooth.framework导入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#蓝牙连接所涉及到的类"><span class="nav-number">4.</span> <span class="nav-text">蓝牙连接所涉及到的类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小米手环Demo开发"><span class="nav-number">5.</span> <span class="nav-text">小米手环Demo开发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#界面搭建"><span class="nav-number">5.1.</span> <span class="nav-text">界面搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置蓝牙操作过程所需对象"><span class="nav-number">5.2.</span> <span class="nav-text">设置蓝牙操作过程所需对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现CBCentralManagerDelegate协议"><span class="nav-number">5.3.</span> <span class="nav-text">实现CBCentralManagerDelegate协议</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Minecode</span>
+
+</div>
+
+
+<!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>-->
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv">
+    总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共26.0k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+<div id="hexo-helper-live2d">
+  <canvas id="live2dcanvas" width="150" height="300"></canvas>
+</div>
+<style>
+  #live2dcanvas{
+    position: fixed;
+    width: 150px;
+    height: 300px;
+    opacity:0.7;
+    right: 0px;
+    z-index: 999;
+    pointer-events: none;
+    bottom: -20px;
+  }
+</style>
+<script type="text/javascript" src="/live2d/device.min.js"></script>
+<script type="text/javascript">
+const loadScript = function loadScript(c,b){var a=document.createElement("script");a.type="text/javascript";"undefined"!=typeof b&&(a.readyState?a.onreadystatechange=function(){if("loaded"==a.readyState||"complete"==a.readyState)a.onreadystatechange=null,b()}:a.onload=function(){b()});a.src=c;document.body.appendChild(a)};
+(function(){
+  if((typeof(device) != 'undefined') && (device.mobile())){
+    var trElement = document.getElementById('hexo-helper-live2d');
+    trElement.parentNode.removeChild(trElement);
+    return;
+  }else
+    if (typeof(device) === 'undefined') console.error('Cannot find current-device script.');
+  loadScript("/live2d/script.js", function(){loadlive2d("live2dcanvas", "/live2d/assets/wanko.model.json", 0.5);});
+})();
+</script>
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
