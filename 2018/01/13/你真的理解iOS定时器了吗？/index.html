@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="底层,性能优化,GCD,多线程,Cocoa," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在开发中我们经常用到定时器，iOS为我们提供了多种定时器，包括NSTimer、CADisplayLink、GCD、NSThread(performSelector:afterDelay:)，其本质都是通过RunLoop来实现，但GCD通过其调度机制大大提高了性能。定时器的使用中容易存在一些误区，故写本文总结。 本文将介绍iOS的几种定时器、定时器的立即执行方法、内存泄露问题、不准时问题 NSTim">
+<meta name="keywords" content="底层,性能优化,GCD,多线程,Cocoa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你真的理解iOS定时器了吗？">
+<meta property="og:url" content="https://minecodecraft.github.io/2018/01/13/你真的理解iOS定时器了吗？/index.html">
+<meta property="og:site_name" content="Minecode&#39;s Blog">
+<meta property="og:description" content="在开发中我们经常用到定时器，iOS为我们提供了多种定时器，包括NSTimer、CADisplayLink、GCD、NSThread(performSelector:afterDelay:)，其本质都是通过RunLoop来实现，但GCD通过其调度机制大大提高了性能。定时器的使用中容易存在一些误区，故写本文总结。 本文将介绍iOS的几种定时器、定时器的立即执行方法、内存泄露问题、不准时问题 NSTim">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-13T07:41:20.592Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="你真的理解iOS定时器了吗？">
+<meta name="twitter:description" content="在开发中我们经常用到定时器，iOS为我们提供了多种定时器，包括NSTimer、CADisplayLink、GCD、NSThread(performSelector:afterDelay:)，其本质都是通过RunLoop来实现，但GCD通过其调度机制大大提高了性能。定时器的使用中容易存在一些误区，故写本文总结。 本文将介绍iOS的几种定时器、定时器的立即执行方法、内存泄露问题、不准时问题 NSTim">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://minecodecraft.github.io/2018/01/13/你真的理解iOS定时器了吗？/"/>
+
+
+
+
+
+  <title>你真的理解iOS定时器了吗？ | Minecode's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Minecode's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://minecodecraft.github.io/2018/01/13/你真的理解iOS定时器了吗？/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Minecode">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Minecode's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">你真的理解iOS定时器了吗？</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-13T15:40:00+08:00">
+                2018-01-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS技术/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,299
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在开发中我们经常用到定时器，iOS为我们提供了多种定时器，包括NSTimer、CADisplayLink、GCD、NSThread(performSelector:afterDelay:)，其本质都是通过RunLoop来实现，但GCD通过其调度机制大大提高了性能。定时器的使用中容易存在一些误区，故写本文总结。</p>
+<p><strong>本文将介绍iOS的几种定时器、定时器的立即执行方法、内存泄露问题、不准时问题</strong></p>
+<h2 id="NSTimer"><a href="#NSTimer" class="headerlink" title="NSTimer"></a>NSTimer</h2><p>iOS中最基本的定时器，在Swift中称为Timer。其通过RunLoop来实现，一般情况下较为准确，但当当前循环耗时操作较多时，会出现延迟问题。同时，也受所加入的RunLoop的RunLoopMode影响，具体可以参考RunLoop的特性。</p>
+<h3 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h3><p>构造方法主要分为自动启动和手动启动，手动启动的构造方法需要我们在创建NSTimer后手动启动它:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/// 构造并开启(启动NSTimer本质上是将其加入RunLoop中)</span><br><span class="line">// &quot;scheduledTimer&quot;前缀的为自动启动NSTimer的，如:</span><br><span class="line">+ (NSTimer *)scheduledTimerWithTimeInterval:(NSTimeInterval)interval repeats:(BOOL)repeats block:(void (^)(NSTimer *timer))block</span><br><span class="line"></span><br><span class="line">/// 构造但不开启</span><br><span class="line">// &quot;timer&quot;前缀的为只构造不启用的，如:</span><br><span class="line">+ (NSTimer *)timerWithTimeInterval:(NSTimeInterval)interval repeats:(BOOL)repeats block:(void (^)(NSTimer *timer))block</span><br></pre></td></tr></table></figure>
+<p>前面说到，定时器的本质是加入到了RunLoop的Timer列表中，从而随着运行循环来实现定时器的功能。所以NSTimer除了构造，还需要加入RunLoop。关于RunLoop简单实用可以见文末。</p>
+<h3 id="释放"><a href="#释放" class="headerlink" title="释放"></a>释放</h3><p><strong>定时器的释放一定要先将其终止，而后才能销毁对象。</strong>具体原因下文会说。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)invalidate;</span><br></pre></td></tr></table></figure>
+<h3 id="立即执行-fire"><a href="#立即执行-fire" class="headerlink" title="立即执行(fire)"></a>立即执行(fire)</h3><p>我们对定时器设置了延时之后，有时需要让它立刻执行，可以使用fire方法:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)fire;</span><br></pre></td></tr></table></figure>
+<p>但是该方法的使用需要注意: <strong>fire方法不会改变预定周期性调度</strong>。什么意思呢？就是说，如果我们把Timer设置为循环调用，那么我们任何时候调用fire方法，下一次调度的时间仍旧是按照预定时间，而非基于本次执行的时间计算而得。这里需要特别注意，我们可以参考下面的🌰:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">self.timer1 = [NSTimer timerWithTimeInterval:5.0 target:self selector:@selector(timerMethod1) userInfo:nil repeats:NO];</span><br><span class="line">[[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];</span><br><span class="line"></span><br><span class="line">self.timer2 = [NSTimer timerWithTimeInterval:5.0 target:self selector:@selector(timerMethod2) userInfo:nil repeats:NO];</span><br><span class="line">[[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];</span><br><span class="line"></span><br><span class="line">/* ......... */</span><br><span class="line"></span><br><span class="line">- (void)timerMethod1 &#123;</span><br><span class="line">    static int timerIdx1 = 0;</span><br><span class="line">    NSLog(@&quot;Timer Method1: %d&quot;, timerIdx1++);</span><br><span class="line">&#125;</span><br><span class="line">- (void)timerMethod2 &#123;</span><br><span class="line">    static int timerIdx2 = 0;</span><br><span class="line">    NSLog(@&quot;Timer Method2: %d&quot;, timerIdx2++);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们定义了两个NSTimer并加入到RUnLoop中，其目标方法和其他属性均相同，唯一区别是前者只运行一次。</p>
+<p>我们在第8秒时调用fire方法，结果如何呢？ timer1立即执行，并且由于仅执行一次，其任务结束。而timer2在第8秒执行后，仍旧在第10秒执行，这样的结果说明了<strong>fire方法不会改变预定周期性调度</strong>。</p>
+<h2 id="CADisplayLink"><a href="#CADisplayLink" class="headerlink" title="CADisplayLink"></a>CADisplayLink</h2><p>CADisplayLink是基于屏幕刷新的周期，所以其一般很准时，每秒刷新60次。其本质也是通过RunLoop，所以不难看出，当RunLoop选择其他模式或被耗时操作过多时，仍旧会造成延迟。</p>
+<p>其使用步骤为 <strong><code>创建CADisplayLink-&gt;添加至RunLoop中-&gt;终止-&gt;销毁</code></strong>。代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 创建CADisplayLink</span><br><span class="line">CADisplayLink *disLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(linkMethod)];</span><br><span class="line">// 添加至RunLoop中</span><br><span class="line">[disLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];</span><br><span class="line">// 终止定时器</span><br><span class="line">[disLink invalidate];</span><br><span class="line">// 销毁对象</span><br><span class="line">disLink = nil;</span><br></pre></td></tr></table></figure>
+<p>由于其并非NSTimer的子类，直接使用NSRunLoop的添加Timer方法无法加入，应使用CADisplayLink自己的addToRunLoop:forMode:方法。</p>
+<p>同时，由于其是基于屏幕刷新的，所以也度量单位是每帧，其提供了根据屏幕刷新来设置间隔的<code>frameInterval</code>属性，其决定于屏幕刷新多少帧时调用一次该方法，默认为1，即1/60秒调用一次。</p>
+<p>如果我们想要计算出每次调用的时间间隔，可以通过<code>frameInterval * duration</code>求出，后者为屏幕每帧间隔的只读属性。</p>
+<p>在日常开发中，适当使用CADisplayLink甚至有优化作用。比如对于需要动态计算进度的进度条，由于起进度反馈主要是为了UI更新，那么当计算进度的频率超过帧数时，就造成了很多无谓的计算。如果将计算进度的方法绑定到CADisplayLink上来调用，则只在每次屏幕刷新时计算进度，优化了性能。MBProcessHUB则是利用了这一特性。</p>
+<h2 id="GCD"><a href="#GCD" class="headerlink" title="GCD"></a>GCD</h2><p>首先要明确一点，<strong>GCD更为精准，但其依旧是基于RunLoop</strong>，在很多博客上写GCD定时器不通过RunLoop是错误的，定时器本质就是通过轮询来实现，包括事件循环及死循环等方式。</p>
+<p>使用如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">/** 创建定时器对象</span><br><span class="line"> * para1: DISPATCH_SOURCE_TYPE_TIMER 为定时器类型</span><br><span class="line"> * para2-3: 中间两个参数对定时器无用</span><br><span class="line"> * para4: 最后为在什么调度队列中使用</span><br><span class="line"> */</span><br><span class="line">_gcdTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_global_queue(0, 0));</span><br><span class="line">/** 设置定时器</span><br><span class="line"> * para2: 任务开始时间</span><br><span class="line"> * para3: 任务的间隔</span><br><span class="line"> * para4: 可接受的误差时间，设置0即不允许出现误差</span><br><span class="line"> * Tips: 单位均为纳秒</span><br><span class="line"> */</span><br><span class="line">dispatch_source_set_timer(_gcdTimer, DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC, 0.0 * NSEC_PER_SEC);</span><br><span class="line">/** 设置定时器任务</span><br><span class="line"> * 可以通过block方式</span><br><span class="line"> * 也可以通过C函数方式</span><br><span class="line"> */</span><br><span class="line">dispatch_source_set_event_handler(_gcdTimer, ^&#123;</span><br><span class="line">    static int gcdIdx = 0;</span><br><span class="line">    NSLog(@&quot;GCD Method: %d&quot;, gcdIdx++);</span><br><span class="line">    NSLog(@&quot;%@&quot;, [NSThread currentThread]);</span><br><span class="line">    </span><br><span class="line">    if(gcdIdx == 5) &#123;</span><br><span class="line">        // 终止定时器</span><br><span class="line">        dispatch_suspend(_gcdTimer);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">// 启动任务，GCD计时器创建后需要手动启动</span><br><span class="line">dispatch_resume(_gcdTimer);</span><br></pre></td></tr></table></figure>
+<h2 id="GCD更准时的原因"><a href="#GCD更准时的原因" class="headerlink" title="GCD更准时的原因"></a>GCD更准时的原因</h2><p>GCD相对于NSTimer更加精准，但其仍是通过RunLoop实现。那么如何做到的呢？</p>
+<p>观察<code>dispatch_source_set_timer</code>方法，我们可以看到其在创建时设置了调度队列，我们设置了全局调度队列，而其原理是GCD在底层维护了线程池，<strong>我们将该定时器加入调度队列后，仍旧是加入某线程的RunLoop，但GCD会尽可能帮我们选择一个并发任务较少的线程。</strong></p>
+<p>我们可以尝试加入自己建立的队列，然后向其中加入GCD定时器和其他耗时任务，我们会发现依旧像NSTimer一样卡顿，出现延迟问题。或者当我们将任务加入主线程时，在耗时操作阻塞主线程时也会和NSTimer表现一致。</p>
+<p>同样，我们自行建立一个线程，开启RunLoop并放入GCD定时器，而不加入其他耗时任务，那么此时该定时器表现良好。但这样做应适度，因为创建线程会造成512kb的内存+90ms创建时间+CPU上下文切换频繁。</p>
+<h2 id="定时器不准时的问题及解决"><a href="#定时器不准时的问题及解决" class="headerlink" title="定时器不准时的问题及解决"></a>定时器不准时的问题及解决</h2><p>通过上文的叙述，我们大致了解了定时器不准时的原因，总结一下主要是</p>
+<ul>
+<li>当前RunLoop过于繁忙</li>
+<li>RunLoop模式与定时器所在模式不同</li>
+</ul>
+<p>上面解释了GCD更加准时的原因，所以解决方案也不难得出:</p>
+<ul>
+<li>避免过多耗时操作并发</li>
+<li>采用GCD定时器</li>
+<li>创建新线程并开启RunLoop，将定时器加入其中(适度使用)</li>
+<li>将定时器添加到NSRunLoopCommonModes(使用不当会阻塞UI响应)</li>
+</ul>
+<p>其中后两者在使用前应确保合理使用，否则会产生负面影响。</p>
+<h2 id="定时器的内存泄露问题"><a href="#定时器的内存泄露问题" class="headerlink" title="定时器的内存泄露问题"></a>定时器的内存泄露问题</h2><p>定时器在使用时应格外注意内存管理，常见情况时定时器对象无法释放造成内存泄露，而严重情况会造成控制器也无法释放，危害更大。其内存泄露有两部分问题，我们先来看第一部分:</p>
+<h3 id="问题1-NSTimer无法释放"><a href="#问题1-NSTimer无法释放" class="headerlink" title="问题1: NSTimer无法释放"></a>问题1: NSTimer无法释放</h3><p>我们知道，NSTimer实际上是加入到RunLoop中的，那么在其启动时其被RunLoop强引用，那么即使我们在后面将定时器设为nil，也只是引用计数减少了1，其仍因为被RunLoop引用而无法释放，造成内存泄露。</p>
+<h3 id="问题2-控制器无法释放"><a href="#问题2-控制器无法释放" class="headerlink" title="问题2: 控制器无法释放"></a>问题2: 控制器无法释放</h3><p>这是NSTimer无法释放所造成的更严重问题，由于为定时器设置了target，控制器就会得到一个来自定时器的引用。我们来分析一下这个情况，首先定时器必须被强引用，否则将在autoreleasepool之后被释放掉造成野指针。而定时器的target又对控制器有一个强引用，这就是典型的强引用循环(循环引用)。</p>
+<p>那么如何解决这两个问题呢？答案就是使用<code>invalidate</code>方法。</p>
+<p>苹果文档介绍如下:</p>
+<blockquote>
+<p>This method is the only way to remove a timer from an NSRunLoop object. The NSRunLoop object removes its strong reference to the timer, either just before the invalidate method returns or at some later point.<br>If it was configured with target and user info objects, the receiver removes its strong references to those objects as well.</p>
+</blockquote>
+<p>即，<strong>invalidate方法会将定时器从RunLoop中移除，同时解除对target等对象的强引用。</strong></p>
+<p>CADisplayLink同理，而GCD定时器则使用<code>dispatch_suspend()</code></p>
+<p><strong><em>更多技术文章，欢迎访问</em></strong><br><a href="http://minecode.link" target="_blank" rel="external">本人博客 - Minecode’s Blog</a><br><a href="https://github.com/Minecodecraft" target="_blank" rel="external">Github - Minecodecraft</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/底层/" rel="tag"><i class="fa fa-tag"></i> 底层</a>
+          
+            <a href="/tags/性能优化/" rel="tag"><i class="fa fa-tag"></i> 性能优化</a>
+          
+            <a href="/tags/GCD/" rel="tag"><i class="fa fa-tag"></i> GCD</a>
+          
+            <a href="/tags/多线程/" rel="tag"><i class="fa fa-tag"></i> 多线程</a>
+          
+            <a href="/tags/Cocoa/" rel="tag"><i class="fa fa-tag"></i> Cocoa</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/09/再探OC对象模型(isa:superclass)--从NSObject的实现出发/" rel="next" title="再探OC对象模型(isa/superclass)--从NSObject的实现出发">
+                <i class="fa fa-chevron-left"></i> 再探OC对象模型(isa/superclass)--从NSObject的实现出发
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzA3Ni85NjM4"></div>
+    </div>
+
+  
+
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Minecode</p>
+              <p class="site-description motion-element" itemprop="description">在校iOS开发者，前ACM鶸，精通各种HelloWord写法，向着移动端全栈进发。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Minecodecraft" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:minecoder@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
+                    
+                      <i class="fa fa-fw fa-globe"></i>简书</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://blog.csdn.net/b735098742" target="_blank" title="CSDN博客">
+                    
+                      <i class="fa fa-fw fa-globe"></i>CSDN博客</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#NSTimer"><span class="nav-number">1.</span> <span class="nav-text">NSTimer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建"><span class="nav-number">1.1.</span> <span class="nav-text">创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#释放"><span class="nav-number">1.2.</span> <span class="nav-text">释放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#立即执行-fire"><span class="nav-number">1.3.</span> <span class="nav-text">立即执行(fire)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CADisplayLink"><span class="nav-number">2.</span> <span class="nav-text">CADisplayLink</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GCD"><span class="nav-number">3.</span> <span class="nav-text">GCD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GCD更准时的原因"><span class="nav-number">4.</span> <span class="nav-text">GCD更准时的原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定时器不准时的问题及解决"><span class="nav-number">5.</span> <span class="nav-text">定时器不准时的问题及解决</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定时器的内存泄露问题"><span class="nav-number">6.</span> <span class="nav-text">定时器的内存泄露问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题1-NSTimer无法释放"><span class="nav-number">6.1.</span> <span class="nav-text">问题1: NSTimer无法释放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题2-控制器无法释放"><span class="nav-number">6.2.</span> <span class="nav-text">问题2: 控制器无法释放</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Minecode</span>
+
+</div>
+
+
+<!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>-->
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv">
+    总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共28.3k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+<div id="hexo-helper-live2d">
+  <canvas id="live2dcanvas" width="150" height="300"></canvas>
+</div>
+<style>
+  #live2dcanvas{
+    position: fixed;
+    width: 150px;
+    height: 300px;
+    opacity:0.7;
+    right: 0px;
+    z-index: 999;
+    pointer-events: none;
+    bottom: -20px;
+  }
+</style>
+<script type="text/javascript" src="/live2d/device.min.js"></script>
+<script type="text/javascript">
+const loadScript = function loadScript(c,b){var a=document.createElement("script");a.type="text/javascript";"undefined"!=typeof b&&(a.readyState?a.onreadystatechange=function(){if("loaded"==a.readyState||"complete"==a.readyState)a.onreadystatechange=null,b()}:a.onload=function(){b()});a.src=c;document.body.appendChild(a)};
+(function(){
+  if((typeof(device) != 'undefined') && (device.mobile())){
+    var trElement = document.getElementById('hexo-helper-live2d');
+    trElement.parentNode.removeChild(trElement);
+    return;
+  }else
+    if (typeof(device) === 'undefined') console.error('Cannot find current-device script.');
+  loadScript("/live2d/script.js", function(){loadlive2d("live2dcanvas", "/live2d/assets/wanko.model.json", 0.5);});
+})();
+</script>
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

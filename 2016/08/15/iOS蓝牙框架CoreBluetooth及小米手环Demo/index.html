@@ -95,21 +95,21 @@
 
 
 
-<meta name="description" content="章节目录 iOS蓝牙框架介绍 CoreBluetooth.framework导入 CoreBluetooth的基础使用 蓝牙连接所涉及到的类 小米手环Demo  iOS蓝牙框架介绍####CoreBluetooth介绍 在iOS开发中，实现蓝牙通信的方法有两种。分别是GameKit.framework以及CoreBluetooth.framework，前者在iOS5后基本被淘汰。 在苹果文档中，写">
+<meta name="description" content="章节目录 iOS蓝牙框架介绍 CoreBluetooth.framework导入 CoreBluetooth的基础使用 蓝牙连接所涉及到的类 小米手环Demo  iOS蓝牙框架介绍CoreBluetooth介绍在iOS开发中，实现蓝牙通信的方法有两种。分别是GameKit.framework以及CoreBluetooth.framework，前者在iOS5后基本被淘汰。 在苹果文档中，写了Comm">
 <meta name="keywords" content="Cocoa">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS蓝牙框架CoreBluetooth及小米手环Demo">
 <meta property="og:url" content="https://minecodecraft.github.io/2016/08/15/iOS蓝牙框架CoreBluetooth及小米手环Demo/index.html">
 <meta property="og:site_name" content="Minecode&#39;s Blog">
-<meta property="og:description" content="章节目录 iOS蓝牙框架介绍 CoreBluetooth.framework导入 CoreBluetooth的基础使用 蓝牙连接所涉及到的类 小米手环Demo  iOS蓝牙框架介绍####CoreBluetooth介绍 在iOS开发中，实现蓝牙通信的方法有两种。分别是GameKit.framework以及CoreBluetooth.framework，前者在iOS5后基本被淘汰。 在苹果文档中，写">
+<meta property="og:description" content="章节目录 iOS蓝牙框架介绍 CoreBluetooth.framework导入 CoreBluetooth的基础使用 蓝牙连接所涉及到的类 小米手环Demo  iOS蓝牙框架介绍CoreBluetooth介绍在iOS开发中，实现蓝牙通信的方法有两种。分别是GameKit.framework以及CoreBluetooth.framework，前者在iOS5后基本被淘汰。 在苹果文档中，写了Comm">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6362190-df35d8fa706b3aca?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/CoreBluetooth_CBRelationship.png">
 <meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/CoreBluetooth_mibandDemo.jpeg">
-<meta property="og:updated_time" content="2018-01-13T02:58:13.771Z">
+<meta property="og:updated_time" content="2018-01-13T03:09:26.918Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS蓝牙框架CoreBluetooth及小米手环Demo">
-<meta name="twitter:description" content="章节目录 iOS蓝牙框架介绍 CoreBluetooth.framework导入 CoreBluetooth的基础使用 蓝牙连接所涉及到的类 小米手环Demo  iOS蓝牙框架介绍####CoreBluetooth介绍 在iOS开发中，实现蓝牙通信的方法有两种。分别是GameKit.framework以及CoreBluetooth.framework，前者在iOS5后基本被淘汰。 在苹果文档中，写">
+<meta name="twitter:description" content="章节目录 iOS蓝牙框架介绍 CoreBluetooth.framework导入 CoreBluetooth的基础使用 蓝牙连接所涉及到的类 小米手环Demo  iOS蓝牙框架介绍CoreBluetooth介绍在iOS开发中，实现蓝牙通信的方法有两种。分别是GameKit.framework以及CoreBluetooth.framework，前者在iOS5后基本被淘汰。 在苹果文档中，写了Comm">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/6362190-df35d8fa706b3aca?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -410,8 +410,7 @@
 <li>蓝牙连接所涉及到的类</li>
 <li>小米手环Demo</li>
 </ul>
-<h2 id="iOS蓝牙框架介绍"><a href="#iOS蓝牙框架介绍" class="headerlink" title="iOS蓝牙框架介绍"></a>iOS蓝牙框架介绍</h2><p>####<strong>CoreBluetooth介绍</strong></p>
-<p>在iOS开发中，实现蓝牙通信的方法有两种。分别是GameKit.framework以及CoreBluetooth.framework，前者在iOS5后基本被淘汰。</p>
+<h2 id="iOS蓝牙框架介绍"><a href="#iOS蓝牙框架介绍" class="headerlink" title="iOS蓝牙框架介绍"></a>iOS蓝牙框架介绍</h2><h4 id="CoreBluetooth介绍"><a href="#CoreBluetooth介绍" class="headerlink" title="CoreBluetooth介绍"></a><strong>CoreBluetooth介绍</strong></h4><p>在iOS开发中，实现蓝牙通信的方法有两种。分别是GameKit.framework以及CoreBluetooth.framework，前者在iOS5后基本被淘汰。</p>
 <p>在苹果文档中，写了<code>Communicate with Bluetooth 4.0 low-energy devices</code>，也就是说仅支持蓝牙4.0低功耗协议(BLE)。</p>
 <p>对于iOS10以上的设备，苹果注明以下信息:</p>
 <blockquote>
@@ -442,8 +441,7 @@
 <li>声明协议：使用CoreBluetooth需要支持CBCentralManagerDelegate, CBPeripheralDelegate协议，即前面所说的中心设备和外围设备，并实现相应方法</li>
 </ol>
 <p><br><br></p>
-<p>##CoreBluetooth的基础使用</p>
-<p>导入框架并声明协议后，即可开始实现必要方法。<br>下面通过展示整个流程所需要的方法</p>
+<h2 id="CoreBluetooth的基础使用"><a href="#CoreBluetooth的基础使用" class="headerlink" title="CoreBluetooth的基础使用"></a>CoreBluetooth的基础使用</h2><p>导入框架并声明协议后，即可开始实现必要方法。<br>下面通过展示整个流程所需要的方法</p>
 <ul>
 <li><p><strong>初始化</strong></p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> manager = <span class="type">CBCentralManager</span>.<span class="keyword">init</span>(delegate: <span class="keyword">self</span> <span class="keyword">as</span>? <span class="type">CBCentralManagerDelegate</span>, queue: <span class="literal">nil</span>)</span><br></pre></td></tr></table></figure>
@@ -638,7 +636,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -721,7 +719,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#章节目录"><span class="nav-number">1.</span> <span class="nav-text">章节目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iOS蓝牙框架介绍"><span class="nav-number">2.</span> <span class="nav-text">iOS蓝牙框架介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CoreBluetooth-framework导入"><span class="nav-number">3.</span> <span class="nav-text">CoreBluetooth.framework导入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#蓝牙连接所涉及到的类"><span class="nav-number">4.</span> <span class="nav-text">蓝牙连接所涉及到的类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小米手环Demo开发"><span class="nav-number">5.</span> <span class="nav-text">小米手环Demo开发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#界面搭建"><span class="nav-number">5.1.</span> <span class="nav-text">界面搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置蓝牙操作过程所需对象"><span class="nav-number">5.2.</span> <span class="nav-text">设置蓝牙操作过程所需对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现CBCentralManagerDelegate协议"><span class="nav-number">5.3.</span> <span class="nav-text">实现CBCentralManagerDelegate协议</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#章节目录"><span class="nav-number">1.</span> <span class="nav-text">章节目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iOS蓝牙框架介绍"><span class="nav-number">2.</span> <span class="nav-text">iOS蓝牙框架介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CoreBluetooth介绍"><span class="nav-number">2.0.1.</span> <span class="nav-text">CoreBluetooth介绍</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CoreBluetooth-framework导入"><span class="nav-number">3.</span> <span class="nav-text">CoreBluetooth.framework导入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CoreBluetooth的基础使用"><span class="nav-number">4.</span> <span class="nav-text">CoreBluetooth的基础使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#蓝牙连接所涉及到的类"><span class="nav-number">5.</span> <span class="nav-text">蓝牙连接所涉及到的类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小米手环Demo开发"><span class="nav-number">6.</span> <span class="nav-text">小米手环Demo开发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#界面搭建"><span class="nav-number">6.1.</span> <span class="nav-text">界面搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置蓝牙操作过程所需对象"><span class="nav-number">6.2.</span> <span class="nav-text">设置蓝牙操作过程所需对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现CBCentralManagerDelegate协议"><span class="nav-number">6.3.</span> <span class="nav-text">实现CBCentralManagerDelegate协议</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -770,7 +768,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共26.0k字</span>
+  <span class="post-count">博客全站共28.3k字</span>
 </div>
 
         
