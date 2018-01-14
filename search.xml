@@ -10,9 +10,9 @@
       <tags>
         <tag>底层</tag>
         <tag>性能优化</tag>
+        <tag>Cocoa</tag>
         <tag>GCD</tag>
         <tag>多线程</tag>
-        <tag>Cocoa</tag>
       </tags>
   </entry>
   <entry>
@@ -63,9 +63,9 @@
       </categories>
       <tags>
         <tag>Objective-C</tag>
-        <tag>Clang</tag>
         <tag>Runtime</tag>
         <tag>底层</tag>
+        <tag>Clang</tag>
       </tags>
   </entry>
   <entry>
@@ -90,8 +90,8 @@
       </categories>
       <tags>
         <tag>Runtime</tag>
-        <tag>底层</tag>
         <tag>Objecitve-C</tag>
+        <tag>底层</tag>
         <tag>性能优化</tag>
       </tags>
   </entry>
@@ -227,8 +227,8 @@
       </categories>
       <tags>
         <tag>数据结构</tag>
-        <tag>ACM</tag>
         <tag>编译原理</tag>
+        <tag>ACM</tag>
       </tags>
   </entry>
 </search>
