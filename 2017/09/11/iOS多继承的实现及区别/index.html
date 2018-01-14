@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Objective-C,Runtime,Cocoa," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="多继承可以允许子类从多个父类派生，而Objective-C并不支持多继承，但我们仍可间接实现。 Objective-C实现多继承主要可以通过协议、分类、消息转发来实现。我们来总结一下其使用以及优缺点。 通过协议实现协议主要是用来提出类应遵守的标准，但其特性也可用来实现多继承。一个类可以遵守多个协议，也即实现多个协议的方法，以此来达到多继承的效果。 概念上的单继承和多继承应该是继承父类的属性和方法，">
+<meta name="keywords" content="Objective-C,Runtime,Cocoa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS多继承的实现及区别">
+<meta property="og:url" content="https://minecodecraft.github.io/2017/09/11/iOS多继承的实现及区别/index.html">
+<meta property="og:site_name" content="Minecode&#39;s Blog">
+<meta property="og:description" content="多继承可以允许子类从多个父类派生，而Objective-C并不支持多继承，但我们仍可间接实现。 Objective-C实现多继承主要可以通过协议、分类、消息转发来实现。我们来总结一下其使用以及优缺点。 通过协议实现协议主要是用来提出类应遵守的标准，但其特性也可用来实现多继承。一个类可以遵守多个协议，也即实现多个协议的方法，以此来达到多继承的效果。 概念上的单继承和多继承应该是继承父类的属性和方法，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-14T07:21:06.094Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS多继承的实现及区别">
+<meta name="twitter:description" content="多继承可以允许子类从多个父类派生，而Objective-C并不支持多继承，但我们仍可间接实现。 Objective-C实现多继承主要可以通过协议、分类、消息转发来实现。我们来总结一下其使用以及优缺点。 通过协议实现协议主要是用来提出类应遵守的标准，但其特性也可用来实现多继承。一个类可以遵守多个协议，也即实现多个协议的方法，以此来达到多继承的效果。 概念上的单继承和多继承应该是继承父类的属性和方法，">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://minecodecraft.github.io/2017/09/11/iOS多继承的实现及区别/"/>
+
+
+
+
+
+  <title>iOS多继承的实现及区别 | Minecode's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Minecode's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://minecodecraft.github.io/2017/09/11/iOS多继承的实现及区别/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Minecode">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Minecode's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS多继承的实现及区别</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-11T15:17:00+08:00">
+                2017-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS技术/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,958
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>多继承可以允许子类从多个父类派生，而Objective-C并不支持多继承，但我们仍可间接实现。</p>
+<p><strong>Objective-C实现多继承主要可以通过协议、分类、消息转发来实现。</strong>我们来总结一下其使用以及优缺点。</p>
+<h2 id="通过协议实现"><a href="#通过协议实现" class="headerlink" title="通过协议实现"></a>通过协议实现</h2><p>协议主要是用来提出类应遵守的标准，但其特性也可用来实现多继承。一个类可以遵守多个协议，也即实现多个协议的方法，以此来达到多继承的效果。</p>
+<p>概念上的单继承和多继承应该是继承父类的属性和方法，并且不经重写即可使用，但通过协议实现多继承有如下不同:</p>
+<ul>
+<li>子类需要实现协议方法</li>
+<li>由于协议无法定义属性，所以该方法只能实现方法的多继承</li>
+</ul>
+<p>下面来看一下示例代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">// 编程技能</span><br><span class="line">@protocol Program &lt;NSObject&gt;</span><br><span class="line">- (void)program;</span><br><span class="line">@end</span><br><span class="line">// 绘画技能</span><br><span class="line">@protocol Draw &lt;NSObject&gt;</span><br><span class="line">- (void)draw;</span><br><span class="line">@end</span><br><span class="line">// 歌唱技能</span><br><span class="line">@protocol Sing &lt;NSObject&gt;</span><br><span class="line">- (void)sing;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">// 原本一个什么也不会的程序员</span><br><span class="line">// 学会了多个技能</span><br><span class="line">@interface Programmer : NSObject &lt;Draw, Sing&gt;</span><br><span class="line">// 继承的协议方法自动公有，无须声明接口</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@interface Programmer () &lt;Program&gt;</span><br><span class="line">// 继承的协议方法自动私有，无须声明接口</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">// 需要自行实现协议方法</span><br><span class="line">@implementation Programmer</span><br><span class="line">- (void)program &#123;</span><br><span class="line">    NSLog(@&quot;I&apos;m writing bugs!&quot;);</span><br><span class="line">&#125;</span><br><span class="line">- (void)draw &#123;</span><br><span class="line">    NSLog(@&quot;I can draw&quot;);</span><br><span class="line">&#125;</span><br><span class="line">- (void)sing &#123;</span><br><span class="line">    NSLog(@&quot;Lalalallalalala&quot;);</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>通过下面的协议遵守，该程序员类掌握了编程、唱歌、绘画多个技能。同时也可以根据遵守协议的位置绝对协议方法是否公开，上述代码中draw和sing方法公开，而program为私有方法（毕竟唱歌画画是要展示给大家的 :P</p>
+<h2 id="通过类别实现"><a href="#通过类别实现" class="headerlink" title="通过类别实现"></a>通过类别实现</h2><p>下面就有请Objective-C的一大黑魔法——Catagory(分类)。</p>
+<p>相对于协议，它的Runtime特性造就了其一定优势:</p>
+<ul>
+<li>可以为类添加方法</li>
+<li>可以为类添加实例(通过Runtime)，这是协议做不到的</li>
+<li>分类方便管理</li>
+</ul>
+<p>下面来看一下通过分类来实现多继承:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">/*      分类头文件       */</span><br><span class="line">#import &quot;Programmer.h&quot;</span><br><span class="line"></span><br><span class="line">@interface Programmer (Program)</span><br><span class="line">// 声明属性</span><br><span class="line">@property (nonatomic, assign) NSString *motto;</span><br><span class="line">// 声明公有方法</span><br><span class="line">- (void)draw;</span><br><span class="line">- (void)sing;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/*      分类实现文件       */</span><br><span class="line">#import &lt;objc/runtime.h&gt;</span><br><span class="line"></span><br><span class="line">@implementation Programmer (Program)</span><br><span class="line">// 为Catagory添加属性</span><br><span class="line">static const char kMottoKey;</span><br><span class="line">- (void)setMotto:(NSString *)motto &#123;</span><br><span class="line">    objc_setAssociatedObject(self, &amp;kMottoKey, motto, OBJC_ASSOCIATION_COPY_NONATOMIC);</span><br><span class="line">&#125;</span><br><span class="line">- (NSString *)motto &#123;</span><br><span class="line">    return objc_getAssociatedObject(self, &amp;kMottoKey);</span><br><span class="line">&#125;</span><br><span class="line">// 私有方法</span><br><span class="line">- (void)program &#123;</span><br><span class="line">    NSLog(@&quot;I&apos;m writing bugs!&quot;);</span><br><span class="line">&#125;</span><br><span class="line">// 实现公有方法</span><br><span class="line">- (void)draw &#123;</span><br><span class="line">    NSLog(@&quot;I can draw&quot;);</span><br><span class="line">&#125;</span><br><span class="line">- (void)sing &#123;</span><br><span class="line">    NSLog(@&quot;Lalalalallalala&quot;);</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>通过添加分类，我们可以为程序员添加各种方法，同时通过Runtime这一黑魔法实现了动态添加属性，我们可以直接通过点语法为程序员设置座右铭。</p>
+<p>同时，分类的文件在管理上也比较方便，如果不想用直接删除<code>#import</code>即可，灵活性较强。</p>
+<p>关于Catagory添加属性的方式可以自行学习Runtime。</p>
+<h2 id="通过消息转发"><a href="#通过消息转发" class="headerlink" title="通过消息转发"></a>通过消息转发</h2><p>消息转发也是Runtime的黑魔法，其中一个用处就是可以实现多继承，当发送消息后找不到对应的方法实现时，会经过如下过程:</p>
+<ol>
+<li>动态方法解析: 通过<code>resolveInstanceMethod:</code>方法，检查是否通过<code>@dynamic</code>动态添加了方法。</li>
+<li>直接消息转发: 不修改原本方法签名，直接检查<code>forwardingTargetForSelector:</code>是否实现，若返回非nil且非self，则向该返回对象直接转发消息。</li>
+<li>标准消息转发: 先处理方法调用再转发消息，重写<code>methodSignatureForSelector:</code>和<code>forwardInvocation:</code>方法，前者用于为该消息创建一个合适的方法签名，后者则是将该消息转发给其他对象。</li>
+<li>上述过程均未实现，则程序异常。</li>
+</ol>
+<p>我们现在尝试2和3两种方案:</p>
+<h3 id="直接消息转发"><a href="#直接消息转发" class="headerlink" title="直接消息转发"></a>直接消息转发</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">/*  Programmer实现文件  */</span><br><span class="line">@implementation Programmer</span><br><span class="line"></span><br><span class="line">// 通过消息转发实现多继承</span><br><span class="line">- (id)forwardingTargetForSelector:(SEL)aSelector &#123;</span><br><span class="line">    Singer *singer = [[Singer alloc] init];</span><br><span class="line">    Artist *artist = [[Artist alloc] init];</span><br><span class="line">    </span><br><span class="line">    if ([singer respondsToSelector:aSelector]) &#123;</span><br><span class="line">        return singer;</span><br><span class="line">    &#125;</span><br><span class="line">    else if ([artist respondsToSelector:aSelector]) &#123;</span><br><span class="line">        return artist;</span><br><span class="line">    &#125;</span><br><span class="line">    return nil;</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">/*  Artist代码  */</span><br><span class="line">@interface Artist : NSObject</span><br><span class="line">// 画家可以绘画</span><br><span class="line">- (void)draw;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation Artist</span><br><span class="line">- (void)draw &#123;</span><br><span class="line">    NSLog(@&quot;I can draw&quot;);</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">/*  Singer代码  */</span><br><span class="line">@interface Singer : NSObject</span><br><span class="line">// 歌手会唱歌</span><br><span class="line">- (void)sing;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation Singer</span><br><span class="line">- (void)sing &#123;</span><br><span class="line">    NSLog(@&quot;Lalalalalala&quot;);</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>通过直接转发消息到其他类型的对象，我们就实现了多继承。如下调用，结果能够完成唱歌和绘画</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Programmer *programmer = [[Programmer alloc] init];</span><br><span class="line"></span><br><span class="line">// 在performSelector中使用NSSelectorFromString会造成警告</span><br><span class="line">// 可以通过设置不检测performSelector内存泄露关闭警告</span><br><span class="line">[programmer performSelector:NSSelectorFromString(@&quot;sing&quot;) withObject:nil];</span><br><span class="line"></span><br><span class="line">// 或者通过类型强转来实现，无警告</span><br><span class="line">[(Artist *)programmer draw];</span><br></pre></td></tr></table></figure>
+<p>通过消息转发，我们实现了动态性，及真正的将方法交给其他类来实现，而非协议或者分类所需要自行实现。同时，消息转发也给我们了充分的灵活性，如上代码，我们可以在Programer类声明sing和draw方法，但也可不暴露这些接口而通过类型强转来调用这两个方法。</p>
+<h3 id="标准消息转发"><a href="#标准消息转发" class="headerlink" title="标准消息转发"></a>标准消息转发</h3><p>标准消息转发相对于直接消息转发更加高级，可以由程序员控制转发的过程，同时也可以实现对多个对象的转发，直接消息转发仅能把该方法直接转发给其他某对象。</p>
+<p>标准消息转发代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">@interface Programmer ()</span><br><span class="line">&#123;</span><br><span class="line">    // 由于要频繁用到，我们可以创建成员实例</span><br><span class="line">    Singer *_singer;</span><br><span class="line">    Artist *_artist;</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation Programmer</span><br><span class="line"></span><br><span class="line">- (instancetype)init &#123;</span><br><span class="line">    if (self = [super init]) &#123;</span><br><span class="line">        _singer = [[Singer alloc] init];</span><br><span class="line">        _artist = [[Artist alloc] init];</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 在转发消息前先对方法重新签名</span><br><span class="line">- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector &#123;</span><br><span class="line">    // 尝试自行实现方法签名</span><br><span class="line">    NSMethodSignature *signature = [super methodSignatureForSelector:aSelector];</span><br><span class="line">    </span><br><span class="line">    // 若无法实现，尝试通过多继承得到的方法实现</span><br><span class="line">    if (signature == nil) &#123;</span><br><span class="line">        // 判断该方法是哪个父类的，并通过其创建方法签名</span><br><span class="line">        if ([_singer respondsToSelector:aSelector]) &#123;</span><br><span class="line">            signature = [_singer methodSignatureForSelector:aSelector];</span><br><span class="line">        &#125;</span><br><span class="line">        else if ([_artist respondsToSelector:aSelector]) &#123;</span><br><span class="line">            signature = [_artist methodSignatureForSelector:aSelector];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return signature;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 为方法签名后，转发消息</span><br><span class="line">- (void)forwardInvocation:(NSInvocation *)anInvocation &#123;</span><br><span class="line">    SEL sel = [anInvocation selector];</span><br><span class="line">    </span><br><span class="line">    // 判断哪个类实现了该方法</span><br><span class="line">    if ([_singer respondsToSelector:sel]) &#123;</span><br><span class="line">        [anInvocation invokeWithTarget:_singer];</span><br><span class="line">    &#125;</span><br><span class="line">    else if ([_artist respondsToSelector:sel]) &#123;</span><br><span class="line">        [anInvocation invokeWithTarget:_artist];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">/*  Singer和Artist的实现同上述代码  */</span><br></pre></td></tr></table></figure>
+<p>调用后，正常执行。实际上在实现多继承方面并没有必要使用标准消息转发，它可以在我们需要对消息进行处理时发挥其优势。</p>
+<h2 id="包含父类方法"><a href="#包含父类方法" class="headerlink" title="包含父类方法"></a>包含父类方法</h2><p>这个其实就是为Programmer添加Singer和Artist成员变量，并为前者提供接口调用后两者的方法。这种方式虽然在效果上实现了多继承，但是没有实现的意义，既然所有东西都要在子类实现一遍，那么也有悖于”继承”这一概念，在此不再赘述。</p>
+<h2 id="几种多继承方式的对比"><a href="#几种多继承方式的对比" class="headerlink" title="几种多继承方式的对比"></a>几种多继承方式的对比</h2><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>添加属性</th>
+<th>添加方法</th>
+<th>继承父类的实现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>协议(Protocol)</td>
+<td>○</td>
+<td>●</td>
+<td>○</td>
+</tr>
+<tr>
+<td>分类(Catagory)</td>
+<td>●</td>
+<td>●</td>
+<td>○</td>
+</tr>
+<tr>
+<td>消息转发</td>
+<td>●</td>
+<td>●</td>
+<td>●</td>
+</tr>
+</tbody>
+</table>
+<p>对于上述的内容进行一些补充:</p>
+<ul>
+<li>分类的属性实现是通过Runtime关联对象，而消息转发的属性实现也是类似方法。</li>
+<li>分类和消息转发更接近于真正意义的多继承，也方便管理，添加删除父类方便。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Objective-C/" rel="tag"><i class="fa fa-tag"></i> Objective-C</a>
+          
+            <a href="/tags/Runtime/" rel="tag"><i class="fa fa-tag"></i> Runtime</a>
+          
+            <a href="/tags/Cocoa/" rel="tag"><i class="fa fa-tag"></i> Cocoa</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/01/iOS的多线程/" rel="next" title="iOS的多线程">
+                <i class="fa fa-chevron-left"></i> iOS的多线程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/01/结构体的自引用及相互引用/" rel="prev" title="结构体的自引用及相互引用">
+                结构体的自引用及相互引用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzA3Ni85NjM4"></div>
+    </div>
+
+  
+
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Minecode</p>
+              <p class="site-description motion-element" itemprop="description">在校iOS开发者，前ACM鶸，精通各种HelloWord写法，向着移动端全栈进发。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Minecodecraft" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:minecoder@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
+                    
+                      <i class="fa fa-fw fa-globe"></i>简书</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://blog.csdn.net/b735098742" target="_blank" title="CSDN博客">
+                    
+                      <i class="fa fa-fw fa-globe"></i>CSDN博客</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#通过协议实现"><span class="nav-number">1.</span> <span class="nav-text">通过协议实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过类别实现"><span class="nav-number">2.</span> <span class="nav-text">通过类别实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过消息转发"><span class="nav-number">3.</span> <span class="nav-text">通过消息转发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#直接消息转发"><span class="nav-number">3.1.</span> <span class="nav-text">直接消息转发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标准消息转发"><span class="nav-number">3.2.</span> <span class="nav-text">标准消息转发</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包含父类方法"><span class="nav-number">4.</span> <span class="nav-text">包含父类方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几种多继承方式的对比"><span class="nav-number">5.</span> <span class="nav-text">几种多继承方式的对比</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Minecode</span>
+
+</div>
+
+
+<!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>-->
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv">
+    总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共31.4k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+<div id="hexo-helper-live2d">
+  <canvas id="live2dcanvas" width="150" height="300"></canvas>
+</div>
+<style>
+  #live2dcanvas{
+    position: fixed;
+    width: 150px;
+    height: 300px;
+    opacity:0.7;
+    right: 0px;
+    z-index: 999;
+    pointer-events: none;
+    bottom: -20px;
+  }
+</style>
+<script type="text/javascript" src="/live2d/device.min.js"></script>
+<script type="text/javascript">
+const loadScript = function loadScript(c,b){var a=document.createElement("script");a.type="text/javascript";"undefined"!=typeof b&&(a.readyState?a.onreadystatechange=function(){if("loaded"==a.readyState||"complete"==a.readyState)a.onreadystatechange=null,b()}:a.onload=function(){b()});a.src=c;document.body.appendChild(a)};
+(function(){
+  if((typeof(device) != 'undefined') && (device.mobile())){
+    var trElement = document.getElementById('hexo-helper-live2d');
+    trElement.parentNode.removeChild(trElement);
+    return;
+  }else
+    if (typeof(device) === 'undefined') console.error('Cannot find current-device script.');
+  loadScript("/live2d/script.js", function(){loadlive2d("live2dcanvas", "/live2d/assets/wanko.model.json", 0.5);});
+})();
+</script>
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
