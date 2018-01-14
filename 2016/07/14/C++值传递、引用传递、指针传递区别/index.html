@@ -84,7 +84,7 @@
 
 
 
-  <meta name="keywords" content="数据结构," />
+  <meta name="keywords" content="数据结构,ACM,编译原理," />
 
 
 
@@ -95,18 +95,18 @@
 
 
 
-<meta name="description" content="简述在用C来实现数据结构以及部分算法时，经常用到结构体，比如实现树以及树的子节点时，就需要该结构体包含自身类型的成员变量。而最近在研究OC的匿名函数实现时，也涉及到了类似需求。同时，两个结构体之间相互引用也经常遇到问题。故简单总结一下C语言结构体的自引用语法。 示例我们以二叉树的节点为例来看一下自引用：12345struct binary_tree &amp;#123;    int data    ;">
-<meta name="keywords" content="数据结构">
+<meta name="description" content="在C/C++中经常会遇到传值问题，总结一下传参区别。 简介值传递: 值传递仅传递了实参的拷贝，在传参时会在栈区开辟内存空间并将实参值拷贝其中。也就是说值传递的形参任何时候都只是实参的一个副本，仅改变了该函数栈内的局部变量值。 引用传递:  引用传递实际是为实参设置了别名，其在栈区开辟内存空间后并不进行拷贝，而是存放实参的地址，从而对形参的操作实际上是通过对实参的间接寻址来实现，操作的是实参。 指针">
+<meta name="keywords" content="数据结构,ACM,编译原理">
 <meta property="og:type" content="article">
-<meta property="og:title" content="结构体的自引用及相互引用">
-<meta property="og:url" content="https://minecodecraft.github.io/2017/10/01/结构体的自引用及相互引用/index.html">
+<meta property="og:title" content="C++值传递、引用传递、指针传递区别">
+<meta property="og:url" content="https://minecodecraft.github.io/2016/07/14/C++值传递、引用传递、指针传递区别/index.html">
 <meta property="og:site_name" content="Minecode&#39;s Blog">
-<meta property="og:description" content="简述在用C来实现数据结构以及部分算法时，经常用到结构体，比如实现树以及树的子节点时，就需要该结构体包含自身类型的成员变量。而最近在研究OC的匿名函数实现时，也涉及到了类似需求。同时，两个结构体之间相互引用也经常遇到问题。故简单总结一下C语言结构体的自引用语法。 示例我们以二叉树的节点为例来看一下自引用：12345struct binary_tree &amp;#123;    int data    ;">
+<meta property="og:description" content="在C/C++中经常会遇到传值问题，总结一下传参区别。 简介值传递: 值传递仅传递了实参的拷贝，在传参时会在栈区开辟内存空间并将实参值拷贝其中。也就是说值传递的形参任何时候都只是实参的一个副本，仅改变了该函数栈内的局部变量值。 引用传递:  引用传递实际是为实参设置了别名，其在栈区开辟内存空间后并不进行拷贝，而是存放实参的地址，从而对形参的操作实际上是通过对实参的间接寻址来实现，操作的是实参。 指针">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-19T17:18:37.945Z">
+<meta property="og:updated_time" content="2018-01-14T03:50:22.772Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="结构体的自引用及相互引用">
-<meta name="twitter:description" content="简述在用C来实现数据结构以及部分算法时，经常用到结构体，比如实现树以及树的子节点时，就需要该结构体包含自身类型的成员变量。而最近在研究OC的匿名函数实现时，也涉及到了类似需求。同时，两个结构体之间相互引用也经常遇到问题。故简单总结一下C语言结构体的自引用语法。 示例我们以二叉树的节点为例来看一下自引用：12345struct binary_tree &amp;#123;    int data    ;">
+<meta name="twitter:title" content="C++值传递、引用传递、指针传递区别">
+<meta name="twitter:description" content="在C/C++中经常会遇到传值问题，总结一下传参区别。 简介值传递: 值传递仅传递了实参的拷贝，在传参时会在栈区开辟内存空间并将实参值拷贝其中。也就是说值传递的形参任何时候都只是实参的一个副本，仅改变了该函数栈内的局部变量值。 引用传递:  引用传递实际是为实参设置了别名，其在栈区开辟内存空间后并不进行拷贝，而是存放实参的地址，从而对形参的操作实际上是通过对实参的间接寻址来实现，操作的是实参。 指针">
 
 
 
@@ -136,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="https://minecodecraft.github.io/2017/10/01/结构体的自引用及相互引用/"/>
+  <link rel="canonical" href="https://minecodecraft.github.io/2016/07/14/C++值传递、引用传递、指针传递区别/"/>
 
 
 
 
 
-  <title>结构体的自引用及相互引用 | Minecode's Blog</title>
+  <title>C++值传递、引用传递、指针传递区别 | Minecode's Blog</title>
   
 
 
@@ -279,7 +279,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://minecodecraft.github.io/2017/10/01/结构体的自引用及相互引用/">
+    <link itemprop="mainEntityOfPage" href="https://minecodecraft.github.io/2016/07/14/C++值传递、引用传递、指针传递区别/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Minecode">
@@ -296,7 +296,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">结构体的自引用及相互引用</h1>
+          <h1 class="post-title" itemprop="name headline">C++值传递、引用传递、指针传递区别</h1>
         
 
         <div class="post-meta">
@@ -308,8 +308,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-01T17:11:00+08:00">
-                2017-10-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-14T11:50:00+08:00">
+                2016-07-14
               </time>
             
 
@@ -362,7 +362,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  622
+                  1,144
                 </span>
               
 
@@ -378,7 +378,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2
+                  4
                 </span>
               
             </div>
@@ -399,22 +399,28 @@
       
 
       
-        <h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>在用C来实现数据结构以及部分算法时，经常用到结构体，比如实现树以及树的子节点时，就需要该结构体包含自身类型的成员变量。而最近在研究OC的匿名函数实现时，也涉及到了类似需求。同时，两个结构体之间相互引用也经常遇到问题。故简单总结一下C语言结构体的自引用语法。</p>
-<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>我们以二叉树的节点为例来看一下自引用：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> data    ;   <span class="comment">// Data area</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">right</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>在树中，我们需要保存其左右子树，所以需要引用自身。</p>
-<h2 id="结构体自引用"><a href="#结构体自引用" class="headerlink" title="结构体自引用"></a>结构体自引用</h2><h3 id="不使用typedef"><a href="#不使用typedef" class="headerlink" title="不使用typedef"></a>不使用typedef</h3><p>如果不适用typedef，那么此时我们需要使用struct [名称]来调用。<br>但如果按下面的调用方式<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> <span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> <span class="title">right</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>则会导致在分配内存的时候循环分配，此时编译器会计算left和right的成员变量并为之分配内存，从而导致嵌套死循环。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">right</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>所以后者是正确的，left和right在分配时是以结构体指针的形式来分配内存的。而意义上我们就是为了将其指向另一个binary_tree，所以这样是复合逻辑的。</p>
-<h3 id="使用typedef"><a href="#使用typedef" class="headerlink" title="使用typedef"></a>使用typedef</h3><p>使用typedef可以为结构体设置别名，但是要注意的是，typdef的语法为<code>typedef [原类型] [别名];</code><br>所以在结构体声明之前，别名是未定义的。所以我们在内部需要使用其原类型来定义成员变量。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">binary_tree</span> * <span class="title">right</span>;</span></span><br><span class="line">&#125;BinTREE;</span><br></pre></td></tr></table></figure></p>
-<h2 id="结构体相互引用"><a href="#结构体相互引用" class="headerlink" title="结构体相互引用"></a>结构体相互引用</h2><h3 id="同文件内"><a href="#同文件内" class="headerlink" title="同文件内"></a>同文件内</h3><h4 id="使用不完整类型"><a href="#使用不完整类型" class="headerlink" title="使用不完整类型"></a>使用不完整类型</h4><p>通过不完整类型语法来实现相互引用<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s_a</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">s_b</span> *<span class="title">B_Ptr</span>;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s_b</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    A *A_Ptr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<h4 id="使用前向声明"><a href="#使用前向声明" class="headerlink" title="使用前向声明"></a>使用前向声明</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">s_a</span> <span class="title">A</span>;</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">s_b</span> <span class="title">B</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s_a</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    B *B_Ptr;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s_b</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    A *A_Ptr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="不同文件内"><a href="#不同文件内" class="headerlink" title="不同文件内"></a>不同文件内</h3><p>对于不同文件，主要有两点需要注意的。</p>
-<ul>
-<li>头文件重复包含问题</li>
-<li>结构体的声明问题</li>
-</ul>
-<p>而前者通过宏定义解决<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __FILENAME_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __FILENAME_H</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 代码</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure></p>
-<p>后者通过上述的“前向声明”或“不完整类型即可解决”。</p>
+        <p>在C/C++中经常会遇到传值问题，总结一下传参区别。</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><strong>值传递:</strong> 值传递仅传递了实参的拷贝，在传参时会在栈区开辟内存空间并将实参值拷贝其中。也就是说值传递的形参任何时候都只是实参的一个副本，仅改变了该函数栈内的局部变量值。</p>
+<p><strong>引用传递:</strong>  引用传递实际是为实参设置了别名，其在栈区开辟内存空间后并不进行拷贝，而是存放实参的地址，从而对形参的操作实际上是通过对实参的间接寻址来实现，操作的是实参。</p>
+<p><strong>指针传递:</strong> 指针传递其实是特殊的值传递，区别是其传递的值是地址而值传递是传递了实参的值。指针传递时会在栈区开辟内存空间并存放指针，而指针指向实参的地址。通过这一方法，操作指针也就达到了操作实参的效果。</p>
+<h2 id="试验"><a href="#试验" class="headerlink" title="试验"></a>试验</h2><p>我们来尝试如下代码</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 值传递</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">change1</span><span class="params">(<span class="keyword">int</span> num)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"(值传递) 形参地址: "</span> &lt;&lt; &amp;num &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"(值传递) 改变前 , num = "</span> &lt;&lt; num &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    num++;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 引用传递</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">change2</span><span class="params">(<span class="keyword">int</span> &amp;num)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"(引用传递) 形参地址: "</span> &lt;&lt; &amp;num &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"(引用传递) 改变前, num = "</span> &lt;&lt; num &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    num++;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 指针传递</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">change3</span><span class="params">(<span class="keyword">int</span> *num)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"(指针传递) 形参地址: "</span> &lt;&lt; num &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"(指针传递) 改变前, num = "</span> &lt;&lt; *num &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="comment">// 注意区分指针地址自增和指针值自增的区别</span></span><br><span class="line">    (*num)++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"实参的地址: "</span> &lt;&lt; &amp;num &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    change1(num);</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"(值传递) 改变后, num = "</span> &lt;&lt; num &lt;&lt; <span class="built_in">endl</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    change2(num);</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"(引用传递) 改变后, num = "</span> &lt;&lt; num &lt;&lt; <span class="built_in">endl</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    change3(&amp;num);</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"(指针传递) 改变后, num = "</span> &lt;&lt; num &lt;&lt; <span class="built_in">endl</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行后结果为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">实参的地址: 0x7ffeefbff5ac</span><br><span class="line">(值传递) 形参地址: 0x7ffeefbff54c</span><br><span class="line">(值传递) 改变前 , num = 1</span><br><span class="line">(值传递) 改变后, num = 1</span><br><span class="line"></span><br><span class="line">(引用传递) 形参地址: 0x7ffeefbff5ac</span><br><span class="line">(引用传递) 改变前, num = 1</span><br><span class="line">(引用传递) 改变后, num = 2</span><br><span class="line"></span><br><span class="line">(指针传递) 形参地址: 0x7ffeefbff5ac</span><br><span class="line">(指针传递) 改变前, num = 2</span><br><span class="line">(指针传递) 改变后, num = 3</span><br></pre></td></tr></table></figure>
+<p>通过对比，我们不难发现，引用传递和指针传递时形参存放的地址是相同的，而值传递则是对实参进行了拷贝。那么引用和指针有什么区别呢？我们来进一步讨论。</p>
+<h2 id="引用传递和指针传递的区别"><a href="#引用传递和指针传递的区别" class="headerlink" title="引用传递和指针传递的区别"></a>引用传递和指针传递的区别</h2><p><strong>1. 是否可空</strong></p>
+<p>我们先看函数原型以及传入空地址的情况:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">change2</span><span class="params">(<span class="keyword">int</span> &amp;num)</span></span>;		<span class="comment">// 引用传递</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">change3</span><span class="params">(<span class="keyword">int</span> *num)</span>		<span class="comment">// 指针传递</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">change2</span><span class="params">(<span class="literal">NULL</span>)</span></span>;		<span class="comment">// 报错，不能引用空地址</span></span><br><span class="line">change3(<span class="literal">NULL</span>);		<span class="comment">// 通过，可以传入空地址</span></span><br></pre></td></tr></table></figure>
+<p>可以看出，引用必须对应一个有效的内存地址，因为其本质上是实参的别名，而指针可以指向一个空地址，因为其本质上是可以指向某地址的指针。</p>
+<p><strong>2. 是否为实体</strong></p>
+<p>我们知道，指针实际上也是一种类型，其指向一个内存地址，其与目标变量之间并无关系。而引用实际上是作为变量别名来存在，并非一个独立的实体。</p>
+<p>在使用时，引用不能改变其引用地址，只能改变目标变量的值，而指针可以改变地址和被指向变量的值，这一点显示了后者是一个独立的实体。</p>
+<p><strong>3. sizeof</strong></p>
+<p>我们知道sizeof用来计算变量大小，当我们对引用取sizeof时，得到的是其引用变量的大小，而对指针使用sizeof，得到的只是指针变量的大小，与被指向变量无关。</p>
+<p><strong>4. 编译时的区别</strong></p>
+<p>在编译时，引用和指针在符号表的处理上同样有区别，体现在符号表变量名和变量地址上。</p>
+<p>引用的地址是目标变量的地址，也就是说引用并非以一个独立实体来存在。<br>而指针的地址是这个指针类型变量的地址，目标变量的地址只是存在于指针变量内部，并没有在该指针符号表中存在。</p>
+<p>由于符号表不可变，所以不难看出，引用并不能改变其目标变量，而指针可以任意改变其指向的地址。</p>
 
       
     </div>
@@ -434,6 +440,10 @@
           
             <a href="/tags/数据结构/" rel="tag"><i class="fa fa-tag"></i> 数据结构</a>
           
+            <a href="/tags/ACM/" rel="tag"><i class="fa fa-tag"></i> ACM</a>
+          
+            <a href="/tags/编译原理/" rel="tag"><i class="fa fa-tag"></i> 编译原理</a>
+          
         </div>
       
 
@@ -445,18 +455,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/08/01/iOS的多线程/" rel="next" title="iOS的多线程">
-                <i class="fa fa-chevron-left"></i> iOS的多线程
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/11/11/利用iOS ARKit制作AR传送门/" rel="prev" title="利用iOS ARKit制作AR传送门">
-                利用iOS ARKit制作AR传送门 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/08/13/树状数组的几种模型/" rel="prev" title="树状数组的几种模型">
+                树状数组的几种模型 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -624,7 +630,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简述"><span class="nav-number">1.</span> <span class="nav-text">简述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例"><span class="nav-number">2.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结构体自引用"><span class="nav-number">3.</span> <span class="nav-text">结构体自引用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不使用typedef"><span class="nav-number">3.1.</span> <span class="nav-text">不使用typedef</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用typedef"><span class="nav-number">3.2.</span> <span class="nav-text">使用typedef</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结构体相互引用"><span class="nav-number">4.</span> <span class="nav-text">结构体相互引用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#同文件内"><span class="nav-number">4.1.</span> <span class="nav-text">同文件内</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用不完整类型"><span class="nav-number">4.1.1.</span> <span class="nav-text">使用不完整类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用前向声明"><span class="nav-number">4.1.2.</span> <span class="nav-text">使用前向声明</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不同文件内"><span class="nav-number">4.2.</span> <span class="nav-text">不同文件内</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#试验"><span class="nav-number">2.</span> <span class="nav-text">试验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引用传递和指针传递的区别"><span class="nav-number">3.</span> <span class="nav-text">引用传递和指针传递的区别</span></a></li></ol></div>
             
 
           </div>
