@@ -98,14 +98,14 @@
 <meta name="description" content="在开发中我们经常用到定时器，iOS为我们提供了多种定时器，包括NSTimer、CADisplayLink、GCD、NSThread(performSelector:afterDelay:)，其本质都是通过RunLoop来实现，但GCD通过其调度机制大大提高了性能。定时器的使用中容易存在一些误区，故写本文总结。 本文将介绍iOS的几种定时器、定时器的立即执行方法、内存泄露问题、不准时问题 NSTim">
 <meta name="keywords" content="底层,性能优化,Cocoa,GCD,多线程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="你真的理解iOS定时器了吗？">
-<meta property="og:url" content="https://minecodecraft.github.io/2018/01/13/你真的理解iOS定时器了吗？/index.html">
+<meta property="og:title" content="iOS的几种定时器及区别">
+<meta property="og:url" content="https://minecodecraft.github.io/2018/01/13/iOS的几种定时器及区别/index.html">
 <meta property="og:site_name" content="Minecode&#39;s Blog">
 <meta property="og:description" content="在开发中我们经常用到定时器，iOS为我们提供了多种定时器，包括NSTimer、CADisplayLink、GCD、NSThread(performSelector:afterDelay:)，其本质都是通过RunLoop来实现，但GCD通过其调度机制大大提高了性能。定时器的使用中容易存在一些误区，故写本文总结。 本文将介绍iOS的几种定时器、定时器的立即执行方法、内存泄露问题、不准时问题 NSTim">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-15T04:27:02.902Z">
+<meta property="og:updated_time" content="2018-01-15T04:36:54.425Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="你真的理解iOS定时器了吗？">
+<meta name="twitter:title" content="iOS的几种定时器及区别">
 <meta name="twitter:description" content="在开发中我们经常用到定时器，iOS为我们提供了多种定时器，包括NSTimer、CADisplayLink、GCD、NSThread(performSelector:afterDelay:)，其本质都是通过RunLoop来实现，但GCD通过其调度机制大大提高了性能。定时器的使用中容易存在一些误区，故写本文总结。 本文将介绍iOS的几种定时器、定时器的立即执行方法、内存泄露问题、不准时问题 NSTim">
 
 
@@ -136,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="https://minecodecraft.github.io/2018/01/13/你真的理解iOS定时器了吗？/"/>
+  <link rel="canonical" href="https://minecodecraft.github.io/2018/01/13/iOS的几种定时器及区别/"/>
 
 
 
 
 
-  <title>你真的理解iOS定时器了吗？ | Minecode's Blog</title>
+  <title>iOS的几种定时器及区别 | Minecode's Blog</title>
   
 
 
@@ -279,7 +279,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://minecodecraft.github.io/2018/01/13/你真的理解iOS定时器了吗？/">
+    <link itemprop="mainEntityOfPage" href="https://minecodecraft.github.io/2018/01/13/iOS的几种定时器及区别/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Minecode">
@@ -296,7 +296,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">你真的理解iOS定时器了吗？</h1>
+          <h1 class="post-title" itemprop="name headline">iOS的几种定时器及区别</h1>
         
 
         <div class="post-meta">
