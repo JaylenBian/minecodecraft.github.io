@@ -103,7 +103,7 @@
 <meta property="og:site_name" content="Minecode&#39;s Blog">
 <meta property="og:description" content="在开发中我们经常用到定时器，iOS为我们提供了多种定时器，包括NSTimer、CADisplayLink、GCD、NSThread(performSelector:afterDelay:)，其本质都是通过RunLoop来实现，但GCD通过其调度机制大大提高了性能。定时器的使用中容易存在一些误区，故写本文总结。 本文将介绍iOS的几种定时器、定时器的立即执行方法、内存泄露问题、不准时问题 NSTim">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-13T07:41:20.592Z">
+<meta property="og:updated_time" content="2018-01-15T04:27:02.902Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="你真的理解iOS定时器了吗？">
 <meta name="twitter:description" content="在开发中我们经常用到定时器，iOS为我们提供了多种定时器，包括NSTimer、CADisplayLink、GCD、NSThread(performSelector:afterDelay:)，其本质都是通过RunLoop来实现，但GCD通过其调度机制大大提高了性能。定时器的使用中容易存在一些误区，故写本文总结。 本文将介绍iOS的几种定时器、定时器的立即执行方法、内存泄露问题、不准时问题 NSTim">
@@ -362,7 +362,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,299
+                  2,081
                 </span>
               
 
@@ -378,7 +378,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  9
+                  8
                 </span>
               
             </div>
@@ -420,13 +420,9 @@
 <p>同时，由于其是基于屏幕刷新的，所以也度量单位是每帧，其提供了根据屏幕刷新来设置间隔的<code>frameInterval</code>属性，其决定于屏幕刷新多少帧时调用一次该方法，默认为1，即1/60秒调用一次。</p>
 <p>如果我们想要计算出每次调用的时间间隔，可以通过<code>frameInterval * duration</code>求出，后者为屏幕每帧间隔的只读属性。</p>
 <p>在日常开发中，适当使用CADisplayLink甚至有优化作用。比如对于需要动态计算进度的进度条，由于起进度反馈主要是为了UI更新，那么当计算进度的频率超过帧数时，就造成了很多无谓的计算。如果将计算进度的方法绑定到CADisplayLink上来调用，则只在每次屏幕刷新时计算进度，优化了性能。MBProcessHUB则是利用了这一特性。</p>
-<h2 id="GCD"><a href="#GCD" class="headerlink" title="GCD"></a>GCD</h2><p>首先要明确一点，<strong>GCD更为精准，但其依旧是基于RunLoop</strong>，在很多博客上写GCD定时器不通过RunLoop是错误的，定时器本质就是通过轮询来实现，包括事件循环及死循环等方式。</p>
-<p>使用如下:</p>
+<h2 id="GCD"><a href="#GCD" class="headerlink" title="GCD"></a>GCD</h2><p>GCD定时器是<code>dispatch_source_t</code>类型的变量，其可以实现更加精准的定时效果。我们来看看如何使用:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">/** 创建定时器对象</span><br><span class="line"> * para1: DISPATCH_SOURCE_TYPE_TIMER 为定时器类型</span><br><span class="line"> * para2-3: 中间两个参数对定时器无用</span><br><span class="line"> * para4: 最后为在什么调度队列中使用</span><br><span class="line"> */</span><br><span class="line">_gcdTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_global_queue(0, 0));</span><br><span class="line">/** 设置定时器</span><br><span class="line"> * para2: 任务开始时间</span><br><span class="line"> * para3: 任务的间隔</span><br><span class="line"> * para4: 可接受的误差时间，设置0即不允许出现误差</span><br><span class="line"> * Tips: 单位均为纳秒</span><br><span class="line"> */</span><br><span class="line">dispatch_source_set_timer(_gcdTimer, DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC, 0.0 * NSEC_PER_SEC);</span><br><span class="line">/** 设置定时器任务</span><br><span class="line"> * 可以通过block方式</span><br><span class="line"> * 也可以通过C函数方式</span><br><span class="line"> */</span><br><span class="line">dispatch_source_set_event_handler(_gcdTimer, ^&#123;</span><br><span class="line">    static int gcdIdx = 0;</span><br><span class="line">    NSLog(@&quot;GCD Method: %d&quot;, gcdIdx++);</span><br><span class="line">    NSLog(@&quot;%@&quot;, [NSThread currentThread]);</span><br><span class="line">    </span><br><span class="line">    if(gcdIdx == 5) &#123;</span><br><span class="line">        // 终止定时器</span><br><span class="line">        dispatch_suspend(_gcdTimer);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">// 启动任务，GCD计时器创建后需要手动启动</span><br><span class="line">dispatch_resume(_gcdTimer);</span><br></pre></td></tr></table></figure>
-<h2 id="GCD更准时的原因"><a href="#GCD更准时的原因" class="headerlink" title="GCD更准时的原因"></a>GCD更准时的原因</h2><p>GCD相对于NSTimer更加精准，但其仍是通过RunLoop实现。那么如何做到的呢？</p>
-<p>观察<code>dispatch_source_set_timer</code>方法，我们可以看到其在创建时设置了调度队列，我们设置了全局调度队列，而其原理是GCD在底层维护了线程池，<strong>我们将该定时器加入调度队列后，仍旧是加入某线程的RunLoop，但GCD会尽可能帮我们选择一个并发任务较少的线程。</strong></p>
-<p>我们可以尝试加入自己建立的队列，然后向其中加入GCD定时器和其他耗时任务，我们会发现依旧像NSTimer一样卡顿，出现延迟问题。或者当我们将任务加入主线程时，在耗时操作阻塞主线程时也会和NSTimer表现一致。</p>
-<p>同样，我们自行建立一个线程，开启RunLoop并放入GCD定时器，而不加入其他耗时任务，那么此时该定时器表现良好。但这样做应适度，因为创建线程会造成512kb的内存+90ms创建时间+CPU上下文切换频繁。</p>
+<h2 id="GCD更准时的原因"><a href="#GCD更准时的原因" class="headerlink" title="GCD更准时的原因"></a>GCD更准时的原因</h2><p>通过观察代码，我们可以发现GCD定时器实际上是使用了dispatch源(dispatch source)，dispatch源监听系统内核对象并处理。dispatch类似生产者消费者模式，通过监听系统内核对象，在生产者生产数据后自动通知相应的dispatch队列执行，后者充当消费者。通过系统级调用，更加精准。</p>
 <h2 id="定时器不准时的问题及解决"><a href="#定时器不准时的问题及解决" class="headerlink" title="定时器不准时的问题及解决"></a>定时器不准时的问题及解决</h2><p>通过上文的叙述，我们大致了解了定时器不准时的原因，总结一下主要是</p>
 <ul>
 <li>当前RunLoop过于繁忙</li>
@@ -645,12 +641,6 @@
 
           
           
-            <div class="cc-license motion-element" itemprop="license">
-              <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" class="cc-opacity" target="_blank">
-                <img src="/images/cc-by-nc-nd.svg" alt="Creative Commons" />
-              </a>
-            </div>
-          
 
           
           
@@ -719,7 +709,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共31.4k字</span>
+  <span class="post-count">博客全站共31.1k字</span>
 </div>
 
         
