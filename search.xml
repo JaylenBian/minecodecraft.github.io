@@ -9,10 +9,10 @@
       </categories>
       <tags>
         <tag>底层</tag>
-        <tag>性能优化</tag>
         <tag>Cocoa</tag>
         <tag>GCD</tag>
         <tag>多线程</tag>
+        <tag>性能优化</tag>
       </tags>
   </entry>
   <entry>
@@ -63,9 +63,9 @@
       </categories>
       <tags>
         <tag>Objective-C</tag>
+        <tag>Clang</tag>
         <tag>Runtime</tag>
         <tag>底层</tag>
-        <tag>Clang</tag>
       </tags>
   </entry>
   <entry>
@@ -90,9 +90,9 @@
       </categories>
       <tags>
         <tag>Runtime</tag>
-        <tag>Objecitve-C</tag>
         <tag>底层</tag>
         <tag>性能优化</tag>
+        <tag>Objecitve-C</tag>
       </tags>
   </entry>
   <entry>
@@ -151,10 +151,10 @@
         <category>iOS技术</category>
       </categories>
       <tags>
-        <tag>性能优化</tag>
         <tag>GCD</tag>
         <tag>多线程</tag>
         <tag>iOS技术</tag>
+        <tag>性能优化</tag>
       </tags>
   </entry>
   <entry>
