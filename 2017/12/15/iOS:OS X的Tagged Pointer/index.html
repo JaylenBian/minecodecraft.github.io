@@ -103,13 +103,13 @@
 <meta property="og:site_name" content="Minecode&#39;s Blog">
 <meta property="og:description" content="Tagged Pointer是存在于字符串、NSNumber、NSDate等重复性高且较小的对象中的一种优化方式，用于解决重复性较高的类型在64位操作系统内存的内部碎片问题。 背景在创建讨论Tagged Pointer之前，我们先认识一下它执行以下代码: 1234567891011121314__weak NSNumber *weakNumber;__weak NSString *weakStri">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/TaggedPointer_memoryPiece.png">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/TaggedPointer_memoryGraph.png">
-<meta property="og:updated_time" content="2018-01-12T13:28:16.000Z">
+<meta property="og:image" content="http://cdn.ialgo.xin/TaggedPointer_memoryPiece.png">
+<meta property="og:image" content="http://cdn.ialgo.xin/TaggedPointer_memoryGraph.png">
+<meta property="og:updated_time" content="2019-07-08T16:45:47.816Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS&#x2F;OS X的Tagged Pointer">
 <meta name="twitter:description" content="Tagged Pointer是存在于字符串、NSNumber、NSDate等重复性高且较小的对象中的一种优化方式，用于解决重复性较高的类型在64位操作系统内存的内部碎片问题。 背景在创建讨论Tagged Pointer之前，我们先认识一下它执行以下代码: 1234567891011121314__weak NSNumber *weakNumber;__weak NSString *weakStri">
-<meta name="twitter:image" content="http://p0h33xrro.bkt.clouddn.com/TaggedPointer_memoryPiece.png">
+<meta name="twitter:image" content="http://cdn.ialgo.xin/TaggedPointer_memoryPiece.png">
 
 
 
@@ -409,13 +409,13 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WeakNumber is 123</span><br><span class="line">WeakString is string123</span><br><span class="line">WeakDate is Thu Jan  1 08:00:00 1970</span><br></pre></td></tr></table></figure>
 <p>这样的结果与想象中可能不同，我们设置weakNumber/weakString/weakDate变量为弱引用，而在NSNumber/NSString/NSDate创建的代码部分设置了自动释放，那么当运行到输出部分的代码时，数字和字符串变量理应已经释放掉了，那么结果自然应该输出nil，然而事实是他们并没有。为什么会这样？下面我们来介绍苹果在推出64位系统后为了节省内存和提高效率而引入的Tagged Pointer。</p>
 <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>在iPhone 5s推出后，处理器步入了64位架构时代，而我们知道，64位系统中变量所占字节也会随之变大，如32位系统中的int为4字节，而64位系统下是8字节。虽然值域也随之变大，但是很多情况下，增加的值域对于数字、日期、短字符串来说并不需要。造成的内部碎片问题如下图，大多数情况下64位系统增加了32位的内存浪费:</p>
-<p><img src="http://p0h33xrro.bkt.clouddn.com/TaggedPointer_memoryPiece.png" alt="字符串在64位系统中的内部碎片问题"></p>
+<p><img src="http://cdn.ialgo.xin/TaggedPointer_memoryPiece.png" alt="字符串在64位系统中的内部碎片问题"></p>
 <p>那么能否优化这一内存浪费问题呢？可以注意到，虽然我们每个数字对象都占用8字节，但大家实际能用到的数字可能仅仅几位，大数计算的情况很少。那么，以较低的内存消耗预先保存一些常见数字，而对于不常见的再动态创建8字节的变量的方案，就会更加节省内存，以及创建对象的性能消耗。</p>
 <h2 id="Tagged-Pointer"><a href="#Tagged-Pointer" class="headerlink" title="Tagged Pointer"></a>Tagged Pointer</h2><p>知道了存在的问题，我们现在则介绍一下Tagged Pointer。它就是将大部分常用的字符串、数字对象、日期预先保存，而其不再按照64位系统的8字节大小，当我们创建的对象内容命中了Tagged Pointer预先存储的内容时，我们的对象指针会变成Tagged Pointer，指向指定的内存。我们可以看如下的例子:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">int num = 123;</span><br><span class="line">NSString *str1 = [NSString stringWithUTF8String:&quot;String123&quot;];</span><br><span class="line">NSString *str2 = [NSString stringWithFormat:@&quot;String%d&quot;, num];</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;%p&quot;, str1);</span><br><span class="line">NSLog(@&quot;%p&quot;, str2);</span><br></pre></td></tr></table></figure>
 <p>打印的地址相同，证明两者指向了同一地址。</p>
 <p>那么如何实现将这些对象不按照8字节存储的呢？<br>Tagged Pointer将一个对象按32位保存(4字节)，而后对其绑定一个同样是4字节的Tag，从而可以方便定位它。这样一个Tag+对象总共为8字节，与32位系统中对象指针+对象内容大小相当。至于为什么对象要按4字节保存而不是由数据大小而定，则是为了避免产生外部碎片。内存图如下所示:</p>
-<p><img src="http://p0h33xrro.bkt.clouddn.com/TaggedPointer_memoryGraph.png" alt="使用Tagged Pointer后内存对比"></p>
+<p><img src="http://cdn.ialgo.xin/TaggedPointer_memoryGraph.png" alt="使用Tagged Pointer后内存对比"></p>
 <h2 id="isa和引用计数"><a href="#isa和引用计数" class="headerlink" title="isa和引用计数"></a>isa和引用计数</h2><p>现在再谈一些与Tagged Pointer有关的问题。看了其内存图后，我们知道它不是真正意义上的OC对象，那么其isa指针也就无法正常使用了。我们可以通过object_getClass()方法来获取真实对象，该对象打印结果为<code>NSTaggedPointerString</code>、<code>__NSTaggedDate</code>、<code>__NSCFNumber</code>。</p>
 <p>同时，Tagged Pointer的引用计数是无穷大的，可以尝试如下代码打印:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// ARC模式下可以使用CFGetRetainCount函数获取引用计数</span><br><span class="line">NSLog(@&quot;Retain count: %ld&quot;, CFGetRetainCount((__bridge CFTypeRef)(str1)));</span><br></pre></td></tr></table></figure>
@@ -552,7 +552,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">Minecode</p>
-              <p class="site-description motion-element" itemprop="description">重庆大学大三在校生，前ACM鶸，沉迷iOS开发暂时无法自拔XD。现于字节跳动实习</p>
+              <p class="site-description motion-element" itemprop="description">字节跳动iOS开发工程师，后台开发养成中</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -562,7 +562,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -573,7 +573,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -584,7 +584,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -610,15 +610,15 @@
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
+                  <a href="https://www.linkedin.com/in/minecode" target="_blank" title="LinkedIn">
                     
-                      <i class="fa fa-fw fa-globe"></i>简书</a>
+                      <i class="fa fa-fw fa-linkedin"></i>LinkedIn</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="http://blog.csdn.net/b735098742" target="_blank" title="CSDN博客">
+                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
                     
-                      <i class="fa fa-fw fa-globe"></i>CSDN博客</a>
+                      <i class="fa fa-fw fa-globe"></i>简书</a>
                 </span>
               
             
@@ -665,9 +665,9 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
-    <i class="fa fa-user"></i>
+    <i class="fa fa-google"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Minecode</span>
 
@@ -694,7 +694,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共31.1k字</span>
+  <span class="post-count">博客全站共34.5k字</span>
 </div>
 
         

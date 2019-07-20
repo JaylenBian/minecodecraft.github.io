@@ -103,14 +103,14 @@
 <meta property="og:site_name" content="Minecode&#39;s Blog">
 <meta property="og:description" content="前言CocoaPods是一款很棒的依赖管理工具，在开发中也经常用它来导入开源第三方库。最近也想把自己的一些库开源并加入CocoaPods中，特总结一下自己制作CocoaPods库的过程。 前提在制作之前，你需要：  掌握CocoaPods的基本使用 掌握Git的简单使用 准备好自己要开源的成品  开始制作下面我们开始制作自己的开源库，以个人的MCScratchImageView为例。 推送至Git">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/CocoaPods_SHA.png">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/CocoaPods_GithubTag.png">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/CocoaPods_git%E6%BA%90.png">
-<meta property="og:updated_time" content="2017-12-29T16:08:06.000Z">
+<meta property="og:image" content="http://cdn.ialgo.xin/CocoaPods_SHA.png">
+<meta property="og:image" content="http://cdn.ialgo.xin/CocoaPods_GithubTag.png">
+<meta property="og:image" content="http://cdn.ialgo.xin/CocoaPods_git%E6%BA%90.png">
+<meta property="og:updated_time" content="2019-07-08T16:44:59.945Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="创建自己的CocoaPods库并提交指南">
 <meta name="twitter:description" content="前言CocoaPods是一款很棒的依赖管理工具，在开发中也经常用它来导入开源第三方库。最近也想把自己的一些库开源并加入CocoaPods中，特总结一下自己制作CocoaPods库的过程。 前提在制作之前，你需要：  掌握CocoaPods的基本使用 掌握Git的简单使用 准备好自己要开源的成品  开始制作下面我们开始制作自己的开源库，以个人的MCScratchImageView为例。 推送至Git">
-<meta name="twitter:image" content="http://p0h33xrro.bkt.clouddn.com/CocoaPods_SHA.png">
+<meta name="twitter:image" content="http://cdn.ialgo.xin/CocoaPods_SHA.png">
 
 
 
@@ -412,8 +412,8 @@
 </ul>
 <h2 id="开始制作"><a href="#开始制作" class="headerlink" title="开始制作"></a>开始制作</h2><p>下面我们开始制作自己的开源库，以个人的<a href="https://github.com/Minecodecraft/MCScratchImageView" target="_blank" rel="external">MCScratchImageView</a>为例。</p>
 <h3 id="推送至Git仓库-Github"><a href="#推送至Git仓库-Github" class="headerlink" title="推送至Git仓库(Github)"></a>推送至Git仓库(Github)</h3><p>首先需要将你的开源框架上传至远程仓库，比如Github，使用方式不再赘述。记录下你要使用的commit版本对应的SHA值。如下图：</p>
-<p><img src="http://p0h33xrro.bkt.clouddn.com/CocoaPods_SHA.png" alt="SHA Code"></p>
-<h3 id="为所选版本打tag"><a href="#为所选版本打tag" class="headerlink" title="为所选版本打tag"></a>为所选版本打tag</h3><h4 id="在Github自带tag功能"><a href="#在Github自带tag功能" class="headerlink" title="在Github自带tag功能"></a>在Github自带tag功能</h4><p>在Github上为项目打tag可在release页面，选择创建新tag并按下图所示填写即可。删除tag也同理。<br>由于CocoaPods的版本信息仅支持数字的格式(如1.0.0)，所以版本号请勿带有其他特殊符号和字母。<br><img src="http://p0h33xrro.bkt.clouddn.com/CocoaPods_GithubTag.png" alt="Tag on Github"></p>
+<p><img src="http://cdn.ialgo.xin/CocoaPods_SHA.png" alt="SHA Code"></p>
+<h3 id="为所选版本打tag"><a href="#为所选版本打tag" class="headerlink" title="为所选版本打tag"></a>为所选版本打tag</h3><h4 id="在Github自带tag功能"><a href="#在Github自带tag功能" class="headerlink" title="在Github自带tag功能"></a>在Github自带tag功能</h4><p>在Github上为项目打tag可在release页面，选择创建新tag并按下图所示填写即可。删除tag也同理。<br>由于CocoaPods的版本信息仅支持数字的格式(如1.0.0)，所以版本号请勿带有其他特殊符号和字母。<br><img src="http://cdn.ialgo.xin/CocoaPods_GithubTag.png" alt="Tag on Github"></p>
 <h4 id="使用命令行"><a href="#使用命令行" class="headerlink" title="使用命令行"></a>使用命令行</h4><p>使用命令行进行版本管理较为方便，简单步骤为: 创建本地tag -&gt; 将tag推至远程仓库。</p>
 <p>参考如下代码：<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/<span class="regexp">/ 创建本地tag</span></span><br><span class="line"><span class="regexp">git tag -a 1.0.0 0c3b62d -m "Release Edition v1.0.0"</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 同步到远程仓库</span></span><br><span class="line"><span class="regexp">git push origin 1.0.0</span></span><br></pre></td></tr></table></figure></p>
 <p>具体Tag的使用方式，可以参考<a href="http://minecode.link/2016/10/21/%E4%BD%BF%E7%94%A8Git%E6%B7%BB%E5%8A%A0Tag%E7%9A%84%E6%96%B9%E6%B3%95/" target="_blank" rel="external">使用Git添加tag的方法</a></p>
@@ -424,7 +424,7 @@
 <p><strong>s.version</strong>: 框架最新版本号。这个版本号对应了你Git仓库中某个提交的tag，如果仓库中对应的tag不存在则会提交失败。</p>
 <p><strong>s.summary</strong>: 框架的概述。<br><strong>s.description</strong>: 框架的详细介绍。<br><strong>s.homepage</strong>: 框架对应页面，随便写<br><strong>s.license</strong>: 框架的开源协议<br><strong>s.author</strong>: 框架作者及邮箱，设置方式见注释</p>
 <p><strong>s.platform</strong>: 这个要按注释写清支持的系统和版本，同时也要保证实际情况，比如Swift3.0最低支持到iOS 8.0，你就不能写最低支持iOS 7.0</p>
-<p><strong>s.source</strong>: 对应的git源，在Github-&gt;Clone or download-&gt;Clone with HTTPS中<br><img src="http://p0h33xrro.bkt.clouddn.com/CocoaPods_git%E6%BA%90.png" alt="Git source"></p>
+<p><strong>s.source</strong>: 对应的git源，在Github-&gt;Clone or download-&gt;Clone with HTTPS中<br><img src="http://cdn.ialgo.xin/CocoaPods_git%E6%BA%90.png" alt="Git source"></p>
 <p><strong>s.source_files</strong>: 库的源代码文件。这个是重点，应该包含全部你的库所需的文件。<br>如<code>&quot;s.source_files  = MCScratchImageView/*.swift&quot;</code>为MCScratchImageView文件夹内的全部swift代码文件。注意默认为.h和.m文件，需要设置为swift的格式。可以设置多个文件参数。</p>
 <p><strong>s.framework</strong>: 项目所用到的原生框架，如UIKit Framework</p>
 <p><strong>s.dependency</strong>: 项目需要的其他CocoaPods库，如<code>s.dependency &quot;JSONKit&quot;, &quot;~&gt; 1.4&quot;</code></p>
@@ -565,7 +565,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">Minecode</p>
-              <p class="site-description motion-element" itemprop="description">重庆大学大三在校生，前ACM鶸，沉迷iOS开发暂时无法自拔XD。现于字节跳动实习</p>
+              <p class="site-description motion-element" itemprop="description">字节跳动iOS开发工程师，后台开发养成中</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -575,7 +575,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -586,7 +586,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -597,7 +597,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -623,15 +623,15 @@
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
+                  <a href="https://www.linkedin.com/in/minecode" target="_blank" title="LinkedIn">
                     
-                      <i class="fa fa-fw fa-globe"></i>简书</a>
+                      <i class="fa fa-fw fa-linkedin"></i>LinkedIn</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="http://blog.csdn.net/b735098742" target="_blank" title="CSDN博客">
+                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
                     
-                      <i class="fa fa-fw fa-globe"></i>CSDN博客</a>
+                      <i class="fa fa-fw fa-globe"></i>简书</a>
                 </span>
               
             
@@ -678,9 +678,9 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
-    <i class="fa fa-user"></i>
+    <i class="fa fa-google"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Minecode</span>
 
@@ -707,7 +707,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共31.1k字</span>
+  <span class="post-count">博客全站共34.5k字</span>
 </div>
 
         

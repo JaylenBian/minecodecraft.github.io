@@ -104,9 +104,9 @@
 <meta property="og:description" content="章节目录 iOS蓝牙框架介绍 CoreBluetooth.framework导入 CoreBluetooth的基础使用 蓝牙连接所涉及到的类 小米手环Demo  iOS蓝牙框架介绍CoreBluetooth介绍在iOS开发中，实现蓝牙通信的方法有两种。分别是GameKit.framework以及CoreBluetooth.framework，前者在iOS5后基本被淘汰。 在苹果文档中，写了Comm">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6362190-df35d8fa706b3aca?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/CoreBluetooth_CBRelationship.png">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/CoreBluetooth_mibandDemo.jpeg">
-<meta property="og:updated_time" content="2018-01-13T03:09:26.000Z">
+<meta property="og:image" content="http://cdn.ialgo.xin/CoreBluetooth_CBRelationship.png">
+<meta property="og:image" content="http://cdn.ialgo.xin/CoreBluetooth_mibandDemo.jpeg">
+<meta property="og:updated_time" content="2019-07-08T16:46:01.242Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS蓝牙框架CoreBluetooth及小米手环Demo">
 <meta name="twitter:description" content="章节目录 iOS蓝牙框架介绍 CoreBluetooth.framework导入 CoreBluetooth的基础使用 蓝牙连接所涉及到的类 小米手环Demo  iOS蓝牙框架介绍CoreBluetooth介绍在iOS开发中，实现蓝牙通信的方法有两种。分别是GameKit.framework以及CoreBluetooth.framework，前者在iOS5后基本被淘汰。 在苹果文档中，写了Comm">
@@ -495,14 +495,14 @@
 <li><code>discoverCharacteristics(...)</code>：扫描特征值(需要先获取服务)</li>
 <li><code>readValue(...)</code>：读取特征值所对应的值(需要先获取到特征值，同时要注意此方法不反回值，要用协议的<code>didUpdateValueFor characteristic</code>方法处理)</li>
 </ul>
-<p><img src="http://p0h33xrro.bkt.clouddn.com/CoreBluetooth_CBRelationship.png" alt="中心设备与外围设备关系"></p>
+<p><img src="http://cdn.ialgo.xin/CoreBluetooth_CBRelationship.png" alt="中心设备与外围设备关系"></p>
 <p><strong>CBCharacteristic</strong><br>外围设备服务的特征值</p>
 <ul>
 <li>★<code>Value</code>：获取特征值对应的值</li>
 </ul>
 <h2 id="小米手环Demo开发"><a href="#小米手环Demo开发" class="headerlink" title="小米手环Demo开发"></a>小米手环Demo开发</h2><p>现在尝试通过CoreBluetooth的内容，来实现小米手环的连接、振动与停止振动功能。特征值基于小米手环1，有兴趣可以收集其他设备特征值。</p>
 <h3 id="界面搭建"><a href="#界面搭建" class="headerlink" title="界面搭建"></a>界面搭建</h3><p>方便起见，该项目直接采用storyboard搭建，不再赘述<a href="https://github.com/Minecodecraft/MiBandDemo" target="_blank" rel="external">项目Demo</a></p>
-<p><img src="http://p0h33xrro.bkt.clouddn.com/CoreBluetooth_mibandDemo.jpeg" alt="故事板"></p>
+<p><img src="http://cdn.ialgo.xin/CoreBluetooth_mibandDemo.jpeg" alt="故事板"></p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> scanButton: <span class="type">UIButton</span>!</span><br><span class="line"><span class="meta">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> stopButton: <span class="type">UIButton</span>!</span><br><span class="line"><span class="meta">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> vibrateButton: <span class="type">UIButton</span>!</span><br><span class="line"><span class="meta">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> stopVibrateButton: <span class="type">UIButton</span>!</span><br><span class="line"><span class="meta">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> loadingInd: <span class="type">UIActivityIndicatorView</span>!</span><br><span class="line"><span class="meta">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> statusLabel: <span class="type">UILabel</span>!</span><br><span class="line"><span class="meta">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> resultField: <span class="type">UITextView</span>!</span><br><span class="line"><span class="meta">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> vibrateLevel: <span class="type">UISegmentedControl</span>!</span><br></pre></td></tr></table></figure>
 <h3 id="设置蓝牙操作过程所需对象"><a href="#设置蓝牙操作过程所需对象" class="headerlink" title="设置蓝牙操作过程所需对象"></a>设置蓝牙操作过程所需对象</h3><p>按上述讲解，定义所需的对象，包括中心设备外围设备等。</p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> theManager: <span class="type">CBCentralManager</span>!</span><br><span class="line"><span class="keyword">var</span> thePerpher: <span class="type">CBPeripheral</span>!</span><br><span class="line"><span class="keyword">var</span> theVibrator: <span class="type">CBCharacteristic</span>!</span><br></pre></td></tr></table></figure>
@@ -626,7 +626,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">Minecode</p>
-              <p class="site-description motion-element" itemprop="description">重庆大学大三在校生，前ACM鶸，沉迷iOS开发暂时无法自拔XD。现于字节跳动实习</p>
+              <p class="site-description motion-element" itemprop="description">字节跳动iOS开发工程师，后台开发养成中</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -636,7 +636,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -647,7 +647,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -658,7 +658,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -684,15 +684,15 @@
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
+                  <a href="https://www.linkedin.com/in/minecode" target="_blank" title="LinkedIn">
                     
-                      <i class="fa fa-fw fa-globe"></i>简书</a>
+                      <i class="fa fa-fw fa-linkedin"></i>LinkedIn</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="http://blog.csdn.net/b735098742" target="_blank" title="CSDN博客">
+                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
                     
-                      <i class="fa fa-fw fa-globe"></i>CSDN博客</a>
+                      <i class="fa fa-fw fa-globe"></i>简书</a>
                 </span>
               
             
@@ -739,9 +739,9 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
-    <i class="fa fa-user"></i>
+    <i class="fa fa-google"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Minecode</span>
 
@@ -768,7 +768,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共31.1k字</span>
+  <span class="post-count">博客全站共34.5k字</span>
 </div>
 
         

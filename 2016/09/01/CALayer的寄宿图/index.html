@@ -103,16 +103,16 @@
 <meta property="og:site_name" content="Minecode&#39;s Blog">
 <meta property="og:description" content="寄宿图我们都知道，视图可以导入图片，并设置其拉伸模式、放大比例之类。而图层也可以导入图片，CALayer提供了寄宿图的概念来实现这一点。简单来说，寄宿图就是图层之中包含的图。 CALayer的contents属性在设置图层图片时，需要给contents赋值。其定义如下：@property(nullable, strong) id contents;可以看到，它是一个id类型的对象，但是这是为了兼容">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/CA_contentGravity.png">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/CA_contentsScale.png">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/CA_masksToBounds.png">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/CA_contentsCenter_bubble.png">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/CA_contentsCenter.png">
-<meta property="og:updated_time" content="2017-12-24T12:56:09.000Z">
+<meta property="og:image" content="http://cdn.ialgo.xin/CA_contentGravity.png">
+<meta property="og:image" content="http://cdn.ialgo.xin/CA_contentsScale.png">
+<meta property="og:image" content="http://cdn.ialgo.xin/CA_masksToBounds.png">
+<meta property="og:image" content="http://cdn.ialgo.xin/CA_contentsCenter_bubble.png">
+<meta property="og:image" content="http://cdn.ialgo.xin/CA_contentsCenter.png">
+<meta property="og:updated_time" content="2019-07-08T16:45:43.041Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CALayer的寄宿图">
 <meta name="twitter:description" content="寄宿图我们都知道，视图可以导入图片，并设置其拉伸模式、放大比例之类。而图层也可以导入图片，CALayer提供了寄宿图的概念来实现这一点。简单来说，寄宿图就是图层之中包含的图。 CALayer的contents属性在设置图层图片时，需要给contents赋值。其定义如下：@property(nullable, strong) id contents;可以看到，它是一个id类型的对象，但是这是为了兼容">
-<meta name="twitter:image" content="http://p0h33xrro.bkt.clouddn.com/CA_contentGravity.png">
+<meta name="twitter:image" content="http://cdn.ialgo.xin/CA_contentGravity.png">
 
 
 
@@ -430,18 +430,18 @@
 <li>kCAGravityResizeAspect</li>
 <li>kCAGravityResizeAspectFill</li>
 </ul>
-<p>对于图片被拉伸的问题，我们处理之后如下:<br><img src="http://p0h33xrro.bkt.clouddn.com/CA_contentGravity.png" alt="contentsGravity解决图片拉伸问题"></p>
+<p>对于图片被拉伸的问题，我们处理之后如下:<br><img src="http://cdn.ialgo.xin/CA_contentGravity.png" alt="contentsGravity解决图片拉伸问题"></p>
 <h3 id="contentsScale"><a href="#contentsScale" class="headerlink" title="contentsScale"></a>contentsScale</h3><p>由于苹果设备多采用了Retina屏幕，屏幕的实际分辨率(手机像素)和设计分辨率(视图的点)之间存在着区别。比如对于iPhone 6，视图大小为375×677(单位:点)，但实际像素为750×1334(单位:像素)，在界面开发时并无大碍，而对于图片素材，我们有时候不希望高分屏与图片的像素绘制比例为1:1，为了不让图片换算成视图大小后太小，就要设置实际缩放比，从而让高分屏用多个像素显示图片1个像素的内容。苹果为我们提供了contentsScale属性来设置。</p>
 <p>比如当我们设置contentsScale为1.0，即屏幕每一个点绘制图片的1个像素。而contentsScale为2.0时，屏幕每一个点绘制图片的2个像素。显示效果如下:</p>
-<p><img src="http://p0h33xrro.bkt.clouddn.com/CA_contentsScale.png" alt="contentsScale区别"></p>
+<p><img src="http://cdn.ialgo.xin/CA_contentsScale.png" alt="contentsScale区别"></p>
 <p>Tips: 需要注意，缩放只有在图片适配模式不是kCAGravityResize<em>*</em>(拉伸)模式时才有效。</p>
 <h3 id="maskToBounds"><a href="#maskToBounds" class="headerlink" title="maskToBounds"></a>maskToBounds</h3><p>这个属性对应视图的clipToBounds属性。默认情况下视图和图层都允许子视图和子图层的绘制范围超出自己的边界。但是很多情况下我们并不想要这个效果，很多样式都需要裁切子图层。效果如下:</p>
-<p><img src="http://p0h33xrro.bkt.clouddn.com/CA_masksToBounds.png" alt="masksToBounds效果"></p>
+<p><img src="http://cdn.ialgo.xin/CA_masksToBounds.png" alt="masksToBounds效果"></p>
 <h3 id="contentsRect"><a href="#contentsRect" class="headerlink" title="contentsRect"></a>contentsRect</h3><p>contentsRect用来指定内容显示的区域，比如显示图片的某个局部细节。注意数值是比例大小(0.0~1.0)，而非视图大小。<br>其只是设置显示区域，而非裁剪图片，内存中保存的依旧是整个图片，如果要处理图片应使用Core Graphic。</p>
 <h3 id="contentsCenter"><a href="#contentsCenter" class="headerlink" title="contentsCenter"></a>contentsCenter</h3><p>UIImage提供了<code>resizableImageWithCapInsets</code>方法来配置图片的拉伸，而在图层中可以通过设置ccontentsCenter属性来设置一个可拉伸区域，从而保证图片在收到拉伸时局部不变形。</p>
 <p>我们选择一张聊天气泡的照片，然后编写如下代码来测试:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">[super viewDidLoad];</span><br><span class="line"></span><br><span class="line">self.view.backgroundColor = [UIColor lightGrayColor];</span><br><span class="line"></span><br><span class="line">UIImage *image = [UIImage imageNamed:@&quot;bubble&quot;];</span><br><span class="line"></span><br><span class="line">self.layerView1.layer.contents = (__bridge id)image.CGImage;</span><br><span class="line">self.layerView2.layer.contents = (__bridge id)image.CGImage;</span><br><span class="line"></span><br><span class="line">self.layerView2.layer.contentsCenter = CGRectMake(0.75, 0.75, 0.1, 0.1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>原图及裁切效果为：<br><img src="http://p0h33xrro.bkt.clouddn.com/CA_contentsCenter_bubble.png" alt="气泡图"></p>
-<p><img src="http://p0h33xrro.bkt.clouddn.com/CA_contentsCenter.png" alt="裁切后"></p>
+<p>原图及裁切效果为：<br><img src="http://cdn.ialgo.xin/CA_contentsCenter_bubble.png" alt="气泡图"></p>
+<p><img src="http://cdn.ialgo.xin/CA_contentsCenter.png" alt="裁切后"></p>
 <h2 id="通过Core-Graphic绘制"><a href="#通过Core-Graphic绘制" class="headerlink" title="通过Core Graphic绘制"></a>通过Core Graphic绘制</h2><p>CALayer除了通过Core Animation框架的属性来设置外，还可以直接通过Core Graphic来绘制。</p>
 <h3 id="UIView的显示机制"><a href="#UIView的显示机制" class="headerlink" title="UIView的显示机制"></a>UIView的显示机制</h3><p>当视图在屏幕上出现时，它会检测-(void)rawRect:是否被实现(该方法无默认实现)，如果实现了则为视图创建一个寄宿图，其大小等于视图大小×contentsScale。(若不实现该方法则不会创建，进而优化性能)。</p>
 <p>-(void)drawRect:是视图的方法而不是图层的，图层提供了图层方法的代理，可由视图通过实现代理方法完成绘图。-(void)drawRect:不能手动调用，需要调用-(void)setNeedsDisplay来通知重绘。</p>
@@ -564,7 +564,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">Minecode</p>
-              <p class="site-description motion-element" itemprop="description">重庆大学大三在校生，前ACM鶸，沉迷iOS开发暂时无法自拔XD。现于字节跳动实习</p>
+              <p class="site-description motion-element" itemprop="description">字节跳动iOS开发工程师，后台开发养成中</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -574,7 +574,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -585,7 +585,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -596,7 +596,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -622,15 +622,15 @@
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
+                  <a href="https://www.linkedin.com/in/minecode" target="_blank" title="LinkedIn">
                     
-                      <i class="fa fa-fw fa-globe"></i>简书</a>
+                      <i class="fa fa-fw fa-linkedin"></i>LinkedIn</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="http://blog.csdn.net/b735098742" target="_blank" title="CSDN博客">
+                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
                     
-                      <i class="fa fa-fw fa-globe"></i>CSDN博客</a>
+                      <i class="fa fa-fw fa-globe"></i>简书</a>
                 </span>
               
             
@@ -677,9 +677,9 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
-    <i class="fa fa-user"></i>
+    <i class="fa fa-google"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Minecode</span>
 
@@ -706,7 +706,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共31.1k字</span>
+  <span class="post-count">博客全站共34.5k字</span>
 </div>
 
         

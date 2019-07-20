@@ -103,15 +103,15 @@
 <meta property="og:site_name" content="Minecode&#39;s Blog">
 <meta property="og:description" content="很多操作系统都提供了进程和线程的并发操作，他们可能在异步执行时访问共享数据，而并发访问共享数据可能带来数据不一致的同步问题，在此总结一下操作系统的进程/线程同步问题，以线程的并发为例。 问题简介 上图是多线程的状态(以iOS系统为例)。操作系统是通过CPU的时间片轮转来实现多线程的，每个线程有着对应的时间片，当其时间片到来时CPU会切换到该线程上下文并执行，待时间片结束后切换至下一线程，保存原线程">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/Thread_ThreadStatus.png">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/Thread_BuyTickets.png">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/Thread_signalDeadlockSample.png">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/Thread_chopstick.png">
-<meta property="og:updated_time" content="2018-01-10T15:32:09.000Z">
+<meta property="og:image" content="http://cdn.ialgo.xin/Thread_ThreadStatus.png">
+<meta property="og:image" content="http://cdn.ialgo.xin/Thread_BuyTickets.png">
+<meta property="og:image" content="http://cdn.ialgo.xin/Thread_signalDeadlockSample.png">
+<meta property="og:image" content="http://cdn.ialgo.xin/Thread_chopstick.png">
+<meta property="og:updated_time" content="2019-07-08T16:44:57.569Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="操作系统的进程&#x2F;线程同步问题">
 <meta name="twitter:description" content="很多操作系统都提供了进程和线程的并发操作，他们可能在异步执行时访问共享数据，而并发访问共享数据可能带来数据不一致的同步问题，在此总结一下操作系统的进程/线程同步问题，以线程的并发为例。 问题简介 上图是多线程的状态(以iOS系统为例)。操作系统是通过CPU的时间片轮转来实现多线程的，每个线程有着对应的时间片，当其时间片到来时CPU会切换到该线程上下文并执行，待时间片结束后切换至下一线程，保存原线程">
-<meta name="twitter:image" content="http://p0h33xrro.bkt.clouddn.com/Thread_ThreadStatus.png">
+<meta name="twitter:image" content="http://cdn.ialgo.xin/Thread_ThreadStatus.png">
 
 
 
@@ -405,14 +405,14 @@
 
       
         <p>很多操作系统都提供了进程和线程的并发操作，他们可能在异步执行时访问共享数据，而并发访问共享数据可能带来数据不一致的同步问题，在此总结一下操作系统的进程/线程同步问题，以线程的并发为例。</p>
-<h2 id="问题简介"><a href="#问题简介" class="headerlink" title="问题简介"></a>问题简介</h2><p><img src="http://p0h33xrro.bkt.clouddn.com/Thread_ThreadStatus.png" alt="iOS多线程实现原理"></p>
+<h2 id="问题简介"><a href="#问题简介" class="headerlink" title="问题简介"></a>问题简介</h2><p><img src="http://cdn.ialgo.xin/Thread_ThreadStatus.png" alt="iOS多线程实现原理"></p>
 <p>上图是多线程的状态(以iOS系统为例)。操作系统是通过CPU的时间片轮转来实现多线程的，每个线程有着对应的时间片，当其时间片到来时CPU会切换到该线程上下文并执行，待时间片结束后切换至下一线程，保存原线程的上下文并加载下一线程的上下文，依次循环。</p>
 <p>但是，CPU何时切换并不是由用户决定，当时间片到达后会立即进行线程的切换，那么当多个线程并发进行读写操作时，就可能出现线程同步问题。</p>
 <p>我们先重现一下这个问题，以下函数模拟了买票的操作，持续买票直到卖完，整型sum表示当前的票数，函数如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">- (void)buyFunction &#123;</span><br><span class="line">    // 有余票则继续购买</span><br><span class="line">    while (sum &gt; 0) &#123;</span><br><span class="line">        // 购买前打印当前票数</span><br><span class="line">        NSLog(@&quot;线程%@准备买票 剩余:%d张票&quot;, [NSThread currentThread].name, sum);</span><br><span class="line">        // 模拟购买操作,票数-1</span><br><span class="line">        sum--;</span><br><span class="line">    &#125;</span><br><span class="line">    // 票卖完则打印当前票数</span><br><span class="line">    NSLog(@&quot;线程%@: 票已卖完 剩余:%d张票&quot;, [NSThread currentThread].name, sum);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>现在我们开两个线程同时执行此操作，初始为10张票(sum = 10)，查看控制台输出:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">线程2准备买票 剩余:10张票</span><br><span class="line">线程1准备买票 剩余:10张票</span><br><span class="line">线程1准备买票 剩余:9张票</span><br><span class="line">线程2准备买票 剩余:8张票</span><br><span class="line">线程1准备买票 剩余:7张票</span><br><span class="line">线程2准备买票 剩余:6张票</span><br><span class="line">线程1准备买票 剩余:5张票</span><br><span class="line">线程2准备买票 剩余:4张票</span><br><span class="line">线程1准备买票 剩余:3张票</span><br><span class="line">线程2准备买票 剩余:2张票</span><br><span class="line">线程1准备买票 剩余:1张票</span><br><span class="line">线程2: 票已卖完 剩余:0张票</span><br><span class="line">线程1: 票已卖完 剩余:-1张票</span><br></pre></td></tr></table></figure></p>
 <p>观察结果，我们发现了一些问题:<br>(1) 两次买票过程余票数相同<br>(2) 同一张票买了两次<br>(3) 没有余票之后仍然被买了一次</p>
 <p>这样的结果已经体现出了线程不安全的危害，为什么会出现这种情况呢？<br>前面讲到，CPU会在时间片结束后保存当前线程上下文，并切换至下一线程。那么当前线程很可能在获取了数据还没来得及处理，时间片就已结束，而当该线程的下一时间片到来时，数据可能已经变化了。一种可能的过程如下图所示</p>
-<p><img src="http://p0h33xrro.bkt.clouddn.com/Thread_BuyTickets.png" alt="线程同步出现问题"></p>
+<p><img src="http://cdn.ialgo.xin/Thread_BuyTickets.png" alt="线程同步出现问题"></p>
 <p>这便是进程/线程并发访问数据时会存在的同步问题，接下来我们讨论如何解决该问题。</p>
 <h2 id="临界区问题"><a href="#临界区问题" class="headerlink" title="临界区问题"></a>临界区问题</h2><p>为了并发访问数据的同步问题，我们介绍临界区的概念。</p>
 <p><strong>临界区</strong>: 一种代码段，在其中可能发生多个线程共同改变变量、读写文件等操作，其要求当一个线程进入临界区时，其他线程不能进入。从而避免出现同时读写的问题。(实际上，临界区只需保证可以有多个读者同时执行读取操作，或唯一写者执行写入操作)<br><strong>进入区</strong>: 判断线程能否进入临界区的代码段。<br><strong>退出区</strong>: 线程离开临界区后可能对其执行的某些操作。<br><strong>剩余区</strong>: 线程完全退出临界区和退出区后的剩下全部代码。</p>
@@ -444,7 +444,7 @@
 <h3 id="忙等问题"><a href="#忙等问题" class="headerlink" title="忙等问题"></a>忙等问题</h3><p>当进程请求进入临界区而没有被允许时，如果此进程开始在进入区连续循环请求，则会消耗大量性能，浪费了部分CPU时间片。这种加锁方式称为自旋锁，即进程在等待锁时仍然在运行，此方法会造成忙等的性能浪费，但同时也比阻塞-唤醒机制效率更高，避免了阻塞到唤醒的上下文切换。</p>
 <p>如果要克服忙等问题，可以在进入区增加当信号量小于0时，进程阻塞自己，进入等待队列；当临界区内的线程执行完毕后，唤醒等待队列中的进程。同时要保证等待队列调度的算法合理性，避免某进程无限期等待。</p>
 <h3 id="死锁问题"><a href="#死锁问题" class="headerlink" title="死锁问题"></a>死锁问题</h3><p>死锁问题就是多个进程无限等待某个事件，而该事件是由这些进程来产生的，这样就会造成”第二十二条军规”中的问题，进程之间互相等待，无法前进。在此不讨论死锁问题，只介绍可能出现的死锁情况。如下图所示: </p>
-<p><img src="http://p0h33xrro.bkt.clouddn.com/Thread_signalDeadlockSample.png" alt="信号量死锁的情况"></p>
+<p><img src="http://cdn.ialgo.xin/Thread_signalDeadlockSample.png" alt="信号量死锁的情况"></p>
 <p>解决死锁问题主要可以从<strong>死锁预防、死锁避免、死锁检测、死锁恢复</strong>四个方面入手，后面会专门写文章讲解。</p>
 <h3 id="不同处理器的解决方案"><a href="#不同处理器的解决方案" class="headerlink" title="不同处理器的解决方案"></a>不同处理器的解决方案</h3><p><strong>单个处理器</strong>: 单处理器时无须担心并行运算造成的同步问题，所以简单在wait()和signal()中禁止临界区中进程的中断即可。</p>
 <p><strong>多处理器</strong>: 操作系统对于多处理器调度分为SMP和非SMP的情况(SMP为对称多处理，处理器各自控制各自的调度，而非SMP为某一个处理器作为中控，管理其他处理器的调度)。</p>
@@ -454,7 +454,7 @@
 <p>所以<strong>读者——写者问题应当保证同一时间写者的唯一性及读者要等待写者完成后再执行</strong>。</p>
 <p>同时，在实际实现中，要着重处理读者或写者的饥饿问题，读者/写者优先的方案很可能造成对方的饥饿。</p>
 <h3 id="哲学家进餐问题"><a href="#哲学家进餐问题" class="headerlink" title="哲学家进餐问题"></a>哲学家进餐问题</h3><p>哲学家问题是一个经典的死锁问题，n个哲学家围坐在圆桌上，圆桌上放着n支筷子，也就是没人左右都有1支筷子。只有同时拥有两支筷子才能吃饭，吃完饭后会放下筷子。若同一时间每个哲学家都先拿起右手边的筷子再拿起左手的，那么就造成了死锁问题，每个人都在等待左手的筷子。</p>
-<p><img src="http://p0h33xrro.bkt.clouddn.com/Thread_chopstick.png" alt="哲学家进餐问题"></p>
+<p><img src="http://cdn.ialgo.xin/Thread_chopstick.png" alt="哲学家进餐问题"></p>
 <p>解决办法多种多样，可以限制哲学家的数量为n-1，也可以要求拿起筷子前判断是否左右手的筷子均空闲。而本质上，解决方法就是死锁的四种解决方法: <strong>死锁预防、死锁避免、死锁检测、死锁恢复</strong>。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>进程/线程同步问题是操作系统在数据共享方面的一大问题，其不仅需要硬件及系统级的实现，同时还需要程序员在开发时避免死锁，同步问题与死锁问题密不可分，后面将会讨论死锁问题。</p>
 
@@ -577,7 +577,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">Minecode</p>
-              <p class="site-description motion-element" itemprop="description">重庆大学大三在校生，前ACM鶸，沉迷iOS开发暂时无法自拔XD。现于字节跳动实习</p>
+              <p class="site-description motion-element" itemprop="description">字节跳动iOS开发工程师，后台开发养成中</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -587,7 +587,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -598,7 +598,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -609,7 +609,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -635,15 +635,15 @@
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
+                  <a href="https://www.linkedin.com/in/minecode" target="_blank" title="LinkedIn">
                     
-                      <i class="fa fa-fw fa-globe"></i>简书</a>
+                      <i class="fa fa-fw fa-linkedin"></i>LinkedIn</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="http://blog.csdn.net/b735098742" target="_blank" title="CSDN博客">
+                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
                     
-                      <i class="fa fa-fw fa-globe"></i>CSDN博客</a>
+                      <i class="fa fa-fw fa-globe"></i>简书</a>
                 </span>
               
             
@@ -690,9 +690,9 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
-    <i class="fa fa-user"></i>
+    <i class="fa fa-google"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Minecode</span>
 
@@ -719,7 +719,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共31.1k字</span>
+  <span class="post-count">博客全站共34.5k字</span>
 </div>
 
         

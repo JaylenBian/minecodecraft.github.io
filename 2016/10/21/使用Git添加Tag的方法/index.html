@@ -103,12 +103,12 @@
 <meta property="og:site_name" content="Minecode&#39;s Blog">
 <meta property="og:description" content="简述作为版本管理工具，Git可以对某个版本打上标签(tag)，表示本版本为发行版。在发布软件，以及使用CocoaPods创建依赖库等情况时，需要对其版本使用标签注释。故简单总结一下添加tag的方式。 使用Git命令查看标签打印所有标签1git tag` 打印符合检索条件的标签1git tag -l &amp;lt;版本号&amp;gt; 如 git tag -l 1.*.* 为搜索一级版本为1的版本 查看对应标签">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/CocoaPods_GithubTag.png">
-<meta property="og:updated_time" content="2017-12-29T13:34:59.000Z">
+<meta property="og:image" content="http://cdn.ialgo.xin/CocoaPods_GithubTag.png">
+<meta property="og:updated_time" content="2019-07-08T16:45:20.018Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Git添加Tag的方法">
 <meta name="twitter:description" content="简述作为版本管理工具，Git可以对某个版本打上标签(tag)，表示本版本为发行版。在发布软件，以及使用CocoaPods创建依赖库等情况时，需要对其版本使用标签注释。故简单总结一下添加tag的方式。 使用Git命令查看标签打印所有标签1git tag` 打印符合检索条件的标签1git tag -l &amp;lt;版本号&amp;gt; 如 git tag -l 1.*.* 为搜索一级版本为1的版本 查看对应标签">
-<meta name="twitter:image" content="http://p0h33xrro.bkt.clouddn.com/CocoaPods_GithubTag.png">
+<meta name="twitter:image" content="http://cdn.ialgo.xin/CocoaPods_GithubTag.png">
 
 
 
@@ -419,7 +419,7 @@
 <h4 id="新旧版本通用方法"><a href="#新旧版本通用方法" class="headerlink" title="新旧版本通用方法"></a>新旧版本通用方法</h4><p>旧版本Git并没有提供直接删除的方法，而我们可以通过将一个空标签替换现有标签来实现删除标签，即如下命令<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin <span class="symbol">:refs/tags/&lt;</span>版本号&gt;</span><br></pre></td></tr></table></figure></p>
 <h2 id="补充：使用Github添加标签"><a href="#补充：使用Github添加标签" class="headerlink" title="补充：使用Github添加标签"></a>补充：使用Github添加标签</h2><p>Github为我们提供了在页面上进行编辑发行版本的方式，如下图所示：</p>
 <p>在Github上为项目打tag可在release页面，选择创建新tag并按下图所示填写即可。删除tag也同理。母。</p>
-<p><img src="http://p0h33xrro.bkt.clouddn.com/CocoaPods_GithubTag.png" alt="Tag on Github"></p>
+<p><img src="http://cdn.ialgo.xin/CocoaPods_GithubTag.png" alt="Tag on Github"></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>最后总结一下常用命令，方便查阅。</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">/<span class="regexp">//</span> 查看标签</span><br><span class="line">/<span class="regexp">/ 打印所有标签</span></span><br><span class="line"><span class="regexp">git tag</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 打印符合检索条件的标签</span></span><br><span class="line"><span class="regexp">git tag -l 1.*.*</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 查看对应标签状态</span></span><br><span class="line"><span class="regexp">git checkout 1.0.0</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">//</span> 创建标签(本地)</span><br><span class="line">/<span class="regexp">/ 创建轻量标签</span></span><br><span class="line"><span class="regexp">git tag 1.0.0-light</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 创建带备注标签(推荐)</span></span><br><span class="line"><span class="regexp">git tag -a 1.0.0 -m "这是备注信息"</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 针对特定commit版本SHA创建标签</span></span><br><span class="line"><span class="regexp">git tag -a 1.0.0 0c3b62d -m "这是备注信息"</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">//</span> 删除标签(本地)</span><br><span class="line">git tag -d <span class="number">1.0</span>.<span class="number">0</span></span><br><span class="line"></span><br><span class="line">/<span class="regexp">//</span> 将本地标签发布到远程仓库</span><br><span class="line">/<span class="regexp">/ 发送所有</span></span><br><span class="line"><span class="regexp">git push origin --tags</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 指定版本发送</span></span><br><span class="line"><span class="regexp">git push origin 1.0.0</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">//</span> 删除远程仓库对应标签</span><br><span class="line">/<span class="regexp">/ Git版本 &gt; V1.7.0</span></span><br><span class="line"><span class="regexp">git push origin --delete 1.0.0</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 旧版本Git</span></span><br><span class="line"><span class="regexp">git push origin :refs/tags</span><span class="regexp">/1.0.0</span></span><br></pre></td></tr></table></figure>
 
@@ -542,7 +542,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">Minecode</p>
-              <p class="site-description motion-element" itemprop="description">重庆大学大三在校生，前ACM鶸，沉迷iOS开发暂时无法自拔XD。现于字节跳动实习</p>
+              <p class="site-description motion-element" itemprop="description">字节跳动iOS开发工程师，后台开发养成中</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -552,7 +552,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -563,7 +563,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -574,7 +574,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -600,15 +600,15 @@
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
+                  <a href="https://www.linkedin.com/in/minecode" target="_blank" title="LinkedIn">
                     
-                      <i class="fa fa-fw fa-globe"></i>简书</a>
+                      <i class="fa fa-fw fa-linkedin"></i>LinkedIn</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="http://blog.csdn.net/b735098742" target="_blank" title="CSDN博客">
+                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
                     
-                      <i class="fa fa-fw fa-globe"></i>CSDN博客</a>
+                      <i class="fa fa-fw fa-globe"></i>简书</a>
                 </span>
               
             
@@ -655,9 +655,9 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
-    <i class="fa fa-user"></i>
+    <i class="fa fa-google"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Minecode</span>
 
@@ -684,7 +684,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共31.1k字</span>
+  <span class="post-count">博客全站共34.5k字</span>
 </div>
 
         

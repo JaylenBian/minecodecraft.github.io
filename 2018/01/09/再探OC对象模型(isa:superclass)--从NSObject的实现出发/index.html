@@ -103,13 +103,13 @@
 <meta property="og:site_name" content="Minecode&#39;s Blog">
 <meta property="og:description" content="了解Objective-C中类型结构后，我们知道了OC的对象模型构成。在此讨论提出一个问题：object_getClass(obj)与[obj class]有何区别？ 下面，我们将从isKindOfClass和isMemberOfClass两个方法入手进行探究。 背景Objective-C中对于类的数据结构，分为了实例(object)、类(class)、元类(meta class)、根元类(roo">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/Runtime_OCObjectModule.jpg">
-<meta property="og:image" content="http://p0h33xrro.bkt.clouddn.com/Runtime_getObjTest.png">
-<meta property="og:updated_time" content="2018-01-08T17:14:56.000Z">
+<meta property="og:image" content="http://cdn.ialgo.xin/Runtime_OCObjectModule.jpg">
+<meta property="og:image" content="http://cdn.ialgo.xin/Runtime_getObjTest.png">
+<meta property="og:updated_time" content="2019-07-08T16:45:36.062Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="再探OC对象模型(isa&#x2F;superclass)--从NSObject的实现出发">
 <meta name="twitter:description" content="了解Objective-C中类型结构后，我们知道了OC的对象模型构成。在此讨论提出一个问题：object_getClass(obj)与[obj class]有何区别？ 下面，我们将从isKindOfClass和isMemberOfClass两个方法入手进行探究。 背景Objective-C中对于类的数据结构，分为了实例(object)、类(class)、元类(meta class)、根元类(roo">
-<meta name="twitter:image" content="http://p0h33xrro.bkt.clouddn.com/Runtime_OCObjectModule.jpg">
+<meta name="twitter:image" content="http://cdn.ialgo.xin/Runtime_OCObjectModule.jpg">
 
 
 
@@ -405,7 +405,7 @@
         <p>了解Objective-C中类型结构后，我们知道了OC的对象模型构成。在此讨论提出一个问题：object_getClass(obj)与[obj class]有何区别？</p>
 <p>下面，我们将从isKindOfClass和isMemberOfClass两个方法入手进行探究。</p>
 <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>Objective-C中对于类的数据结构，分为了实例(object)、类(class)、元类(meta class)、根元类(root meta class)几种(也可加上根类(root class))。在他们的层次结构中，isa扮演者指向其父类型的职责。具体见这张经典的图:</p>
-<p><img src="http://p0h33xrro.bkt.clouddn.com/Runtime_OCObjectModule.jpg" alt="OC对象模型"></p>
+<p><img src="http://cdn.ialgo.xin/Runtime_OCObjectModule.jpg" alt="OC对象模型"></p>
 <p>Runtime中为我们提供了object_getClass()函数，而NSObject为我们提供了+/- (Class)class两种方法。那么，这两种函数是否相同呢？我们来使用isKindOfClass和isMemberOfClass验证:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">NSObject *obj = [[NSObject alloc] init];</span><br><span class="line">NSLog(@&quot;%p&quot;, obj);</span><br><span class="line">NSLog(@&quot;%p&quot;, object_getClass(obj));</span><br><span class="line">NSLog(@&quot;%p&quot;, object_getClass([NSObject class]));</span><br><span class="line">NSLog(@&quot;%p&quot;, [NSObject class]);</span><br></pre></td></tr></table></figure>
 <p>打印如下</p>
@@ -420,7 +420,7 @@
 <h2 id="探究object-getClass"><a href="#探究object-getClass" class="headerlink" title="探究object_getClass()"></a>探究object_getClass()</h2><p>现在我们来探究object_getClass的具体过程，在Runtime的类模型中，isa连接了几种类的结构，所以推断object_getClass是通过获取isa不断向上寻找的，所以出现了上面class方法与object_getClass方法的结果不一致的问题。我们来编写一下代码测试:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">BOOL getObj1 = object_getClass([NSObject class]) == object_getClass(object_getClass([NSObject class]));</span><br><span class="line">BOOL getObj2 = object_getClass([SubClass class]) == object_getClass(object_getClass(object_getClass([SubClass class])));</span><br><span class="line">BOOL getObj3 = object_getClass([NSObject class]) == class_getSuperclass(object_getClass([NSObject class]));</span><br><span class="line">BOOL getObj4 = object_getClass([NSObject class]) == object_getClass(class_getSuperclass(object_getClass([NSObject class])));</span><br></pre></td></tr></table></figure>
 <p>对于以上代码，如果我们的推测是正确的: object_getClass为按照isa遍历，class_getSuperclass为按照superclass遍历。那么按照上面所示的模型图，结果应该是(YES,NO,NO,YES)。</p>
-<p><img src="http://p0h33xrro.bkt.clouddn.com/Runtime_getObjTest.png" alt="测试结果"></p>
+<p><img src="http://cdn.ialgo.xin/Runtime_getObjTest.png" alt="测试结果"></p>
 <p>结果果然如此，这说明: <strong>object_getClass为按照isa遍历，class_getSuperclass为按照superclass遍历。</strong></p>
 <p>那么我们刚才的代码在等号右侧显然是进行了如下过程:<br><strong>getObj1</strong>: Root Class -&gt; Meta Root Class -&gt; Meta Root Class<br><strong>getObj2</strong>: Class -&gt; Meta Class -&gt; Meta Root Class -&gt; Meta Root Class<br><strong>getObj3</strong>: Root Class -&gt; Meta Root Class -&gt; Root Class<br><strong>getObj4</strong>: Root Class -&gt; Meta Root Class -&gt; Root Class -&gt; Meta Root Class</p>
 <p>这说明了这两个函数的遍历顺序，也加深了我们对于isa、superclass指针在OC对象模型的理解:比如子类通过isa会获取其元类，而通过元类isa直接获取到根元类，而非层层向上遍历。</p>
@@ -567,7 +567,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">Minecode</p>
-              <p class="site-description motion-element" itemprop="description">重庆大学大三在校生，前ACM鶸，沉迷iOS开发暂时无法自拔XD。现于字节跳动实习</p>
+              <p class="site-description motion-element" itemprop="description">字节跳动iOS开发工程师，后台开发养成中</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -577,7 +577,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -588,7 +588,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -599,7 +599,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -625,15 +625,15 @@
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
+                  <a href="https://www.linkedin.com/in/minecode" target="_blank" title="LinkedIn">
                     
-                      <i class="fa fa-fw fa-globe"></i>简书</a>
+                      <i class="fa fa-fw fa-linkedin"></i>LinkedIn</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="http://blog.csdn.net/b735098742" target="_blank" title="CSDN博客">
+                  <a href="http://www.jianshu.com/u/4ee7974ebfa5" target="_blank" title="简书">
                     
-                      <i class="fa fa-fw fa-globe"></i>CSDN博客</a>
+                      <i class="fa fa-fw fa-globe"></i>简书</a>
                 </span>
               
             
@@ -680,9 +680,9 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
-    <i class="fa fa-user"></i>
+    <i class="fa fa-google"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Minecode</span>
 
@@ -709,7 +709,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共31.1k字</span>
+  <span class="post-count">博客全站共34.5k字</span>
 </div>
 
         
